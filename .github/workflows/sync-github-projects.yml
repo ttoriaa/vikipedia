@@ -4,6 +4,15 @@ on:
   schedule:
     - cron: "17 2 * * *"
   workflow_dispatch:
+    inputs:
+      sync_mode:
+        description: "Project filter mode"
+        required: true
+        default: "pages_only"
+        type: choice
+        options:
+          - pages_only
+          - include_homepage_any_domain
 
 permissions:
   contents: write
@@ -25,9 +34,17 @@ jobs:
           GITHUB_SYNC_USERNAME: ttoriaa
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_SYNC_INCLUDE_HOMEPAGE_ANY_DOMAIN: ${{ vars.GITHUB_SYNC_INCLUDE_HOMEPAGE_ANY_DOMAIN }}
+          INPUT_SYNC_MODE: ${{ github.event.inputs.sync_mode }}
         run: |
           EXTRA_ARGS=""
+          # Manual dispatch input takes precedence; fallback to repository variable.
           INCLUDE_FLAG="${GITHUB_SYNC_INCLUDE_HOMEPAGE_ANY_DOMAIN:-false}"
+          if [ "${INPUT_SYNC_MODE:-}" = "include_homepage_any_domain" ]; then
+            INCLUDE_FLAG="true"
+          elif [ "${INPUT_SYNC_MODE:-}" = "pages_only" ]; then
+            INCLUDE_FLAG="false"
+          fi
+
           INCLUDE_FLAG_LOWER=$(echo "$INCLUDE_FLAG" | tr '[:upper:]' '[:lower:]')
           if [ "$INCLUDE_FLAG_LOWER" = "true" ] || [ "$INCLUDE_FLAG_LOWER" = "1" ] || [ "$INCLUDE_FLAG_LOWER" = "yes" ]; then
             EXTRA_ARGS="--include-homepage-any-domain"
