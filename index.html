@@ -17,8 +17,8 @@
       --card-strong: rgba(255, 255, 255, 0.92);
       --blue: #0f6fff;
       --cyan: #55d6ff;
-      --orange: #ff7a00;
-      --sand: #ffd8ae;
+      --orange: #8b5cf6;
+      --sand: #d9c6ff;
       --shadow: 0 18px 60px rgba(16, 24, 32, 0.12);
       --radius-xl: 28px;
       --radius-lg: 22px;
@@ -39,7 +39,7 @@
       font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif;
       background:
         radial-gradient(circle at top left, rgba(85, 214, 255, 0.34), transparent 28%),
-        radial-gradient(circle at 88% 12%, rgba(255, 122, 0, 0.18), transparent 25%),
+        radial-gradient(circle at 88% 12%, rgba(139, 92, 246, 0.2), transparent 25%),
         linear-gradient(135deg, #fff7ec 0%, #f4f5f8 45%, #edf8ff 100%);
       min-height: 100vh;
     }
@@ -93,7 +93,7 @@
       bottom: 16px;
       width: 2px;
       border-radius: 999px;
-      background: linear-gradient(180deg, rgba(15, 111, 255, 0.35), rgba(85, 214, 255, 0.25), rgba(255, 122, 0, 0.25));
+      background: linear-gradient(180deg, rgba(15, 111, 255, 0.35), rgba(85, 214, 255, 0.25), rgba(139, 92, 246, 0.35));
     }
 
     .story-timeline a {
@@ -349,6 +349,98 @@
       margin-top: 8px;
     }
 
+    .resume-hero {
+      background: linear-gradient(140deg, rgba(123, 97, 255, 0.14), rgba(255, 255, 255, 0.92));
+    }
+
+    .resume-profile {
+      display: grid;
+      grid-template-columns: 132px 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .resume-photo-wrap {
+      width: 132px;
+      height: 132px;
+      border-radius: 20px;
+      border: 1px solid rgba(123, 97, 255, 0.36);
+      background: rgba(123, 97, 255, 0.12);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .resume-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .resume-photo-fallback {
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+      line-height: 1.5;
+      padding: 10px;
+    }
+
+    .resume-role {
+      margin: 6px 0 10px;
+      font-size: 14px;
+      color: #55657a;
+      font-weight: 700;
+    }
+
+    .resume-actions {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .resume-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(123, 97, 255, 0.36);
+      background: rgba(123, 97, 255, 0.12);
+      color: #33445a;
+      font-size: 13px;
+      font-weight: 800;
+      transition: transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
+    }
+
+    .resume-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(123, 97, 255, 0.62);
+      background: rgba(123, 97, 255, 0.2);
+    }
+
+    .resume-timeline {
+      margin-top: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .resume-timeline .resume-card {
+      border-left: 4px solid rgba(123, 97, 255, 0.52);
+      padding-left: 16px;
+    }
+
+    .resume-meta {
+      margin: -4px 0 8px;
+      color: #667995;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
     body[data-active-tab="resume"] .story-timeline,
     body[data-active-tab="resume"] .scroll-progress {
       opacity: 0;
@@ -398,7 +490,7 @@
       width: 240px;
       height: 240px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 122, 0, 0.18), rgba(255, 122, 0, 0.02) 72%);
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.22), rgba(139, 92, 246, 0.02) 72%);
     }
 
     .eyebrow {
@@ -574,8 +666,8 @@
     .hero-panel .highlight-box {
       border-radius: var(--radius-lg);
       padding: 18px;
-      background: linear-gradient(140deg, rgba(255, 122, 0, 0.12), rgba(255, 255, 255, 0.86));
-      border: 1px solid rgba(255, 122, 0, 0.22);
+      background: linear-gradient(140deg, rgba(139, 92, 246, 0.14), rgba(255, 255, 255, 0.86));
+      border: 1px solid rgba(139, 92, 246, 0.28);
     }
 
     .showcase-stack {
@@ -982,7 +1074,7 @@
 
     .preview-screen--podcast {
       background:
-        radial-gradient(circle at 15% 20%, rgba(255, 125, 76, 0.22), transparent 26%),
+        radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.22), transparent 26%),
         linear-gradient(145deg, #fff0ea, #fffaf4 46%, #eef5ff 100%);
       color: #18222d;
     }
@@ -1177,8 +1269,8 @@
     .podcast-cover {
       min-height: 158px;
       background:
-        linear-gradient(145deg, rgba(255, 124, 83, 0.92), rgba(255, 204, 128, 0.88)),
-        linear-gradient(180deg, #ff9068, #ffcb7d);
+        linear-gradient(145deg, rgba(126, 97, 255, 0.92), rgba(172, 130, 255, 0.88)),
+        linear-gradient(180deg, #7d61ff, #ac82ff);
       display: grid;
       place-items: end start;
       padding: 14px;
@@ -1213,7 +1305,7 @@
       width: 28px;
       height: 28px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #ff7a4f, #ffb56f);
+      background: linear-gradient(135deg, #7d61ff, #ac82ff);
     }
 
     .episode-copy strong,
@@ -1238,7 +1330,7 @@
     .wave-bars span {
       width: 5px;
       border-radius: 999px;
-      background: linear-gradient(180deg, #ff7a4f, #ffb56f);
+      background: linear-gradient(180deg, #7d61ff, #ac82ff);
     }
 
     .wave-bars span:nth-child(1) { height: 12px; }
@@ -1430,7 +1522,7 @@
       color: #eef5ff;
       background:
         radial-gradient(circle at 12% 8%, rgba(0, 169, 255, 0.16), transparent 28%),
-        radial-gradient(circle at 90% 12%, rgba(255, 122, 0, 0.14), transparent 28%),
+        radial-gradient(circle at 90% 12%, rgba(139, 92, 246, 0.22), transparent 28%),
         linear-gradient(140deg, #06080f 0%, #0b1220 55%, #07101c 100%);
     }
 
@@ -1513,7 +1605,7 @@
     .dark-theme .cta,
     .dark-theme .thumb-bars span,
     .dark-theme .chart-line span {
-      background: linear-gradient(135deg, #2f7bff, #3fc6ff 66%, #ff8e3d) !important;
+      background: linear-gradient(135deg, #2f7bff, #3fc6ff 60%, #9b6dff) !important;
       color: #fff;
       border-color: transparent;
     }
@@ -1538,9 +1630,35 @@
       color: #dbe9ff;
     }
 
+    .dark-theme .resume-hero {
+      background: linear-gradient(145deg, rgba(26, 24, 52, 0.92), rgba(16, 23, 38, 0.92));
+    }
+
+    .dark-theme .resume-photo-wrap,
+    .dark-theme .resume-btn,
+    .dark-theme .resume-timeline .resume-card {
+      border-color: rgba(155, 109, 255, 0.46);
+    }
+
+    .dark-theme .resume-btn {
+      background: rgba(155, 109, 255, 0.18);
+      color: #eaf0ff;
+    }
+
+    .dark-theme .resume-btn:hover {
+      background: rgba(155, 109, 255, 0.3);
+      border-color: rgba(155, 109, 255, 0.68);
+    }
+
     .dark-theme .resume-card p,
     .dark-theme .resume-list {
       color: #a8bfdc;
+    }
+
+    .dark-theme .resume-role,
+    .dark-theme .resume-meta,
+    .dark-theme .resume-photo-fallback {
+      color: #9db3d2;
     }
 
     .dark-theme .browser-bar {
@@ -1557,7 +1675,7 @@
 
     .dark-theme .preview-screen--podcast {
       background:
-        radial-gradient(circle at 15% 20%, rgba(255, 125, 76, 0.22), transparent 26%),
+        radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.24), transparent 26%),
         linear-gradient(145deg, #211429, #111b32 46%, #0e1b2e 100%);
       color: #dbe9ff;
     }
@@ -1645,6 +1763,15 @@
       .hero-notes,
       .project-meta {
         grid-template-columns: 1fr;
+      }
+
+      .resume-profile {
+        grid-template-columns: 1fr;
+      }
+
+      .resume-photo-wrap {
+        width: 108px;
+        height: 108px;
       }
 
       .showcase-card img,
@@ -1999,20 +2126,61 @@
         </div>
         <div class="resume-grid">
           <div class="resume-col">
-            <article class="resume-card">
-              <h3 data-i18n="resumeProfileTitle">Profile</h3>
-              <p data-i18n="resumeProfileBody">Product-minded storyteller and builder focused on automotive strategy, digital product narratives, and data-driven communication across cross-functional teams.</p>
+            <article class="resume-card resume-hero">
+              <div class="resume-profile">
+                <div class="resume-photo-wrap" aria-label="Profile photo area">
+                  <img class="resume-photo" src="assets/profile.jpg" alt="Profile photo of Wentao Vickie Li" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+                  <div class="resume-photo-fallback" style="display:none;" data-i18n="resumePhotoFallback">Profile Photo<br />assets/profile.jpg</div>
+                </div>
+                <div>
+                  <h3 data-i18n="resumeName">Wentao Vickie Li</h3>
+                  <p class="resume-role" data-i18n="resumeRole">Powertrain Data Management | Data &amp; AI Strategy</p>
+                  <p data-i18n="resumeProfileBody">Product-minded storyteller and builder focused on automotive strategy, digital product narratives, and data-driven communication across cross-functional teams.</p>
+                </div>
+              </div>
+              <div class="resume-actions">
+                <a class="resume-btn" href="Vickie%20Li%202026%20CN%20v2.pdf" target="_blank" rel="noopener noreferrer" download data-i18n="resumeDownloadCn">Download CN Resume PDF</a>
+                <a class="resume-btn" href="Vickie%20Li%202026%20EN.pdf" target="_blank" rel="noopener noreferrer" download data-i18n="resumeDownloadEn">Download EN Resume PDF</a>
+              </div>
             </article>
+
+            <div class="resume-timeline">
+              <article class="resume-card">
+                <h3 data-i18n="timelineBmwTitle">BMW (China) Services Ltd.</h3>
+                <div class="resume-meta" data-i18n="timelineBmwMeta">Powertrain Data Management | 2024/05 - Present | Beijing</div>
+                <ul class="resume-list">
+                  <li data-i18n="timelineBmw1">Led an enterprise-government OTA data platform with cross-functional stakeholders across China and Germany teams.</li>
+                  <li data-i18n="timelineBmw2">Built end-to-end powertrain data framework from signal setup and compliance to analytics and quality use cases.</li>
+                </ul>
+              </article>
+              <article class="resume-card">
+                <h3 data-i18n="timelineEyTitle">Ernst &amp; Young (China) Advisory</h3>
+                <div class="resume-meta" data-i18n="timelineEyMeta">Technology Risk Consultant | 2023/08 - 2024/04 | Shanghai</div>
+                <ul class="resume-list">
+                  <li data-i18n="timelineEy1">Delivered digital transformation and technology risk consulting with process and metric mapping.</li>
+                  <li data-i18n="timelineEy2">Supported enterprise IT/data governance planning including cloud and cybersecurity scope.</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+
+          <div class="resume-col">
             <article class="resume-card">
-              <h3 data-i18n="resumeExperienceTitle">Experience Focus</h3>
+              <h3 data-i18n="resumeEducationTitle">Education</h3>
               <ul class="resume-list">
-                <li data-i18n="resumeExp1">Automotive benchmarking and charging-performance analysis for decision-ready reporting.</li>
-                <li data-i18n="resumeExp2">Interactive web concepting that blends brand expression with playful user engagement.</li>
-                <li data-i18n="resumeExp3">Bilingual content strategy and narrative packaging for public-facing digital pages.</li>
+                <li data-i18n="resumeEdu1">University of California, Berkeley - Master of Data Science (2022-2023, GPA 4.00)</li>
+                <li data-i18n="resumeEdu2">Beijing University of Posts and Telecommunications - B.Eng. E-Commerce and Data Engineering (2018-2022, GPA 3.85)</li>
               </ul>
             </article>
-          </div>
-          <div class="resume-col">
+            <article class="resume-card">
+              <h3 data-i18n="resumeInternshipTitle">Internship Timeline</h3>
+              <ul class="resume-list">
+                <li data-i18n="resumeIntern1">Microsoft - Account Technology Strategist (2022/07-2022/10)</li>
+                <li data-i18n="resumeIntern2">Apple - Data Analyst (2022/03-2022/07)</li>
+                <li data-i18n="resumeIntern3">Didi - Business Data Analysis Intern (2022/01-2022/03)</li>
+                <li data-i18n="resumeIntern4">Tencent - Product &amp; User Growth Intern (2020/08-2020/12)</li>
+              </ul>
+            </article>
             <article class="resume-card">
               <h3 data-i18n="resumeSkillsTitle">Core Skills</h3>
               <ul class="resume-list">
@@ -2020,14 +2188,6 @@
                 <li data-i18n="resumeSkill2">Data-to-insight transformation for dashboard experiences</li>
                 <li data-i18n="resumeSkill3">Web prototyping with HTML, CSS, JavaScript</li>
                 <li data-i18n="resumeSkill4">Bilingual communication: Chinese / English</li>
-              </ul>
-            </article>
-            <article class="resume-card">
-              <h3 data-i18n="resumeContactTitle">Portfolio Links</h3>
-              <ul class="resume-list">
-                <li><a href="https://ttoriaa.github.io/automotive-benchmarking" target="_blank" rel="noreferrer">EV Charging Benchmarking</a></li>
-                <li><a href="https://ttoriaa.github.io/gaming-vikipedia/" target="_blank" rel="noreferrer">///M Playground</a></li>
-                <li><a href="https://ttoriaa.github.io/shimai-podcast-site/index.html?lang=zh#home" target="_blank" rel="noreferrer">Shimai Podcast</a></li>
               </ul>
             </article>
           </div>
@@ -2084,18 +2244,33 @@
           liveMapDesc: 'This landing page now behaves like a lightweight portfolio homepage: stable visual previews, concise case-study framing, and direct links to live production pages.',
           resumeTitle: 'Resume',
           resumeIntro: 'A bilingual profile snapshot covering positioning, experience focus, and practical strengths.',
-          resumeProfileTitle: 'Profile',
+          resumeName: 'Wentao Vickie Li',
+          resumeRole: 'Powertrain Data Management | Data & AI Strategy',
+          resumeDownloadCn: 'Download CN Resume PDF',
+          resumeDownloadEn: 'Download EN Resume PDF',
+          resumePhotoFallback: 'Profile Photo / assets/profile.jpg',
           resumeProfileBody: 'Product-minded storyteller and builder focused on automotive strategy, digital product narratives, and data-driven communication across cross-functional teams.',
-          resumeExperienceTitle: 'Experience Focus',
-          resumeExp1: 'Automotive benchmarking and charging-performance analysis for decision-ready reporting.',
-          resumeExp2: 'Interactive web concepting that blends brand expression with playful user engagement.',
-          resumeExp3: 'Bilingual content strategy and narrative packaging for public-facing digital pages.',
+          timelineBmwTitle: 'BMW (China) Services Ltd.',
+          timelineBmwMeta: 'Powertrain Data Management | 2024/05 - Present | Beijing',
+          timelineBmw1: 'Led an enterprise-government OTA data platform with cross-functional stakeholders across China and Germany teams.',
+          timelineBmw2: 'Built end-to-end powertrain data framework from signal setup and compliance to analytics and quality use cases.',
+          timelineEyTitle: 'Ernst & Young (China) Advisory',
+          timelineEyMeta: 'Technology Risk Consultant | 2023/08 - 2024/04 | Shanghai',
+          timelineEy1: 'Delivered digital transformation and technology risk consulting with process and metric mapping.',
+          timelineEy2: 'Supported enterprise IT/data governance planning including cloud and cybersecurity scope.',
+          resumeEducationTitle: 'Education',
+          resumeEdu1: 'University of California, Berkeley - Master of Data Science (2022-2023, GPA 4.00)',
+          resumeEdu2: 'Beijing University of Posts and Telecommunications - B.Eng. E-Commerce and Data Engineering (2018-2022, GPA 3.85)',
+          resumeInternshipTitle: 'Internship Timeline',
+          resumeIntern1: 'Microsoft - Account Technology Strategist (2022/07-2022/10)',
+          resumeIntern2: 'Apple - Data Analyst (2022/03-2022/07)',
+          resumeIntern3: 'Didi - Business Data Analysis Intern (2022/01-2022/03)',
+          resumeIntern4: 'Tencent - Product and User Growth Intern (2020/08-2020/12)',
           resumeSkillsTitle: 'Core Skills',
           resumeSkill1: 'Product storytelling and case-study framing',
           resumeSkill2: 'Data-to-insight transformation for dashboard experiences',
           resumeSkill3: 'Web prototyping with HTML, CSS, JavaScript',
           resumeSkill4: 'Bilingual communication: Chinese / English',
-          resumeContactTitle: 'Portfolio Links',
           langButton: '中文'
         },
         zh: {
@@ -2122,18 +2297,33 @@
           liveMapDesc: '这个 landing page 现在是轻量作品集首页：稳定预览、清晰案例框架、直达线上页面。',
           resumeTitle: '个人简历',
           resumeIntro: '中英文切换的简历概览，覆盖定位、经验重点和核心能力。',
-          resumeProfileTitle: '个人定位',
+          resumeName: '李文韬 Vickie LI',
+          resumeRole: 'Powertrain Data Management | Data & AI Strategy',
+          resumeDownloadCn: '下载中文简历 PDF',
+          resumeDownloadEn: '下载英文简历 PDF',
+          resumePhotoFallback: '个人照片 / assets/profile.jpg',
           resumeProfileBody: '以产品叙事与落地构建为核心，关注汽车战略、数字化产品表达与数据驱动沟通，擅长跨团队协作推进。',
-          resumeExperienceTitle: '经验重点',
-          resumeExp1: '面向决策与汇报的汽车 benchmark 与充电性能分析。',
-          resumeExp2: '将品牌表达与可玩交互融合的 Web 概念设计与实现。',
-          resumeExp3: '面向外部传播页面的中英双语内容策略与叙事包装。',
+          timelineBmwTitle: '宝马（中国）服务有限公司',
+          timelineBmwMeta: 'Powertrain Data Management | 2024/05 - 至今 | 北京',
+          timelineBmw1: '牵头企业-政府 OTA 数据平台项目，协调中国与德国团队及多部门利益相关方推进交付。',
+          timelineBmw2: '搭建动力总成端到端数据体系，覆盖信号定义、数据合规、分析应用与质量场景。',
+          timelineEyTitle: '安永（中国）企业咨询有限公司',
+          timelineEyMeta: 'Technology Risk Consultant | 2023/08 - 2024/04 | 上海',
+          timelineEy1: '为大型企业提供数字化转型与技术风险咨询，梳理流程、指标与系统风险。',
+          timelineEy2: '参与企业 IT 与数据治理规划，覆盖云与网络安全等范围。',
+          resumeEducationTitle: '教育背景',
+          resumeEdu1: '加州大学伯克利分校 - 数据科学硕士（2022-2023，GPA 4.00）',
+          resumeEdu2: '北京邮电大学 - 电子商务工程及法律本科（2018-2022，GPA 3.85）',
+          resumeInternshipTitle: '实习时间线',
+          resumeIntern1: '微软 - 客户技术战略（2022/07-2022/10）',
+          resumeIntern2: '苹果 - 数据分析（2022/03-2022/07）',
+          resumeIntern3: '滴滴 - 商业数据分析（2022/01-2022/03）',
+          resumeIntern4: '腾讯 - 产品与用户增长（2020/08-2020/12）',
           resumeSkillsTitle: '核心能力',
           resumeSkill1: '产品叙事与 case-study 结构化表达',
           resumeSkill2: '从数据到洞察的可视化与仪表盘体验设计',
           resumeSkill3: 'HTML / CSS / JavaScript 快速原型构建',
           resumeSkill4: '中英双语沟通与内容交付',
-          resumeContactTitle: '项目链接',
           langButton: 'English'
         }
       };
