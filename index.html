@@ -15,8 +15,8 @@
       --line: rgba(16, 24, 32, 0.12);
       --card: rgba(255, 255, 255, 0.76);
       --card-strong: rgba(255, 255, 255, 0.92);
-      --blue: #0f6fff;
-      --cyan: #55d6ff;
+      --blue: #7c5cff;
+      --cyan: #b389ff;
       --orange: #8b5cf6;
       --sand: #d9c6ff;
       --shadow: 0 18px 60px rgba(16, 24, 32, 0.12);
@@ -38,7 +38,7 @@
       color: var(--ink);
       font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif;
       background:
-        radial-gradient(circle at top left, rgba(85, 214, 255, 0.34), transparent 28%),
+        radial-gradient(circle at top left, rgba(139, 92, 246, 0.34), transparent 28%),
         radial-gradient(circle at 88% 12%, rgba(139, 92, 246, 0.2), transparent 25%),
         linear-gradient(135deg, #fff7ec 0%, #f4f5f8 45%, #edf8ff 100%);
       min-height: 100vh;
@@ -308,7 +308,7 @@
 
     .resume-grid {
       display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
     }
 
@@ -428,6 +428,13 @@
       gap: 12px;
     }
 
+    .resume-intern-grid {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
     .resume-timeline .resume-card {
       border-left: 4px solid rgba(123, 97, 255, 0.52);
       padding-left: 16px;
@@ -448,7 +455,9 @@
     }
 
     .hero {
-      display: block;
+      display: grid;
+      grid-template-columns: minmax(0, 1.18fr) minmax(280px, 0.82fr);
+      gap: 16px;
       margin-bottom: 18px;
     }
 
@@ -532,14 +541,14 @@
       gap: 6px;
     }
 
-    .hero-step {
+    .hero-copy .hero-step {
       margin: 0;
       padding: 8px 10px;
       border-radius: 14px;
       border: 1px solid rgba(16, 24, 32, 0.08);
       background: rgba(255, 255, 255, 0.68);
       color: #60707d;
-      font-size: clamp(13px, 1.05vw, 15px);
+      font-size: clamp(11px, 0.85vw, 13px);
       line-height: 1.5;
       transition: color 0.25s ease, border-color 0.25s ease, background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
     }
@@ -561,6 +570,55 @@
       margin-top: 14px;
       width: 100%;
       justify-content: flex-end;
+    }
+
+    .hero-side {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: var(--card);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .hero-side h3 {
+      margin: 0;
+      font-family: "Space Grotesk", "Noto Sans SC", sans-serif;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-side p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .hero-side-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .hero-side-chip {
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(16, 24, 32, 0.08);
+      background: rgba(255, 255, 255, 0.7);
+      font-size: 11px;
+      color: #5f7083;
+      line-height: 1.45;
+    }
+
+    .hero-side-chip strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--ink);
+      font-size: 12px;
     }
 
     .hero-notes {
@@ -1521,7 +1579,7 @@
     .dark-theme {
       color: #eef5ff;
       background:
-        radial-gradient(circle at 12% 8%, rgba(0, 169, 255, 0.16), transparent 28%),
+        radial-gradient(circle at 12% 8%, rgba(139, 92, 246, 0.25), transparent 28%),
         radial-gradient(circle at 90% 12%, rgba(139, 92, 246, 0.22), transparent 28%),
         linear-gradient(140deg, #06080f 0%, #0b1220 55%, #07101c 100%);
     }
@@ -1605,7 +1663,7 @@
     .dark-theme .cta,
     .dark-theme .thumb-bars span,
     .dark-theme .chart-line span {
-      background: linear-gradient(135deg, #2f7bff, #3fc6ff 60%, #9b6dff) !important;
+      background: linear-gradient(135deg, #7a5bff, #9b6dff 64%, #c4a1ff) !important;
       color: #fff;
       border-color: transparent;
     }
@@ -1624,7 +1682,9 @@
 
     .dark-theme .top-tabs,
     .dark-theme .top-tab,
-    .dark-theme .resume-card {
+    .dark-theme .resume-card,
+    .dark-theme .hero-side,
+    .dark-theme .hero-side-chip {
       background: rgba(12, 18, 30, 0.78);
       border-color: rgba(163, 189, 255, 0.2);
       color: #dbe9ff;
@@ -1713,7 +1773,6 @@
     }
 
     @media (max-width: 1080px) {
-      .hero,
       .feature-grid,
       .sites-grid,
       .resume-grid {
@@ -1726,6 +1785,12 @@
 
       .hero-copy h1 {
         max-width: none;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .hero {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -1765,7 +1830,9 @@
       .podcast-grid,
       .stat-blocks,
       .hero-notes,
-      .project-meta {
+      .project-meta,
+      .hero-side-grid,
+      .resume-intern-grid {
         grid-template-columns: 1fr;
       }
 
@@ -1857,6 +1924,29 @@
           <a class="ghost" href="#sites" data-i18n="ctaAll">Browse All Pages</a>
         </div>
       </div>
+
+      <aside class="hero-side">
+        <h3 data-i18n="heroSideTitle">Live Snapshot</h3>
+        <p data-i18n="heroSideDesc">Three product tracks with different strengths, now curated under one lightweight launch surface.</p>
+        <div class="hero-side-grid">
+          <div class="hero-side-chip">
+            <strong data-i18n="heroChip1Title">Interactive</strong>
+            <span data-i18n="heroChip1Text">///M Playground</span>
+          </div>
+          <div class="hero-side-chip">
+            <strong data-i18n="heroChip2Title">Data</strong>
+            <span data-i18n="heroChip2Text">Battery &amp; Charging</span>
+          </div>
+          <div class="hero-side-chip">
+            <strong data-i18n="heroChip3Title">Content</strong>
+            <span data-i18n="heroChip3Text">Shimai Podcast</span>
+          </div>
+          <div class="hero-side-chip">
+            <strong data-i18n="heroChip4Title">Format</strong>
+            <span data-i18n="heroChip4Text">Bilingual portfolio + resume</span>
+          </div>
+        </div>
+      </aside>
     </section>
 
     <section id="featured" class="section">
@@ -2093,27 +2183,6 @@
               </div>
             </article>
 
-            <div class="resume-timeline">
-              <article class="resume-card">
-                <h3 data-i18n="timelineBmwTitle">BMW (China) Services Ltd.</h3>
-                <div class="resume-meta" data-i18n="timelineBmwMeta">Powertrain Data Management | 2024/05 - Present | Beijing</div>
-                <ul class="resume-list">
-                  <li data-i18n="timelineBmw1">Led an enterprise-government OTA data platform with cross-functional stakeholders across China and Germany teams.</li>
-                  <li data-i18n="timelineBmw2">Built end-to-end powertrain data framework from signal setup and compliance to analytics and quality use cases.</li>
-                </ul>
-              </article>
-              <article class="resume-card">
-                <h3 data-i18n="timelineEyTitle">Ernst &amp; Young (China) Advisory</h3>
-                <div class="resume-meta" data-i18n="timelineEyMeta">Technology Risk Consultant | 2023/08 - 2024/04 | Shanghai</div>
-                <ul class="resume-list">
-                  <li data-i18n="timelineEy1">Delivered digital transformation and technology risk consulting with process and metric mapping.</li>
-                  <li data-i18n="timelineEy2">Supported enterprise IT/data governance planning including cloud and cybersecurity scope.</li>
-                </ul>
-              </article>
-            </div>
-          </div>
-
-          <div class="resume-col">
             <article class="resume-card">
               <h3 data-i18n="resumeEducationTitle">Education</h3>
               <ul class="resume-list">
@@ -2121,9 +2190,44 @@
                 <li data-i18n="resumeEdu2">Beijing University of Posts and Telecommunications - B.Eng. E-Commerce and Data Engineering (2018-2022, GPA 3.85)</li>
               </ul>
             </article>
+
+            <article class="resume-card">
+              <h3 data-i18n="resumeSkillsTitle">Core Skills</h3>
+              <ul class="resume-list">
+                <li data-i18n="resumeSkill1">Product storytelling and case-study framing</li>
+                <li data-i18n="resumeSkill2">Data-to-insight transformation for dashboard experiences</li>
+                <li data-i18n="resumeSkill3">Web prototyping with HTML, CSS, JavaScript</li>
+                <li data-i18n="resumeSkill4">Bilingual communication: Chinese / English</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="resume-col">
+            <article class="resume-card">
+              <h3 data-i18n="resumeWorkTitle">Work Timeline</h3>
+              <div class="resume-timeline">
+                <article class="resume-card">
+                  <h3 data-i18n="timelineBmwTitle">BMW (China) Services Ltd.</h3>
+                  <div class="resume-meta" data-i18n="timelineBmwMeta">Powertrain Data Management | 2024/05 - Present | Beijing</div>
+                  <ul class="resume-list">
+                    <li data-i18n="timelineBmw1">Led an enterprise-government OTA data platform with cross-functional stakeholders across China and Germany teams.</li>
+                    <li data-i18n="timelineBmw2">Built end-to-end powertrain data framework from signal setup and compliance to analytics and quality use cases.</li>
+                  </ul>
+                </article>
+                <article class="resume-card">
+                  <h3 data-i18n="timelineEyTitle">Ernst &amp; Young (China) Advisory</h3>
+                  <div class="resume-meta" data-i18n="timelineEyMeta">Technology Risk Consultant | 2023/08 - 2024/04 | Shanghai</div>
+                  <ul class="resume-list">
+                    <li data-i18n="timelineEy1">Delivered digital transformation and technology risk consulting with process and metric mapping.</li>
+                    <li data-i18n="timelineEy2">Supported enterprise IT/data governance planning including cloud and cybersecurity scope.</li>
+                  </ul>
+                </article>
+              </div>
+            </article>
+
             <article class="resume-card">
               <h3 data-i18n="resumeInternshipTitle">Internship Timeline</h3>
-              <div class="resume-timeline">
+              <div class="resume-intern-grid">
                 <article class="resume-card">
                   <h3 data-i18n="resumeInternTitle1">Microsoft</h3>
                   <div class="resume-meta" data-i18n="resumeInternMeta1">Account Technology Strategist | 2022/07 - 2022/10 | Shanghai</div>
@@ -2153,15 +2257,6 @@
                   </ul>
                 </article>
               </div>
-            </article>
-            <article class="resume-card">
-              <h3 data-i18n="resumeSkillsTitle">Core Skills</h3>
-              <ul class="resume-list">
-                <li data-i18n="resumeSkill1">Product storytelling and case-study framing</li>
-                <li data-i18n="resumeSkill2">Data-to-insight transformation for dashboard experiences</li>
-                <li data-i18n="resumeSkill3">Web prototyping with HTML, CSS, JavaScript</li>
-                <li data-i18n="resumeSkill4">Bilingual communication: Chinese / English</li>
-              </ul>
             </article>
           </div>
         </div>
@@ -2204,6 +2299,16 @@
           heroStepM: '///M Playground: a brainy playground with chess, sudoku, snake, and 2048.',
           heroStepPodcast: 'Shimai Podcast: a show built to create clarity in an entropic world.',
           heroStepBattery: 'Battery & Charging: a deep dive into HVB vehicles and charging performance.',
+          heroSideTitle: 'Live Snapshot',
+          heroSideDesc: 'Three product tracks with different strengths, now curated under one lightweight launch surface.',
+          heroChip1Title: 'Interactive',
+          heroChip1Text: '///M Playground',
+          heroChip2Title: 'Data',
+          heroChip2Text: 'Battery and Charging',
+          heroChip3Title: 'Content',
+          heroChip3Text: 'Shimai Podcast',
+          heroChip4Title: 'Format',
+          heroChip4Text: 'Bilingual portfolio plus resume',
           ctaFeatured: 'Open Featured Projects',
           ctaAll: 'Browse All Pages',
           featuredTitle: 'Featured',
@@ -2232,6 +2337,7 @@
           timelineEy1: 'Delivered digital transformation and technology risk consulting with process and metric mapping.',
           timelineEy2: 'Supported enterprise IT/data governance planning including cloud and cybersecurity scope.',
           resumeEducationTitle: 'Education',
+          resumeWorkTitle: 'Work Timeline',
           resumeEdu1: 'University of California, Berkeley - Master of Data Science (2022-2023, GPA 4.00)',
           resumeEdu2: 'Beijing University of Posts and Telecommunications - B.Eng. E-Commerce and Data Engineering (2018-2022, GPA 3.85)',
           resumeInternshipTitle: 'Internship Timeline',
@@ -2265,6 +2371,16 @@
           heroStepM: '///M Playground：脑力游乐场，聚合 chess / sudoku / snake / 2048，轻快但有品牌张力。',
           heroStepPodcast: '时髦小姨 Podcast：一个播客。在熵增世界里，做内容的熵减。',
           heroStepBattery: 'Battery & Charging：深挖 HVB 车型与充电性能，用数据讲清差异与趋势。',
+          heroSideTitle: '线上速览',
+          heroSideDesc: '三个方向、三种产品能力，在同一入口中被快速组织与表达。',
+          heroChip1Title: '互动',
+          heroChip1Text: '///M Playground',
+          heroChip2Title: '数据',
+          heroChip2Text: 'Battery & Charging',
+          heroChip3Title: '内容',
+          heroChip3Text: '时髦小姨 Podcast',
+          heroChip4Title: '形态',
+          heroChip4Text: '中英双语作品集 + 简历',
           ctaFeatured: '查看精选项目',
           ctaAll: '浏览全部站点',
           featuredTitle: '精选项目',
@@ -2293,6 +2409,7 @@
           timelineEy1: '为大型企业提供数字化转型与技术风险咨询，梳理流程、指标与系统风险。',
           timelineEy2: '参与企业 IT 与数据治理规划，覆盖云与网络安全等范围。',
           resumeEducationTitle: '教育背景',
+          resumeWorkTitle: '工作时间线',
           resumeEdu1: '加州大学伯克利分校 - 数据科学硕士（2022-2023，GPA 4.00）',
           resumeEdu2: '北京邮电大学 - 电子商务工程及法律本科（2018-2022，GPA 3.85）',
           resumeInternshipTitle: '实习时间线',
