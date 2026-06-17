@@ -1,0 +1,13 @@
+.env
+.venv/
+.vscode/
+reports/
+pd30/
+
+*.csv
+*.json
+*.pdf
+*.docx
+*.txt
+
+!assets/landing-previews/*.png
