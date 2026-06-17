@@ -448,9 +448,7 @@
     }
 
     .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.85fr);
-      gap: 18px;
+      display: block;
       margin-bottom: 18px;
     }
 
@@ -466,7 +464,7 @@
     }
 
     .hero-copy {
-      padding: clamp(26px, 5vw, 52px);
+      padding: clamp(18px, 3.2vw, 30px);
       position: relative;
       overflow: hidden;
       animation: rise-in 0.8s ease both;
@@ -510,9 +508,9 @@
       position: relative;
       z-index: 1;
       margin: 0;
-      max-width: 10ch;
-      font-size: clamp(40px, 7vw, 82px);
-      line-height: 0.95;
+      max-width: 18ch;
+      font-size: clamp(30px, 4.8vw, 54px);
+      line-height: 1;
       letter-spacing: -0.04em;
     }
 
@@ -529,20 +527,20 @@
     .hero-story {
       position: relative;
       z-index: 1;
-      margin-top: 18px;
+      margin-top: 14px;
       display: grid;
-      gap: 8px;
+      gap: 6px;
     }
 
     .hero-step {
       margin: 0;
-      padding: 10px 12px;
+      padding: 8px 10px;
       border-radius: 14px;
       border: 1px solid rgba(16, 24, 32, 0.08);
       background: rgba(255, 255, 255, 0.68);
       color: #60707d;
-      font-size: clamp(14px, 1.25vw, 18px);
-      line-height: 1.75;
+      font-size: clamp(13px, 1.05vw, 15px);
+      line-height: 1.5;
       transition: color 0.25s ease, border-color 0.25s ease, background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
     }
 
@@ -560,7 +558,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin-top: 24px;
+      margin-top: 14px;
     }
 
     .hero-notes {
@@ -1852,62 +1850,7 @@
           <a class="cta" href="#featured" data-i18n="ctaFeatured">Open Featured Projects</a>
           <a class="ghost" href="#sites" data-i18n="ctaAll">Browse All Pages</a>
         </div>
-        <div class="hero-notes">
-          <div class="hero-note">
-            <strong>Case-study framing</strong>
-            <span>每张项目卡强调角色定位、交互策略和输出价值。</span>
-          </div>
-          <div class="hero-note">
-            <strong>Stable previews</strong>
-            <span>预览改为裁切截图资产，视觉稳定且更容易控制版式。</span>
-          </div>
-          <div class="hero-note">
-            <strong>Motion rhythm</strong>
-            <span>首屏强化排版节奏、层次和滚动 reveal，增强“作品发布页”气质。</span>
-          </div>
-        </div>
       </div>
-
-      <aside class="hero-panel">
-        <div class="metric-grid">
-          <div class="metric">
-            <strong>3</strong>
-            <span>已接入的正式站点</span>
-          </div>
-          <div class="metric">
-            <strong>3</strong>
-            <span>主打项目</span>
-          </div>
-          <div class="metric">
-            <strong>EV</strong>
-            <span>数据产品 / benchmark 方向</span>
-          </div>
-          <div class="metric">
-            <strong>Play</strong>
-            <span>轻量交互 / 游戏方向</span>
-          </div>
-        </div>
-        <div class="highlight-box">
-          <p class="meta-line">Project positioning</p>
-          <p><strong>Battery &amp; Charging:</strong> automotive benchmark portal with report-ready dashboards.</p>
-          <p><strong>///M Playground:</strong> branded interactive system for engagement and identity.</p>
-          <p><strong>时髦小姨 Podcast:</strong> content-first experience focused on storytelling and listening flow.</p>
-        </div>
-        <div class="showcase-stack" aria-hidden="true">
-          <div class="showcase-card">
-            <img src="assets/landing-previews/m-playground-home.png" alt="///M Playground preview" loading="lazy" />
-            <div class="showcase-caption"><span>///M Playground</span><span>interactive</span></div>
-          </div>
-          <div class="showcase-card">
-            <img src="assets/landing-previews/charging-home.png" alt="Battery and Charging preview" loading="lazy" />
-            <div class="showcase-caption"><span>Battery &amp; Charging</span><span>benchmark</span></div>
-          </div>
-          <div class="showcase-card">
-            <img src="assets/landing-previews/shimai-podcast-home.png" alt="时髦小姨 Podcast preview" loading="lazy" />
-            <div class="showcase-caption"><span>时髦小姨 Podcast</span><span>content</span></div>
-          </div>
-        </div>
-      </aside>
     </section>
 
     <section id="featured" class="section">
@@ -2129,7 +2072,7 @@
             <article class="resume-card resume-hero">
               <div class="resume-profile">
                 <div class="resume-photo-wrap" aria-label="Profile photo area">
-                  <img class="resume-photo" src="assets/profile.jpg" alt="Profile photo of Wentao Vickie Li" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+                  <img class="resume-photo" src="./assets/profile.jpg" alt="Profile photo of Wentao Vickie Li" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
                   <div class="resume-photo-fallback" style="display:none;" data-i18n="resumePhotoFallback">Profile Photo<br />assets/profile.jpg</div>
                 </div>
                 <div>
@@ -2174,12 +2117,36 @@
             </article>
             <article class="resume-card">
               <h3 data-i18n="resumeInternshipTitle">Internship Timeline</h3>
-              <ul class="resume-list">
-                <li data-i18n="resumeIntern1">Microsoft - Account Technology Strategist (2022/07-2022/10)</li>
-                <li data-i18n="resumeIntern2">Apple - Data Analyst (2022/03-2022/07)</li>
-                <li data-i18n="resumeIntern3">Didi - Business Data Analysis Intern (2022/01-2022/03)</li>
-                <li data-i18n="resumeIntern4">Tencent - Product &amp; User Growth Intern (2020/08-2020/12)</li>
-              </ul>
+              <div class="resume-timeline">
+                <article class="resume-card">
+                  <h3 data-i18n="resumeInternTitle1">Microsoft</h3>
+                  <div class="resume-meta" data-i18n="resumeInternMeta1">Account Technology Strategist | 2022/07 - 2022/10 | Shanghai</div>
+                  <ul class="resume-list">
+                    <li data-i18n="resumeIntern1">Collected client planning inputs, built account roadmap, and supported execution within fiscal cycle.</li>
+                  </ul>
+                </article>
+                <article class="resume-card">
+                  <h3 data-i18n="resumeInternTitle2">Apple</h3>
+                  <div class="resume-meta" data-i18n="resumeInternMeta2">Data Analyst | 2022/03 - 2022/07 | Beijing</div>
+                  <ul class="resume-list">
+                    <li data-i18n="resumeIntern2">Built KPI decomposition and visual dashboards for market-facing optimization.</li>
+                  </ul>
+                </article>
+                <article class="resume-card">
+                  <h3 data-i18n="resumeInternTitle3">Didi</h3>
+                  <div class="resume-meta" data-i18n="resumeInternMeta3">Business Data Analysis Intern | 2022/01 - 2022/03 | Hangzhou</div>
+                  <ul class="resume-list">
+                    <li data-i18n="resumeIntern3">Improved subsidy governance and reduced subsidy rate from 0.8% to 0.6%.</li>
+                  </ul>
+                </article>
+                <article class="resume-card">
+                  <h3 data-i18n="resumeInternTitle4">Tencent</h3>
+                  <div class="resume-meta" data-i18n="resumeInternMeta4">Product &amp; User Growth Intern | 2020/08 - 2020/12 | Beijing</div>
+                  <ul class="resume-list">
+                    <li data-i18n="resumeIntern4">Refined user segmentation and A/B testing strategy to improve recall and content reach.</li>
+                  </ul>
+                </article>
+              </div>
             </article>
             <article class="resume-card">
               <h3 data-i18n="resumeSkillsTitle">Core Skills</h3>
@@ -2262,10 +2229,18 @@
           resumeEdu1: 'University of California, Berkeley - Master of Data Science (2022-2023, GPA 4.00)',
           resumeEdu2: 'Beijing University of Posts and Telecommunications - B.Eng. E-Commerce and Data Engineering (2018-2022, GPA 3.85)',
           resumeInternshipTitle: 'Internship Timeline',
-          resumeIntern1: 'Microsoft - Account Technology Strategist (2022/07-2022/10)',
-          resumeIntern2: 'Apple - Data Analyst (2022/03-2022/07)',
-          resumeIntern3: 'Didi - Business Data Analysis Intern (2022/01-2022/03)',
-          resumeIntern4: 'Tencent - Product and User Growth Intern (2020/08-2020/12)',
+          resumeInternTitle1: 'Microsoft',
+          resumeInternMeta1: 'Account Technology Strategist | 2022/07 - 2022/10 | Shanghai',
+          resumeIntern1: 'Collected client planning inputs, built account roadmap, and supported execution within fiscal cycle.',
+          resumeInternTitle2: 'Apple',
+          resumeInternMeta2: 'Data Analyst | 2022/03 - 2022/07 | Beijing',
+          resumeIntern2: 'Built KPI decomposition and visual dashboards for market-facing optimization.',
+          resumeInternTitle3: 'Didi',
+          resumeInternMeta3: 'Business Data Analysis Intern | 2022/01 - 2022/03 | Hangzhou',
+          resumeIntern3: 'Improved subsidy governance and reduced subsidy rate from 0.8% to 0.6%.',
+          resumeInternTitle4: 'Tencent',
+          resumeInternMeta4: 'Product and User Growth Intern | 2020/08 - 2020/12 | Beijing',
+          resumeIntern4: 'Refined user segmentation and A/B testing strategy to improve recall and content reach.',
           resumeSkillsTitle: 'Core Skills',
           resumeSkill1: 'Product storytelling and case-study framing',
           resumeSkill2: 'Data-to-insight transformation for dashboard experiences',
@@ -2315,10 +2290,18 @@
           resumeEdu1: '加州大学伯克利分校 - 数据科学硕士（2022-2023，GPA 4.00）',
           resumeEdu2: '北京邮电大学 - 电子商务工程及法律本科（2018-2022，GPA 3.85）',
           resumeInternshipTitle: '实习时间线',
-          resumeIntern1: '微软 - 客户技术战略（2022/07-2022/10）',
-          resumeIntern2: '苹果 - 数据分析（2022/03-2022/07）',
-          resumeIntern3: '滴滴 - 商业数据分析（2022/01-2022/03）',
-          resumeIntern4: '腾讯 - 产品与用户增长（2020/08-2020/12）',
+          resumeInternTitle1: '微软',
+          resumeInternMeta1: '客户技术战略 Account Technology Strategist | 2022/07 - 2022/10 | 上海',
+          resumeIntern1: '通过客户访谈搭建 Account Plan 与产品技术路线图，并在财年内推动执行。',
+          resumeInternTitle2: '苹果',
+          resumeInternMeta2: '数据分析 Data Analyst | 2022/03 - 2022/07 | 北京',
+          resumeIntern2: '完善线上业务核心指标体系并构建可视化看板，支持市场策略优化与落地执行。',
+          resumeInternTitle3: '滴滴',
+          resumeInternMeta3: '商业数据分析 | 2022/01 - 2022/03 | 杭州',
+          resumeIntern3: '通过补贴率拆解与资源监控优化，将补贴率由 0.8% 降至 0.6%。',
+          resumeInternTitle4: '腾讯',
+          resumeInternMeta4: '产品与用户增长 | 2020/08 - 2020/12 | 北京',
+          resumeIntern4: '细化用户标签与 A/B Test 策略，提升召回率和内容触达效率。',
           resumeSkillsTitle: '核心能力',
           resumeSkill1: '产品叙事与 case-study 结构化表达',
           resumeSkill2: '从数据到洞察的可视化与仪表盘体验设计',
