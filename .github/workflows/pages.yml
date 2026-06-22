@@ -27,7 +27,10 @@ jobs:
 
       - name: Prepare site artifact
         run: |
+          test -d site
+          rm -rf out
           mkdir -p out/assets/landing-previews
+          cp -R site/. out/
           cp index.html out/index.html
           cp assets/landing-previews/*.png out/assets/landing-previews/
           cp assets/profile.jpg out/assets/profile.jpg
