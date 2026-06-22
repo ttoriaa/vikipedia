@@ -6,15 +6,15 @@ on:
   workflow_dispatch:
     inputs:
       username:
-        description: "GitHub username override"
+        description: GitHub username override
         required: false
         type: string
       limit:
-        description: "Max project count override"
+        description: Max project count override
         required: false
         type: string
       include_homepage_any_domain:
-        description: "Include repos with any homepage URL"
+        description: Include repos with any homepage URL
         required: false
         default: "false"
         type: choice
@@ -22,7 +22,7 @@ on:
           - "false"
           - "true"
       include_project_boards:
-        description: "Include public GitHub Projects boards"
+        description: Include public GitHub Projects boards
         required: false
         default: "true"
         type: choice
@@ -30,7 +30,7 @@ on:
           - "true"
           - "false"
       project_board_limit:
-        description: "How many boards to fetch before final truncation"
+        description: How many boards to fetch before final truncation
         required: false
         type: string
 

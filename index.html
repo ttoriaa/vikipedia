@@ -2445,7 +2445,7 @@
           const url = escapeHtml(project.url || project.repo_url || '#');
           const language = escapeHtml(project.language || 'Project');
           const category = escapeHtml(project.category || dict.autoProjectTag);
-          const targetLabel = project.url_type === 'homepage' ? 'Live' : 'Repo';
+          const targetLabel = escapeHtml(project.target_label || (project.url_type === 'homepage' || project.url_type === 'pages' ? 'Live' : project.url_type === 'project_board' ? 'Board' : 'Repo'));
 
           return `
             <article class="site-card auto-generated reveal is-visible">
