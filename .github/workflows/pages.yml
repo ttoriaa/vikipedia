@@ -31,17 +31,26 @@ jobs:
 
       - name: Prepare site artifact
         run: |
-          test -d site
-          test -d market_watch
           rm -rf out
           mkdir -p out/assets/landing-previews
+          test -d site
           cp -R site/. out/
-          cp -R market_watch out/market_watch
+          if [ -d market_watch ]; then
+            cp -R market_watch out/market_watch
+          fi
           cp index.html out/index.html
-          cp assets/landing-previews/*.png out/assets/landing-previews/
-          cp assets/profile.jpg out/assets/profile.jpg
-          cp assets/github-projects.json out/assets/github-projects.json
-          cp assets/skills-catalog.json out/assets/skills-catalog.json
+          if [ -d assets/landing-previews ]; then
+            cp assets/landing-previews/*.png out/assets/landing-previews/
+          fi
+          if [ -f assets/profile.jpg ]; then
+            cp assets/profile.jpg out/assets/profile.jpg
+          fi
+          if [ -f assets/github-projects.json ]; then
+            cp assets/github-projects.json out/assets/github-projects.json
+          fi
+          if [ -f assets/skills-catalog.json ]; then
+            cp assets/skills-catalog.json out/assets/skills-catalog.json
+          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
