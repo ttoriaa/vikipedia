@@ -449,7 +449,9 @@
     }
 
     body[data-active-tab="resume"] .story-timeline,
-    body[data-active-tab="resume"] .scroll-progress {
+    body[data-active-tab="resume"] .scroll-progress,
+    body[data-active-tab="skills"] .story-timeline,
+    body[data-active-tab="skills"] .scroll-progress {
       opacity: 0;
       pointer-events: none;
     }
@@ -1516,6 +1518,18 @@
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
+    .skills-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .skill-card .skill-path {
+      margin: 0;
+      font-family: "JetBrains Mono", "Consolas", "Menlo", monospace;
+      font-size: 12px;
+      color: color-mix(in srgb, var(--muted) 80%, transparent);
+      word-break: break-all;
+    }
+
     .auto-projects-status {
       margin-top: 14px;
       padding: 12px 14px;
@@ -1643,6 +1657,7 @@
 
     .dark-theme .feature-card p,
     .dark-theme .site-card p,
+    .dark-theme .skill-card .skill-path,
     .dark-theme .meta-line,
     .dark-theme .hero-panel p,
     .dark-theme .section-head p,
@@ -1773,6 +1788,7 @@
     @media (max-width: 1080px) {
       .feature-grid,
       .sites-grid,
+      .skills-grid,
       .resume-grid {
         grid-template-columns: 1fr;
       }
@@ -1902,10 +1918,12 @@
       <div class="top-tabs" role="tablist" aria-label="Main tabs">
         <button class="top-tab is-active" type="button" data-tab-target="index" data-i18n="tabIndex">Index</button>
         <button class="top-tab" type="button" data-tab-target="resume" data-i18n="tabResume">Resume</button>
+        <button class="top-tab" type="button" data-tab-target="skills" data-i18n="tabSkills">Skills</button>
       </div>
       <nav class="top-links" aria-label="快速入口">
         <button id="langToggle" class="lang-toggle" type="button">中文</button>
         <a href="https://ttoriaa.github.io/automotive-benchmarking" target="_blank" rel="noreferrer">Battery &amp; Charging</a>
+        <a href="https://ttoriaa.github.io/vikipedia/market_watch/" target="_blank" rel="noreferrer">Market Watch</a>
         <a href="https://ttoriaa.github.io/gaming-vikipedia/" target="_blank" rel="noreferrer">///M Playground</a>
         <a href="https://ttoriaa.github.io/shimai-podcast-site/index.html?lang=zh#home" target="_blank" rel="noreferrer">Podcast</a>
       </nav>
@@ -2112,6 +2130,28 @@
         </article>
 
         <article class="site-card">
+          <div class="site-thumb site-thumb--auto">
+            <div class="thumb-top"><span></span><span></span><span></span></div>
+            <div class="thumb-body">
+              <div class="thumb-title">Market</div>
+              <div class="thumb-micro"><span>Semi</span><span>AI</span><span>Gold</span></div>
+              <div class="thumb-line long"></div>
+              <div class="thumb-line mid"></div>
+              <div class="thumb-line short"></div>
+            </div>
+          </div>
+          <div class="site-tags">
+            <span class="site-tag">Finance</span>
+            <span class="site-tag">Monitoring</span>
+          </div>
+          <h3>Market Watch</h3>
+          <p>Track semiconductor, AI compute, energy, and gold with multi-source updates, alerts, and digest summaries.</p>
+          <div class="site-actions">
+            <a href="https://ttoriaa.github.io/vikipedia/market_watch/" target="_blank" rel="noreferrer">Open</a>
+          </div>
+        </article>
+
+        <article class="site-card">
           <div class="site-thumb site-thumb--gaming">
             <div class="thumb-top"><span></span><span></span><span></span></div>
             <div class="thumb-body">
@@ -2250,6 +2290,19 @@
         </div>
       </section>
     </main>
+
+    <main id="panel-skills" class="tab-panel" aria-hidden="true">
+      <section class="section resume-shell">
+        <div class="section-head">
+          <div>
+            <h2 data-i18n="skillsTitle">Skills</h2>
+            <p data-i18n="skillsIntro">A dedicated index of trained skills in this repository. Each card links to the corresponding skill folder.</p>
+          </div>
+        </div>
+        <div id="skillsStatus" class="auto-projects-status" data-i18n="skillsLoading">Loading skills from repository...</div>
+        <div id="skillsGrid" class="sites-grid skills-grid" aria-live="polite"></div>
+      </section>
+    </main>
   </div>
   <script>
     (() => {
@@ -2259,13 +2312,18 @@
       const tabButtons = Array.from(document.querySelectorAll('.top-tab[data-tab-target]'));
       const tabPanels = {
         index: document.getElementById('panel-index'),
-        resume: document.getElementById('panel-resume')
+        resume: document.getElementById('panel-resume'),
+        skills: document.getElementById('panel-skills')
       };
       const anchorLinks = Array.from(document.querySelectorAll('.story-timeline a[data-anchor]'));
       const heroSteps = Array.from(document.querySelectorAll('.hero-step'));
       const featureCards = Array.from(document.querySelectorAll('.feature-card'));
       const autoProjectsGrid = document.getElementById('autoProjectsGrid');
       const autoProjectsStatus = document.getElementById('autoProjectsStatus');
+      const skillsGrid = document.getElementById('skillsGrid');
+      const skillsStatus = document.getElementById('skillsStatus');
+      const skillsRepo = 'ttoriaa/vikipedia-agents';
+      let skillsCatalog = [];
       const anchorTargets = anchorLinks
         .map(link => {
           const id = link.getAttribute('href')?.replace('#', '');
@@ -2284,6 +2342,7 @@
           brandSubtitle: 'A compact case-study hub for your live products.',
           tabIndex: 'Index',
           tabResume: 'Resume',
+          tabSkills: 'Skills',
           eyebrow: 'Portfolio of live pages',
           heroTitleLine1: 'Vikipedia:',
           heroTitleLine2: "Let's roll.",
@@ -2344,6 +2403,14 @@
           resumeSkill2: 'Data-to-insight transformation for dashboard experiences',
           resumeSkill3: 'Web prototyping with HTML, CSS, JavaScript',
           resumeSkill4: 'Bilingual communication: Chinese / English',
+          skillsTitle: 'Skills',
+          skillsIntro: 'A dedicated index of trained skills in this repository. Each card links to the corresponding skill folder.',
+          skillsLoading: 'Loading skills from repository...',
+          skillsEmpty: 'No skill directories were found in .github/skills.',
+          skillsError: 'Unable to load skills right now. Please try again later.',
+          skillsNoDescription: 'No description found in SKILL.md yet.',
+          skillsTag: 'Skill',
+          skillsOpen: 'Open Skill',
           langButton: '中文'
         },
         zh: {
@@ -2352,6 +2419,7 @@
           brandSubtitle: '一个紧凑的案例作品首页，连接你所有线上项目。',
           tabIndex: '首页',
           tabResume: '简历',
+          tabSkills: 'Skills',
           eyebrow: '线上项目作品集入口',
           heroTitleLine1: 'Vikipedia:',
           heroTitleLine2: "Let's roll.",
@@ -2412,6 +2480,14 @@
           resumeSkill2: '从数据到洞察的可视化与仪表盘体验设计',
           resumeSkill3: 'HTML / CSS / JavaScript 快速原型构建',
           resumeSkill4: '中英双语沟通与内容交付',
+          skillsTitle: 'Skills 能力库',
+          skillsIntro: '这里集中展示仓库中已训练的 skills。每张卡片都可直接跳转到对应 skill 目录。',
+          skillsLoading: '正在从仓库加载 skills...',
+          skillsEmpty: '在 .github/skills 下暂未发现 skill 目录。',
+          skillsError: '当前无法加载 skills，请稍后再试。',
+          skillsNoDescription: '该 Skill 的 SKILL.md 暂无可提取描述。',
+          skillsTag: 'Skill',
+          skillsOpen: '打开 Skill',
           langButton: 'English'
         }
       };
@@ -2472,6 +2548,158 @@
         }).join('');
       };
 
+      const renderSkills = (lang) => {
+        if (!skillsGrid || !skillsStatus) {
+          return;
+        }
+
+        const dict = i18n[lang] || i18n.en;
+        if (!Array.isArray(skillsCatalog) || skillsCatalog.length === 0) {
+          skillsGrid.innerHTML = '';
+          skillsStatus.style.display = '';
+          skillsStatus.textContent = dict.skillsEmpty;
+          return;
+        }
+
+        skillsStatus.style.display = 'none';
+        skillsGrid.innerHTML = skillsCatalog.map((skill) => {
+          const title = escapeHtml(skill.name);
+          const summary = escapeHtml(skill.description || dict.skillsNoDescription);
+          const repoPathText = escapeHtml(skill.path);
+          const url = escapeHtml(skill.url);
+
+          return `
+            <article class="site-card skill-card reveal is-visible">
+              <div class="site-tags">
+                <span class="site-tag">${dict.skillsTag}</span>
+              </div>
+              <h3>${title}</h3>
+              <p>${summary}</p>
+              <p class="skill-path">${repoPathText}</p>
+              <div class="site-actions">
+                <a href="${url}" target="_blank" rel="noreferrer">${dict.skillsOpen}</a>
+              </div>
+            </article>
+          `;
+        }).join('');
+      };
+
+      const extractFirstParagraph = (markdown) => {
+        const lines = String(markdown || '').replace(/\r/g, '').split('\n');
+        let index = 0;
+
+        if (lines[0] && lines[0].trim() === '---') {
+          index = 1;
+          while (index < lines.length && lines[index].trim() !== '---') {
+            index += 1;
+          }
+          if (index < lines.length) {
+            index += 1;
+          }
+        }
+
+        const paragraph = [];
+        let inCodeFence = false;
+
+        for (; index < lines.length; index += 1) {
+          const raw = lines[index];
+          const line = raw.trim();
+
+          if (line.startsWith('```')) {
+            inCodeFence = !inCodeFence;
+            continue;
+          }
+
+          if (inCodeFence) {
+            continue;
+          }
+
+          if (!line) {
+            if (paragraph.length > 0) {
+              break;
+            }
+            continue;
+          }
+
+          if (/^#{1,6}\s/.test(line) || /^[-*+]\s/.test(line) || /^\d+\.\s/.test(line) || /^>\s?/.test(line) || /^\|/.test(line)) {
+            if (paragraph.length > 0) {
+              break;
+            }
+            continue;
+          }
+
+          paragraph.push(line);
+        }
+
+        return paragraph.join(' ').replace(/\s+/g, ' ').trim();
+      };
+
+      const toDisplayName = (slug) => slug
+        .split('-')
+        .filter(Boolean)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(' ');
+
+      const loadSkillsCatalog = async (lang) => {
+        if (!skillsStatus || !skillsGrid) {
+          return;
+        }
+
+        const dict = i18n[lang] || i18n.en;
+        skillsStatus.style.display = '';
+        skillsStatus.textContent = dict.skillsLoading;
+
+        try {
+          const listUrl = `https://api.github.com/repos/${skillsRepo}/contents/.github/skills`;
+          const listResp = await fetch(listUrl, {
+            headers: { Accept: 'application/vnd.github+json' },
+            cache: 'no-store'
+          });
+          if (!listResp.ok) {
+            throw new Error(`HTTP ${listResp.status}`);
+          }
+
+          const items = await listResp.json();
+          const skillDirs = Array.isArray(items)
+            ? items
+              .filter((item) => item && item.type === 'dir' && typeof item.name === 'string')
+              .sort((a, b) => a.name.localeCompare(b.name))
+            : [];
+
+          const skills = await Promise.all(skillDirs.map(async (item) => {
+            const slug = item.name;
+            const rawSkillUrl = `https://raw.githubusercontent.com/${skillsRepo}/main/.github/skills/${slug}/SKILL.md`;
+            let description = '';
+
+            try {
+              const mdResp = await fetch(rawSkillUrl, { cache: 'no-store' });
+              if (mdResp.ok) {
+                const markdown = await mdResp.text();
+                description = extractFirstParagraph(markdown);
+              }
+            } catch (error) {
+              description = '';
+            }
+
+            return {
+              slug,
+              name: toDisplayName(slug),
+              description,
+              path: `.github/skills/${slug}`,
+              url: `https://github.com/${skillsRepo}/tree/main/.github/skills/${slug}`
+            };
+          }));
+
+          skillsCatalog = skills;
+          renderSkills(lang);
+        } catch (error) {
+          skillsCatalog = [];
+          skillsGrid.innerHTML = '';
+          skillsStatus.style.display = '';
+          skillsStatus.textContent = dict.skillsError;
+        }
+      };
+
       const loadAutoProjects = async (lang) => {
         if (!autoProjectsGrid || !autoProjectsStatus) {
           return;
@@ -2512,6 +2740,8 @@
         }
         document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
 
+        renderSkills(lang);
+
         if (Array.isArray(autoProjects) && autoProjects.length > 0) {
           renderAutoProjects(lang);
         }
@@ -2519,6 +2749,7 @@
 
       let currentLang = 'en';
       applyLanguage(currentLang);
+      loadSkillsCatalog(currentLang);
       loadAutoProjects(currentLang);
       if (langToggle) {
         langToggle.addEventListener('click', () => {
