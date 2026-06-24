@@ -449,7 +449,9 @@
     }
 
     body[data-active-tab="resume"] .story-timeline,
-    body[data-active-tab="resume"] .scroll-progress {
+    body[data-active-tab="resume"] .scroll-progress,
+    body[data-active-tab="skills"] .story-timeline,
+    body[data-active-tab="skills"] .scroll-progress {
       opacity: 0;
       pointer-events: none;
     }
@@ -782,6 +784,53 @@
       color: var(--muted);
       max-width: 60ch;
       line-height: 1.8;
+    }
+
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .impact-card {
+      position: relative;
+      overflow: hidden;
+      padding: 18px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(119, 146, 196, 0.42);
+      background: linear-gradient(145deg, rgba(11, 22, 40, 0.94), rgba(24, 44, 76, 0.9));
+      box-shadow: 0 14px 30px rgba(7, 14, 28, 0.28);
+    }
+
+    .impact-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 12px;
+      right: 12px;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(122, 91, 255, 0.2), rgba(124, 220, 255, 0.86), rgba(122, 91, 255, 0.2));
+    }
+
+    .impact-card strong {
+      display: block;
+      font-family: "Space Grotesk", "Noto Sans SC", sans-serif;
+      color: #f4f8ff;
+      font-size: clamp(31px, 3.5vw, 38px);
+      line-height: 1;
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.26);
+    }
+
+    .impact-card span {
+      color: #c0d2ef;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      line-height: 1.6;
+      display: block;
     }
 
     .feature-grid,
@@ -1516,6 +1565,52 @@
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
+    .skills-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .skills-controls {
+      display: grid;
+      grid-template-columns: 1fr 220px auto;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .skills-input,
+    .skills-select {
+      width: 100%;
+      min-height: 42px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--ink);
+      padding: 10px 12px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .skills-input:focus,
+    .skills-select:focus {
+      border-color: rgba(15, 111, 255, 0.45);
+      box-shadow: 0 0 0 3px rgba(15, 111, 255, 0.12);
+    }
+
+    .skills-count {
+      justify-self: end;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .skill-card .skill-path {
+      margin: 0;
+      font-family: "JetBrains Mono", "Consolas", "Menlo", monospace;
+      font-size: 12px;
+      color: color-mix(in srgb, var(--muted) 80%, transparent);
+      word-break: break-all;
+    }
+
     .auto-projects-status {
       margin-top: 14px;
       padding: 12px 14px;
@@ -1561,6 +1656,73 @@
       border: 1px dashed var(--line);
       color: var(--muted);
       font-weight: 700;
+    }
+
+    .site-tag.status-active {
+      background: rgba(21, 167, 123, 0.13);
+      border-color: rgba(21, 167, 123, 0.4);
+      color: #087a57;
+    }
+
+    .site-tag.status-stable {
+      background: rgba(15, 111, 255, 0.12);
+      border-color: rgba(15, 111, 255, 0.38);
+      color: #0f5fd2;
+    }
+
+    .site-tag.status-experimental {
+      background: rgba(244, 148, 35, 0.12);
+      border-color: rgba(244, 148, 35, 0.4);
+      color: #b06208;
+    }
+
+    .fixed-cta {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 80;
+      display: grid;
+      gap: 8px;
+      width: min(290px, calc(100vw - 40px));
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 34px rgba(16, 24, 32, 0.2);
+    }
+
+    .fixed-cta p {
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .fixed-cta-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .fixed-cta a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 800;
+      transition: transform 0.18s ease, border-color 0.18s ease;
+    }
+
+    .fixed-cta a:hover {
+      transform: translateY(-1px);
+      border-color: rgba(15, 111, 255, 0.35);
     }
 
     .footer-note {
@@ -1613,6 +1775,10 @@
     .dark-theme .top-links a,
     .dark-theme .chip,
     .dark-theme .site-tag,
+    .dark-theme .skills-input,
+    .dark-theme .skills-select,
+    .dark-theme .fixed-cta,
+    .dark-theme .fixed-cta a,
     .dark-theme .card-actions a,
     .dark-theme .site-actions a,
     .dark-theme .ghost,
@@ -1643,6 +1809,9 @@
 
     .dark-theme .feature-card p,
     .dark-theme .site-card p,
+    .dark-theme .skill-card .skill-path,
+    .dark-theme .skills-count,
+    .dark-theme .fixed-cta p,
     .dark-theme .meta-line,
     .dark-theme .hero-panel p,
     .dark-theme .section-head p,
@@ -1666,6 +1835,20 @@
       background: linear-gradient(135deg, #7a5bff, #9b6dff 64%, #c4a1ff) !important;
       color: #fff;
       border-color: transparent;
+    }
+
+    .dark-theme .impact-card {
+      border-color: rgba(151, 180, 232, 0.45) !important;
+      background: linear-gradient(145deg, rgba(10, 20, 40, 0.95), rgba(20, 40, 74, 0.92)) !important;
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.36);
+    }
+
+    .dark-theme .impact-card strong {
+      color: #f7faff !important;
+    }
+
+    .dark-theme .impact-card span {
+      color: #c7d8f4 !important;
     }
 
     .dark-theme .hero-step.is-active,
@@ -1773,8 +1956,21 @@
     @media (max-width: 1080px) {
       .feature-grid,
       .sites-grid,
+      .skills-grid,
       .resume-grid {
         grid-template-columns: 1fr;
+      }
+
+      .impact-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .skills-controls {
+        grid-template-columns: 1fr;
+      }
+
+      .skills-count {
+        justify-self: start;
       }
 
       .story-timeline {
@@ -1856,6 +2052,12 @@
         width: 100%;
         margin-left: 0;
       }
+
+      .fixed-cta {
+        right: 12px;
+        left: 12px;
+        width: auto;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1900,7 +2102,8 @@
         </div>
       </div>
       <div class="top-tabs" role="tablist" aria-label="Main tabs">
-        <button class="top-tab is-active" type="button" data-tab-target="index" data-i18n="tabIndex">Index</button>
+        <button class="top-tab is-active" type="button" data-tab-target="index" data-i18n="tabIndex">Home</button>
+        <button class="top-tab" type="button" data-tab-target="skills" data-i18n="tabSkills">Skills</button>
         <button class="top-tab" type="button" data-tab-target="resume" data-i18n="tabResume">Resume</button>
       </div>
       <nav class="top-links" aria-label="快速入口">
@@ -1911,6 +2114,14 @@
         <a href="https://ttoriaa.github.io/shimai-podcast-site/index.html?lang=zh#home" target="_blank" rel="noreferrer">Podcast</a>
       </nav>
     </header>
+
+    <aside class="fixed-cta" aria-label="Quick actions">
+      <p data-i18n="ctaBoxText">Need a focused case study walkthrough or a live demo?</p>
+      <div class="fixed-cta-row">
+        <a href="#featured" data-i18n="ctaBoxPrimary">View Featured</a>
+        <a href="case-study-battery-charging.html" target="_blank" rel="noreferrer" data-i18n="ctaBoxCase">Open Case Study</a>
+      </div>
+    </aside>
 
     <main id="panel-index" class="tab-panel is-active">
     <section id="home" class="hero">
@@ -1933,6 +2144,16 @@
         </div>
       </div>
 
+    </section>
+
+    <section id="impact" class="section">
+      <div class="section-head">
+        <div>
+          <h2 data-i18n="impactTitle">Impact Wall</h2>
+          <p data-i18n="impactIntro">A live snapshot of portfolio scale, automation, and production readiness.</p>
+        </div>
+      </div>
+      <div id="impactGrid" class="impact-grid" aria-live="polite"></div>
     </section>
 
     <section id="featured" class="section">
@@ -2016,6 +2237,7 @@
           </div>
           <div class="card-actions">
             <a href="https://ttoriaa.github.io/automotive-benchmarking" target="_blank" rel="noreferrer">Open Site</a>
+            <a href="case-study-battery-charging.html" target="_blank" rel="noreferrer" data-i18n="openCaseStudy">View Case</a>
           </div>
         </article>
 
@@ -2131,6 +2353,28 @@
           <p>Track semiconductor, AI compute, energy, and gold with multi-source updates, alerts, and digest summaries.</p>
           <div class="site-actions">
             <a href="https://ttoriaa.github.io/vikipedia/market_watch/" target="_blank" rel="noreferrer">Open</a>
+          </div>
+        </article>
+
+        <article class="site-card">
+          <div class="site-thumb site-thumb--auto">
+            <div class="thumb-top"><span></span><span></span><span></span></div>
+            <div class="thumb-body">
+              <div class="thumb-title">Copilot</div>
+              <div class="thumb-micro"><span>Guide</span><span>Setup</span><span>Cases</span></div>
+              <div class="thumb-line long"></div>
+              <div class="thumb-line mid"></div>
+              <div class="thumb-line short"></div>
+            </div>
+          </div>
+          <div class="site-tags">
+            <span class="site-tag">AI Workflow</span>
+            <span class="site-tag">Onboarding</span>
+          </div>
+          <h3>GitHub Copilot Quickstart Guide</h3>
+          <p>一页快速说明 GitHub Copilot 是什么、我们为什么要搭、怎么搭，以及它已经能支撑的典型 use cases。</p>
+          <div class="site-actions">
+            <a href="copilot_quickstart_guide.html" target="_blank" rel="noreferrer">Open</a>
           </div>
         </article>
 
@@ -2273,6 +2517,29 @@
         </div>
       </section>
     </main>
+
+    <main id="panel-skills" class="tab-panel" aria-hidden="true">
+      <section class="section resume-shell">
+        <div class="section-head">
+          <div>
+            <h2 data-i18n="skillsTitle">Skills</h2>
+            <p data-i18n="skillsIntro">A dedicated index of trained skills in this repository. Each card links to the corresponding skill folder.</p>
+          </div>
+        </div>
+        <div class="skills-controls">
+          <input id="skillsSearch" class="skills-input" type="search" placeholder="Search skills" data-i18n-placeholder="skillsSearchPlaceholder" />
+          <select id="skillsFilter" class="skills-select" aria-label="Skills status filter">
+            <option value="all" data-i18n="skillsFilterAll">All statuses</option>
+            <option value="active" data-i18n="skillsFilterActive">Active</option>
+            <option value="stable" data-i18n="skillsFilterStable">Stable</option>
+            <option value="experimental" data-i18n="skillsFilterExperimental">Experimental</option>
+          </select>
+          <div id="skillsCount" class="skills-count">0</div>
+        </div>
+        <div id="skillsStatus" class="auto-projects-status" data-i18n="skillsLoading">Loading skills from repository...</div>
+        <div id="skillsGrid" class="sites-grid skills-grid" aria-live="polite"></div>
+      </section>
+    </main>
   </div>
   <script>
     (() => {
@@ -2282,13 +2549,21 @@
       const tabButtons = Array.from(document.querySelectorAll('.top-tab[data-tab-target]'));
       const tabPanels = {
         index: document.getElementById('panel-index'),
-        resume: document.getElementById('panel-resume')
+        resume: document.getElementById('panel-resume'),
+        skills: document.getElementById('panel-skills')
       };
       const anchorLinks = Array.from(document.querySelectorAll('.story-timeline a[data-anchor]'));
       const heroSteps = Array.from(document.querySelectorAll('.hero-step'));
       const featureCards = Array.from(document.querySelectorAll('.feature-card'));
       const autoProjectsGrid = document.getElementById('autoProjectsGrid');
       const autoProjectsStatus = document.getElementById('autoProjectsStatus');
+      const impactGrid = document.getElementById('impactGrid');
+      const skillsGrid = document.getElementById('skillsGrid');
+      const skillsStatus = document.getElementById('skillsStatus');
+      const skillsSearch = document.getElementById('skillsSearch');
+      const skillsFilter = document.getElementById('skillsFilter');
+      const skillsCount = document.getElementById('skillsCount');
+      let skillsCatalog = [];
       const anchorTargets = anchorLinks
         .map(link => {
           const id = link.getAttribute('href')?.replace('#', '');
@@ -2305,8 +2580,9 @@
           pageTitle: "Vikipedia: Let's roll.",
           brandTitle: "Vikipedia: Let's roll.",
           brandSubtitle: 'A compact case-study hub for your live products.',
-          tabIndex: 'Index',
+          tabIndex: 'Home',
           tabResume: 'Resume',
+          tabSkills: 'Skills',
           eyebrow: 'Portfolio of live pages',
           heroTitleLine1: 'Vikipedia:',
           heroTitleLine2: "Let's roll.",
@@ -2315,6 +2591,16 @@
           heroStepBattery: 'Battery & Charging: a deep dive into HVB vehicles and charging performance.',
           ctaFeatured: 'Open Featured Projects',
           ctaAll: 'Browse All Pages',
+          ctaBoxText: 'Need a focused case study walkthrough or a live demo?',
+          ctaBoxPrimary: 'View Featured',
+          ctaBoxCase: 'Open Case Study',
+          openCaseStudy: 'View Case',
+          impactTitle: 'Impact Wall',
+          impactIntro: 'A live snapshot of portfolio scale, automation, and production readiness.',
+          impactPublishedSites: 'Published Sites',
+          impactSkillsTotal: 'Tracked Skills',
+          impactAutomation: 'Automated Pipelines',
+          impactCaseStudies: 'Case Studies',
           featuredTitle: 'Featured',
           featuredIntro: 'Three live products, three distinct product narratives. Each card is framed as goals, methods, and outcomes.',
           sitesTitle: 'All Sites',
@@ -2367,14 +2653,32 @@
           resumeSkill2: 'Data-to-insight transformation for dashboard experiences',
           resumeSkill3: 'Web prototyping with HTML, CSS, JavaScript',
           resumeSkill4: 'Bilingual communication: Chinese / English',
+          skillsTitle: 'Skills',
+          skillsIntro: 'A dedicated index of trained skills in this repository. Each card links to the corresponding skill folder.',
+          skillsLoading: 'Loading skills from repository...',
+          skillsEmpty: 'No skill directories were found in .github/skills.',
+          skillsError: 'Unable to load skills right now. Please try again later.',
+          skillsNoDescription: 'No description found in SKILL.md yet.',
+          skillsSearchPlaceholder: 'Search by skill title, description, or path',
+          skillsFilterAll: 'All statuses',
+          skillsFilterActive: 'Active',
+          skillsFilterStable: 'Stable',
+          skillsFilterExperimental: 'Experimental',
+          skillsStatusActive: 'Active',
+          skillsStatusStable: 'Stable',
+          skillsStatusExperimental: 'Experimental',
+          skillsCountLabel: '{{count}} skills',
+          skillsTag: 'Skill',
+          skillsOpen: 'Open Skill',
           langButton: '中文'
         },
         zh: {
           pageTitle: "Vikipedia: Let's roll.",
           brandTitle: "Vikipedia: Let's roll.",
           brandSubtitle: '一个紧凑的案例作品首页，连接你所有线上项目。',
-          tabIndex: '首页',
+          tabIndex: 'Home',
           tabResume: '简历',
+          tabSkills: 'Skills',
           eyebrow: '线上项目作品集入口',
           heroTitleLine1: 'Vikipedia:',
           heroTitleLine2: "Let's roll.",
@@ -2383,6 +2687,16 @@
           heroStepBattery: 'Battery & Charging：深挖 HVB 车型与充电性能，用数据讲清差异与趋势。',
           ctaFeatured: '查看精选项目',
           ctaAll: '浏览全部站点',
+          ctaBoxText: '需要更聚焦的案例拆解或现场演示？',
+          ctaBoxPrimary: '查看精选',
+          ctaBoxCase: '打开案例页',
+          openCaseStudy: '查看案例',
+          impactTitle: 'Impact 数字墙',
+          impactIntro: '实时展示作品规模、自动化程度与交付成熟度。',
+          impactPublishedSites: '已发布站点',
+          impactSkillsTotal: '技能条目',
+          impactAutomation: '自动化流水线',
+          impactCaseStudies: '案例页面',
           featuredTitle: '精选项目',
           featuredIntro: '三个线上产品，三条不同叙事线。每张卡片都按目标、方法、结果来组织。',
           sitesTitle: '全部站点',
@@ -2435,11 +2749,63 @@
           resumeSkill2: '从数据到洞察的可视化与仪表盘体验设计',
           resumeSkill3: 'HTML / CSS / JavaScript 快速原型构建',
           resumeSkill4: '中英双语沟通与内容交付',
+          skillsTitle: 'Skills 能力库',
+          skillsIntro: '这里集中展示仓库中已训练的 skills。每张卡片都可直接跳转到对应 skill 目录。',
+          skillsLoading: '正在从仓库加载 skills...',
+          skillsEmpty: '在 .github/skills 下暂未发现 skill 目录。',
+          skillsError: '当前无法加载 skills，请稍后再试。',
+          skillsNoDescription: '该 Skill 的 SKILL.md 暂无可提取描述。',
+          skillsSearchPlaceholder: '按 skill 名称、描述或路径搜索',
+          skillsFilterAll: '全部状态',
+          skillsFilterActive: '活跃',
+          skillsFilterStable: '稳定',
+          skillsFilterExperimental: '实验中',
+          skillsStatusActive: '活跃',
+          skillsStatusStable: '稳定',
+          skillsStatusExperimental: '实验中',
+          skillsCountLabel: '{{count}} 个 skill',
+          skillsTag: 'Skill',
+          skillsOpen: '打开 Skill',
           langButton: 'English'
         }
       };
 
       let autoProjects = [];
+
+      const classifySkillStatus = (skill) => {
+        const hay = `${skill.name || ''} ${skill.description || ''} ${skill.path || ''}`.toLowerCase();
+        if (/daily|pipeline|sync|publish|runner|task|assessment|update|backup/.test(hay)) {
+          return 'active';
+        }
+        if (/template|research|search|summary|score|benchmark/.test(hay)) {
+          return 'stable';
+        }
+        return 'experimental';
+      };
+
+      const formatCountLabel = (lang, count) => {
+        const dict = i18n[lang] || i18n.en;
+        return (dict.skillsCountLabel || '{{count}}').replace('{{count}}', String(count));
+      };
+
+      const renderImpact = (lang) => {
+        if (!impactGrid) {
+          return;
+        }
+        const dict = i18n[lang] || i18n.en;
+        const metrics = [
+          { value: '4+', label: dict.impactPublishedSites },
+          { value: String(skillsCatalog.length), label: dict.impactSkillsTotal },
+          { value: '3', label: dict.impactAutomation },
+          { value: '1', label: dict.impactCaseStudies }
+        ];
+        impactGrid.innerHTML = metrics.map((item) => `
+          <article class="impact-card reveal is-visible">
+            <strong>${escapeHtml(item.value)}</strong>
+            <span>${escapeHtml(item.label)}</span>
+          </article>
+        `).join('');
+      };
 
       const escapeHtml = (value) => String(value || '')
         .replace(/&/g, '&amp;')
@@ -2495,6 +2861,111 @@
         }).join('');
       };
 
+      const renderSkills = (lang) => {
+        if (!skillsGrid || !skillsStatus) {
+          return;
+        }
+
+        const dict = i18n[lang] || i18n.en;
+        const query = (skillsSearch?.value || '').trim().toLowerCase();
+        const statusFilter = skillsFilter?.value || 'all';
+
+        if (!Array.isArray(skillsCatalog) || skillsCatalog.length === 0) {
+          skillsGrid.innerHTML = '';
+          skillsStatus.style.display = '';
+          skillsStatus.textContent = dict.skillsEmpty;
+          if (skillsCount) {
+            skillsCount.textContent = formatCountLabel(lang, 0);
+          }
+          renderImpact(lang);
+          return;
+        }
+
+        const filteredSkills = skillsCatalog.filter((skill) => {
+          const status = classifySkillStatus(skill);
+          const hay = `${skill.name || ''} ${skill.description || ''} ${skill.path || ''}`.toLowerCase();
+          const matchedQuery = !query || hay.includes(query);
+          const matchedStatus = statusFilter === 'all' || status === statusFilter;
+          return matchedQuery && matchedStatus;
+        });
+
+        skillsStatus.style.display = 'none';
+        if (skillsCount) {
+          skillsCount.textContent = formatCountLabel(lang, filteredSkills.length);
+        }
+
+        if (filteredSkills.length === 0) {
+          skillsGrid.innerHTML = '';
+          skillsStatus.style.display = '';
+          skillsStatus.textContent = dict.skillsEmpty;
+          renderImpact(lang);
+          return;
+        }
+
+        skillsGrid.innerHTML = filteredSkills.map((skill) => {
+          const title = escapeHtml(skill.name);
+          const summary = escapeHtml(skill.description || dict.skillsNoDescription);
+          const repoPathText = escapeHtml(skill.path);
+          const url = escapeHtml(skill.url);
+          const status = classifySkillStatus(skill);
+          const statusLabelMap = {
+            active: dict.skillsStatusActive,
+            stable: dict.skillsStatusStable,
+            experimental: dict.skillsStatusExperimental
+          };
+          const statusLabel = escapeHtml(statusLabelMap[status] || status);
+
+          return `
+            <article class="site-card skill-card reveal is-visible">
+              <div class="site-tags">
+                <span class="site-tag">${dict.skillsTag}</span>
+                <span class="site-tag status-${status}">${statusLabel}</span>
+              </div>
+              <h3>${title}</h3>
+              <p>${summary}</p>
+              <p class="skill-path">${repoPathText}</p>
+              <div class="site-actions">
+                <a href="${url}" target="_blank" rel="noreferrer">${dict.skillsOpen}</a>
+              </div>
+            </article>
+          `;
+        }).join('');
+
+        renderImpact(lang);
+      };
+
+      const loadSkillsCatalog = async (lang) => {
+        if (!skillsStatus || !skillsGrid) {
+          return;
+        }
+
+        const dict = i18n[lang] || i18n.en;
+        skillsStatus.style.display = '';
+        skillsStatus.textContent = dict.skillsLoading;
+
+        try {
+          const resp = await fetch('assets/skills-catalog.json', { cache: 'no-store' });
+          if (!resp.ok) {
+            throw new Error(`HTTP ${resp.status}`);
+          }
+
+          const payload = await resp.json();
+          const skills = Array.isArray(payload?.skills) ? payload.skills : [];
+          skillsCatalog = skills.map((skill) => ({
+            name: skill.title || skill.slug || 'Untitled Skill',
+            description: skill.description || '',
+            path: skill.path || '',
+            url: skill.url || '#'
+          }));
+          renderSkills(lang);
+        } catch (error) {
+          skillsCatalog = [];
+          skillsGrid.innerHTML = '';
+          skillsStatus.style.display = '';
+          skillsStatus.textContent = dict.skillsError;
+        }
+      };
+
       const loadAutoProjects = async (lang) => {
         if (!autoProjectsGrid || !autoProjectsStatus) {
           return;
@@ -2533,7 +3004,13 @@
           langToggle.textContent = dict.langButton;
           langToggle.setAttribute('aria-label', lang === 'en' ? 'Switch to Chinese' : '切换到英文');
         }
+        if (skillsSearch) {
+          skillsSearch.placeholder = dict.skillsSearchPlaceholder || '';
+        }
         document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+
+        renderSkills(lang);
+        renderImpact(lang);
 
         if (Array.isArray(autoProjects) && autoProjects.length > 0) {
           renderAutoProjects(lang);
@@ -2542,7 +3019,14 @@
 
       let currentLang = 'en';
       applyLanguage(currentLang);
+      loadSkillsCatalog(currentLang);
       loadAutoProjects(currentLang);
+      if (skillsSearch) {
+        skillsSearch.addEventListener('input', () => renderSkills(currentLang));
+      }
+      if (skillsFilter) {
+        skillsFilter.addEventListener('change', () => renderSkills(currentLang));
+      }
       if (langToggle) {
         langToggle.addEventListener('click', () => {
           currentLang = currentLang === 'en' ? 'zh' : 'en';
