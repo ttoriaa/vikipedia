@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C7 OTA Regulation Hub</title>
+  <style>
+    :root {
+      --panel: rgba(255, 255, 255, 0.94);
+      --text: #1f2937;
+      --muted: #52607a;
+      --primary: #0b5cab;
+      --primary-2: #1d6fc1;
+      --border: #d7e0ec;
+      --paper: #f7f5ef;
+      --ink: #17324f;
+      --shadow: 0 18px 44px rgba(11, 92, 171, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.82)),
+        repeating-linear-gradient(180deg, rgba(21, 57, 96, 0.03) 0, rgba(21, 57, 96, 0.03) 1px, transparent 1px, transparent 36px),
+        radial-gradient(circle at top left, rgba(11, 92, 171, 0.08), transparent 24%),
+        linear-gradient(180deg, #eef2f7 0%, var(--paper) 100%);
+      min-height: 100vh;
+    }
+    .wrap { max-width: 1340px; margin: 0 auto; padding: 24px; }
+    .header { background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(245,248,252,0.98)); border: 1px solid #c9d6e5; border-radius: 18px; box-shadow: var(--shadow); padding: 22px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; position: relative; overflow: hidden; }
+    .header::after { content: ""; position: absolute; right: -60px; top: -60px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(11, 92, 171, 0.12), transparent 68%); pointer-events: none; }
+    .header::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: linear-gradient(180deg, #224e7a, #0b5cab); }
+    .header-main { min-width: 0; position: relative; z-index: 1; }
+    .title { margin: 0; font-size: 31px; line-height: 1.2; letter-spacing: 0.01em; color: var(--ink); }
+    .subtitle { margin: 10px 0 0; color: var(--muted); font-size: 14px; max-width: 760px; }
+    .hero-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+    .meta-chip { padding: 6px 10px; border-radius: 999px; background: rgba(11, 92, 171, 0.06); border: 1px solid rgba(11, 92, 171, 0.12); color: #0a467f; font-size: 11px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+    .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    .hero-link { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 9px 14px; border-radius: 999px; border: 1px solid #cfe0f4; background: rgba(255,255,255,0.96); color: #123b66; font-size: 12px; font-weight: 800; text-decoration: none; cursor: pointer; box-shadow: 0 8px 18px rgba(11, 92, 171, 0.08); transition: all 0.2s ease; }
+    .hero-link:hover { background: #f4f9ff; border-color: #b7d0eb; transform: translateY(-1px); }
+    .hero-link--primary { background: linear-gradient(135deg, #0b5cab, #1d6fc1); border-color: transparent; color: #fff; }
+    .hero-link--primary:hover { background: linear-gradient(135deg, #0a539a, #185fa7); }
+    .lang-toggle { border: 1px solid var(--border); background: rgba(255,255,255,0.94); color: var(--text); border-radius: 999px; padding: 8px 12px; font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; transition: all 0.2s ease; box-shadow: 0 8px 18px rgba(11, 92, 171, 0.08); position: relative; z-index: 1; }
+    .lang-toggle:hover { border-color: #a8c3e5; background: #f6fbff; transform: translateY(-1px); }
+    .content-shell { display: grid; grid-template-columns: 302px minmax(0, 1fr); gap: 18px; align-items: start; }
+    .side-nav { position: sticky; top: 20px; background: rgba(255,255,255,0.94); border: 1px solid #cfdbe8; border-radius: 16px; box-shadow: var(--shadow); padding: 16px; backdrop-filter: blur(10px); }
+    .side-nav-title { margin: 0 0 8px; font-size: 18px; font-weight: 800; color: #163a63; }
+    .side-nav-subtitle { margin: 0 0 14px; font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .nav-list { display: flex; flex-direction: column; gap: 8px; }
+    .nav-item { width: 100%; text-align: left; border: 1px solid transparent; background: transparent; border-radius: 14px; padding: 13px 13px; cursor: pointer; transition: all 0.2s ease; color: var(--text); }
+    .nav-top { display: flex; align-items: center; gap: 12px; margin-bottom: 5px; }
+    .nav-icon { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 10px; background: #edf4fc; color: #0a4f90; font-size: 12px; font-weight: 800; flex: 0 0 auto; }
+    .nav-item:hover { background: rgba(11, 92, 171, 0.05); border-color: #d2e0f2; }
+    .nav-item.active { background: linear-gradient(135deg, rgba(11,92,171,0.12), rgba(29,111,193,0.08)); border-color: #abc6e6; box-shadow: inset 0 0 0 1px rgba(11,92,171,0.05); }
+    .nav-label { font-size: 15px; font-weight: 700; }
+    .nav-desc { display: block; margin-left: 46px; font-size: 12px; line-height: 1.55; color: var(--muted); }
+    .main-col { min-width: 0; }
+    .panel { background: var(--panel); border: 1px solid #cfdbe8; border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; backdrop-filter: blur(10px); }
+    .panel-head { padding: 15px 18px; border-bottom: 1px solid #d6e0ea; font-size: 12px; color: var(--muted); background: linear-gradient(180deg, #f8fbff, #eef3f9); font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+    .panel-body { background: linear-gradient(180deg, rgba(252,253,255,0.98) 0%, rgba(247,249,252,0.98) 100%); min-height: 76vh; }
+    .overview-pane, .chapter-pane { display: none; padding: 24px; }
+    .overview-pane.active, .chapter-pane.active { display: block; }
+    .overview-title { margin: 0 0 6px; font-size: 24px; color: #163a63; }
+    .overview-subtitle { margin: 0 0 18px; font-size: 14px; color: var(--muted); line-height: 1.6; max-width: 760px; }
+    .summary-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 18px; }
+    .summary-card { border: 1px solid #d6e0ea; border-radius: 14px; background: rgba(255,255,255,0.98); box-shadow: 0 8px 22px rgba(11, 92, 171, 0.05); padding: 16px; }
+    .summary-eyebrow { margin: 0 0 10px; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #5c7aa0; }
+    .summary-value { margin: 0; font-size: 28px; line-height: 1; color: #123b66; }
+    .summary-label { margin: 8px 0 0; font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .finder-panel { border: 1px solid #d6e0ea; border-radius: 14px; background: linear-gradient(180deg, #fbfdff, #f5f8fc); box-shadow: 0 10px 24px rgba(11, 92, 171, 0.05); padding: 18px; margin-bottom: 18px; }
+    .finder-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+    .finder-eyebrow { margin: 0 0 4px; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #5c7aa0; }
+    .finder-title { margin: 0; font-size: 20px; color: #163a63; }
+    .finder-count { margin: 0; font-size: 12px; font-weight: 700; color: #5c7aa0; white-space: nowrap; }
+    .finder-controls { display: grid; gap: 12px; }
+    .finder-search { width: 100%; border: 1px solid #cddff2; border-radius: 14px; padding: 12px 14px; font-size: 14px; color: #1f2937; background: #fff; outline: none; }
+    .finder-search:focus { border-color: #90b8e3; box-shadow: 0 0 0 3px rgba(29, 111, 193, 0.12); }
+    .finder-filter-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .finder-filter { border: 1px solid #d2e0f2; background: #fff; color: #355272; border-radius: 999px; padding: 8px 12px; font-size: 12px; font-weight: 700; cursor: pointer; }
+    .finder-filter.active { background: linear-gradient(135deg, rgba(11,92,171,0.14), rgba(29,111,193,0.08)); border-color: #9fc0e4; color: #0a4f90; }
+    .finder-results { display: grid; gap: 10px; margin-top: 14px; }
+    .finder-group { border: 1px solid #d7e3f1; border-radius: 12px; background: rgba(255,255,255,0.98); box-shadow: 0 8px 20px rgba(11,92,171,0.05); overflow: hidden; }
+    .finder-group + .finder-group { margin-top: 2px; }
+    .finder-group-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; cursor: pointer; font-size: 13px; font-weight: 800; color: #163a63; background: linear-gradient(180deg, #fbfdff, #f5f8fc); }
+    .finder-group-head::marker, .finder-group-head::-webkit-details-marker { color: #5c7aa0; }
+    .finder-group-count { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; padding: 4px 8px; font-size: 11px; font-weight: 800; background: #eaf3fe; color: #0d4f8f; border: 1px solid #d8e5f3; }
+    .finder-group-body { padding: 10px; display: grid; gap: 10px; }
+    .finder-result { width: 100%; text-align: left; border: 1px solid #d7e3f1; border-radius: 12px; background: rgba(255,255,255,0.98); padding: 14px; cursor: pointer; box-shadow: 0 8px 20px rgba(11,92,171,0.05); }
+    .finder-result:hover { border-color: #b5cde8; background: #fbfdff; }
+    .finder-result-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+    .finder-result-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .finder-clause { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; background: #eaf3fe; color: #0d4f8f; padding: 5px 9px; font-size: 11px; font-weight: 800; }
+    .finder-section { font-size: 12px; font-weight: 700; color: #355272; }
+    .finder-open { font-size: 11px; font-weight: 800; color: #0a4f90; }
+    .finder-result-text { margin: 0; font-size: 13px; line-height: 1.6; color: #52607a; }
+    .finder-empty { margin: 0; border: 1px dashed #cfe0f4; border-radius: 16px; padding: 16px; font-size: 13px; color: #52607a; background: rgba(255,255,255,0.76); }
+    .overview-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .overview-card { border: 1px solid #d6e0ea; border-radius: 14px; background: rgba(255,255,255,0.98); box-shadow: 0 10px 24px rgba(11, 92, 171, 0.05); padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .overview-card-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .overview-card-head { display: flex; align-items: center; gap: 10px; }
+    .overview-card-icon { width: 38px; height: 38px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #edf4fc, #dfeefd); color: #0a4f90; font-size: 12px; font-weight: 800; flex: 0 0 auto; }
+    .overview-card-title { margin: 0; font-size: 16px; color: #183b63; }
+    .overview-ref { display: inline-flex; align-items: center; gap: 6px; padding: 5px 9px; border-radius: 999px; background: #eef5fd; border: 1px solid #d8e5f3; color: #0d4f8f; font-size: 11px; font-weight: 800; position: relative; cursor: help; }
+    .overview-ref:hover::after { content: attr(data-tip); position: absolute; left: 0; top: calc(100% + 8px); width: 260px; padding: 10px 12px; border-radius: 12px; background: rgba(17, 24, 39, 0.94); color: #fff; font-size: 11px; line-height: 1.5; font-weight: 600; box-shadow: 0 12px 24px rgba(0,0,0,0.18); z-index: 30; white-space: normal; }
+    .overview-card-text { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .overview-keywords { margin: 0; font-size: 12px; color: #355272; line-height: 1.5; font-weight: 700; }
+    .overview-keywords span { color: var(--muted); font-weight: 600; }
+    .overview-card-action { margin-top: auto; align-self: flex-start; border: 1px solid #cfe0f4; background: #f7fbff; color: #0a4f90; border-radius: 999px; padding: 8px 12px; font-size: 12px; font-weight: 700; cursor: pointer; }
+    .overview-card-action:hover { background: #ecf5ff; border-color: #b9d2ef; }
+    .chapter-content { color: var(--text); font-size: 14px; }
+    .chapter-content > h1 { margin: 0 0 14px; font-size: 29px; line-height: 1.18; color: #123b66; letter-spacing: 0.01em; }
+    .chapter-content > p:first-of-type { margin: 0 0 24px; padding: 16px 18px; border: 1px solid #dbe7f3; border-radius: 18px; background: linear-gradient(135deg, #f7fbff, #eef6ff); color: #405066; box-shadow: 0 10px 24px rgba(11,92,171,0.06); line-height: 1.68; font-size: 14px; }
+    .chapter-content h2 { margin: 28px 0 12px; font-size: 18px; color: #0f4f8d; padding: 12px 14px; border: 1px solid #d9e6f3; border-left: 4px solid #224e7a; border-radius: 10px; background: #f4f7fb; }
+    .chapter-content h3 { margin: 20px 0 10px; font-size: 15px; color: #355272; }
+    .chapter-content p { line-height: 1.68; color: #405066; font-size: 14px; }
+    .chapter-content ul { margin: 12px 0 20px; padding: 16px 18px 16px 34px; border: 1px solid #e2ebf5; border-radius: 16px; background: #ffffff; box-shadow: 0 8px 20px rgba(11,92,171,0.04); }
+    .chapter-content li { margin: 8px 0; line-height: 1.6; font-size: 14px; }
+    .chapter-content table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; background: #fff; border: 1px solid #d9e4f0; display: block; overflow: auto; border-radius: 16px; box-shadow: 0 10px 24px rgba(11,92,171,0.06); }
+    .chapter-content tbody { display: table; width: 100%; }
+    .chapter-content th, .chapter-content td { border: 1px solid #d9e4f0; padding: 11px 13px; vertical-align: top; line-height: 1.55; text-align: left; font-size: 13px; }
+    .chapter-content th { background: #eef5fd; color: #153f6b; font-weight: 700; position: sticky; top: 0; }
+    .chapter-content tr:nth-child(even) td { background: #fbfdff; }
+    .chapter-content td { background: #ffffff; }
+    .chapter-content strong { color: #193f69; }
+    .clause-hit { background: #fff3bf; color: #5a3f00; padding: 0 3px; border-radius: 4px; box-shadow: inset 0 -1px 0 rgba(90, 63, 0, 0.12); }
+    .clause-hit-active { background: #ffd166; color: #4d3500; box-shadow: 0 0 0 2px rgba(255, 171, 0, 0.4), inset 0 -1px 0 rgba(77, 53, 0, 0.18); }
+    .hit-nav { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding: 10px 12px; border-bottom: 1px solid #d6e0ea; background: linear-gradient(180deg, #fffef8, #f5f8fc); }
+    .hit-nav[hidden] { display: none; }
+    .hit-nav-label { margin-right: auto; font-size: 12px; color: #5c7aa0; font-weight: 700; }
+    .hit-nav-btn { border: 1px solid #cfe0f4; background: #fff; color: #0a4f90; border-radius: 999px; padding: 6px 10px; font-size: 12px; font-weight: 700; cursor: pointer; }
+    .hit-nav-btn:hover:not(:disabled) { background: #eef6ff; border-color: #b9d2ef; }
+    .hit-nav-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .hit-nav-count { display: inline-flex; align-items: center; justify-content: center; min-width: 62px; border-radius: 999px; background: #eef5fd; border: 1px solid #d8e5f3; color: #0d4f8f; padding: 6px 10px; font-size: 11px; font-weight: 800; }
+    @media (max-width: 800px) {
+      .wrap { padding: 16px; }
+      .header { padding: 18px 16px; border-radius: 18px; }
+      .title { font-size: 22px; }
+      .hero-meta { margin-top: 10px; }
+      .content-shell { grid-template-columns: 1fr; }
+      .side-nav { position: static; }
+      .summary-strip { grid-template-columns: 1fr; }
+      .overview-grid { grid-template-columns: 1fr; }
+      .overview-ref:hover::after { width: 220px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="header">
+      <div class="header-main">
+        <h1 class="title" id="pageTitle">C7 OTA Regulation Hub</h1>
+        <p class="subtitle" id="pageSubtitle">A unified portal view of the five C7 OTA regulation modules with direct chapter navigation.</p>
+        <div class="hero-meta">
+          <span class="meta-chip" id="chipA">5 modules</span>
+          <span class="meta-chip" id="chipB">Bilingual view</span>
+          <span class="meta-chip" id="chipC">C7 OTA regulation</span>
+        </div>
+        <div class="hero-actions">
+          <a class="hero-link hero-link--primary" id="heroHomeLink" href="index.html#sites">Back to home</a>
+          <button class="hero-link" id="heroOverviewLink" data-target-link="overview" type="button">Open overview</button>
+          <button class="hero-link" id="heroStartLink" data-target-link="onboard" type="button">Start with on-board</button>
+        </div>
+      </div>
+      <button class="lang-toggle" id="langToggle" type="button">CN</button>
+    </section>
+    <div class="content-shell">
+      <aside class="side-nav">
+        <h2 class="side-nav-title" id="sideNavTitle">Section Navigator</h2>
+        <p class="side-nav-subtitle" id="sideNavSubtitle">Browse the five regulation sections and switch directly to the target chapter.</p>
+        <div class="nav-list" id="navList">          <button class="nav-item active" data-target="overview" type="button"><span class="nav-top"><span class="nav-icon">OV</span><span class="nav-label">Overview</span></span><span class="nav-desc">Summary entry and quick orientation across all five chapters.</span></button>
+          <button class="nav-item" data-target="onboard" type="button"><span class="nav-top"><span class="nav-icon">OB</span><span class="nav-label">On-board Requirements</span></span><span class="nav-desc">Vehicle-end capability, triggers, and lifecycle data control.</span></button>
+          <button class="nav-item" data-target="backend" type="button"><span class="nav-top"><span class="nav-icon">BE</span><span class="nav-label">Backend Requirements</span></span><span class="nav-desc">Enterprise platform intake, forwarding, and protocol execution.</span></button>
+          <button class="nav-item" data-target="cyber" type="button"><span class="nav-top"><span class="nav-icon">CS</span><span class="nav-label">Cybersecurity Requirements</span></span><span class="nav-desc">Authentication, integrity, encryption, and audit controls.</span></button>
+          <button class="nav-item" data-target="reporting" type="button"><span class="nav-top"><span class="nav-icon">RP</span><span class="nav-label">Reporting Requirements</span></span><span class="nav-desc">Upload frequency, event triggers, buffering, and resend logic.</span></button>
+          <button class="nav-item" data-target="testing" type="button"><span class="nav-top"><span class="nav-icon">TS</span><span class="nav-label">Testing Requirements</span></span><span class="nav-desc">Validation methods, test setup, and accuracy verification.</span></button></div>
+      </aside>
+      <div class="main-col">
+        <section class="panel">
+          <div class="panel-head" id="panelHead">Overview</div>
+          <div class="panel-body">
+            <div class="overview-pane active" id="overviewPane">
+              <h2 class="overview-title" id="overviewTitle">Overview</h2>
+              <p class="overview-subtitle" id="overviewSubtitle">Start here for a quick briefing across the five C7 OBD regulation modules before opening each detailed chapter.</p>
+              <div class="summary-strip">
+                <article class="summary-card">
+                  <p class="summary-eyebrow">Portal</p>
+                  <p class="summary-value">5</p>
+                  <p class="summary-label" id="summaryModules">Regulation modules organized into one portal.</p>
+                </article>
+                <article class="summary-card">
+                  <p class="summary-eyebrow">Navigation</p>
+                  <p class="summary-value">6</p>
+                  <p class="summary-label" id="summaryChapters">Overview plus five detailed chapters with one-click switching.</p>
+                </article>
+                <article class="summary-card">
+                  <p class="summary-eyebrow">Shareability</p>
+                  <p class="summary-value">URL</p>
+                  <p class="summary-label" id="summaryDeepLinks">Each chapter now keeps a direct URL hash for review and sharing.</p>
+                </article>
+              </div>
+              <section class="finder-panel">
+                <div class="finder-head">
+                  <div>
+                    <p class="finder-eyebrow" id="finderEyebrow">Clause finder</p>
+                    <h3 class="finder-title" id="finderTitle">Filter by clause or topic</h3>
+                  </div>
+                  <p class="finder-count" id="finderCount">0 matches</p>
+                </div>
+                <div class="finder-controls">
+                  <input class="finder-search" id="clauseSearch" type="search" placeholder="Search JD.4.3 / OTA / encryption" />
+                  <div class="finder-filter-list" id="finderFilterList"></div>
+                </div>
+                <div class="finder-results" id="finderResults"></div>
+              </section>
+              <div class="overview-grid" id="overviewGrid">                <article class="overview-card">
+                  <div class="overview-card-meta"><div class="overview-card-head"><span class="overview-card-icon">OB</span><h3 class="overview-card-title" id="overviewCardTitleOnboard">On-board Requirements</h3></div><span class="overview-ref" id="overviewCardRefOnboard" data-tip="Covers vehicle-end applicability, data acquisition, local storage, lifecycle counters, and periodic/event-trigger upload windows.">Quick reference JD.1-JD.4</span></div>
+                  <p class="overview-card-text" id="overviewCardTextOnboard">Vehicle-end monitoring, storage, trigger rules, lifecycle counters, and local readout capability.</p>
+                  <p class="overview-keywords" id="overviewCardKeywordsOnboard"><span>Keywords:</span> MIL / OTA / CALID-CVN / NVM / JD.9</p>
+                  <button class="overview-card-action" data-target="onboard" type="button" id="overviewCardActionOnboard">Open section</button>
+                </article>
+                <article class="overview-card">
+                  <div class="overview-card-meta"><div class="overview-card-head"><span class="overview-card-icon">BE</span><h3 class="overview-card-title" id="overviewCardTitleBackend">Backend Requirements</h3></div><span class="overview-ref" id="overviewCardRefBackend" data-tip="Covers enterprise/national platform definitions, collection-forwarding chain, protocol execution, data structure, and platform responsibilities.">Quick reference J.2.61-JD.9.1</span></div>
+                  <p class="overview-card-text" id="overviewCardTextBackend">Enterprise platform responsibilities covering receive, validate, forward, and protocol state handling.</p>
+                  <p class="overview-keywords" id="overviewCardKeywordsBackend"><span>Keywords:</span> Enterprise platform / protocol / resend / VIN / next-day 24:00</p>
+                  <button class="overview-card-action" data-target="backend" type="button" id="overviewCardActionBackend">Open section</button>
+                </article>
+                <article class="overview-card">
+                  <div class="overview-card-meta"><div class="overview-card-head"><span class="overview-card-icon">CS</span><h3 class="overview-card-title" id="overviewCardTitleCyber">Cybersecurity Requirements</h3></div><span class="overview-ref" id="overviewCardRefCyber" data-tip="Covers platform data security, protection level, login validation, encryption fields, and key-exchange clauses for the remote link.">Quick reference JD.7.5-JD.8.8.3</span></div>
+                  <p class="overview-card-text" id="overviewCardTextCyber">Remote-link security controls including authentication, encryption, integrity, and auditability.</p>
+                  <p class="overview-keywords" id="overviewCardKeywordsCyber"><span>Keywords:</span> authentication / encryption / integrity / level-3 / key exchange</p>
+                  <button class="overview-card-action" data-target="cyber" type="button" id="overviewCardActionCyber">Open section</button>
+                </article>
+                <article class="overview-card">
+                  <div class="overview-card-meta"><div class="overview-card-head"><span class="overview-card-icon">RP</span><h3 class="overview-card-title" id="overviewCardTitleReporting">Reporting Requirements</h3></div><span class="overview-ref" id="overviewCardRefReporting" data-tip="Covers reporting obligations from vehicle to enterprise to national platform, 3-minute windows, event uploads, resend, and connected-state logic.">Quick reference JD.1.3-JD.5.4</span></div>
+                  <p class="overview-card-text" id="overviewCardTextReporting">Periodic and event-driven reporting, timing windows, connected-state logic, and resend handling.</p>
+                  <p class="overview-keywords" id="overviewCardKeywordsReporting"><span>Keywords:</span> 3-minute window / periodic / trigger / resend / connected state</p>
+                  <button class="overview-card-action" data-target="reporting" type="button" id="overviewCardActionReporting">Open section</button>
+                </article>
+                <article class="overview-card">
+                  <div class="overview-card-meta"><div class="overview-card-head"><span class="overview-card-icon">TS</span><h3 class="overview-card-title" id="overviewCardTitleTesting">Testing Requirements</h3></div><span class="overview-ref" id="overviewCardRefTesting" data-tip="Covers test equipment, remote test platform, pre-check conditions, event verification, and fuel/electric accuracy validation.">Quick reference JD.6.1-JD.6.5</span></div>
+                  <p class="overview-card-text" id="overviewCardTextTesting">Test setup, pre-checks, event verification, platform verification, and accuracy validation rules.</p>
+                  <p class="overview-keywords" id="overviewCardKeywordsTesting"><span>Keywords:</span> scan tool / remote test platform / pre-check / accuracy / retest</p>
+                  <button class="overview-card-action" data-target="testing" type="button" id="overviewCardActionTesting">Open section</button>
+                </article></div>
+            </div>
+            <div class="chapter-pane" id="chapterPane"><div class="hit-nav" id="hitNav" hidden><span class="hit-nav-label" id="hitNavLabel">Clause matches</span><button class="hit-nav-btn" id="hitPrevBtn" type="button">Previous</button><span class="hit-nav-count" id="hitNavCount">0 / 0</span><button class="hit-nav-btn" id="hitNextBtn" type="button">Next</button></div><div class="chapter-content" id="chapterContent"></div></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+  <script>
+    const sections = {'onboard': {'titleZh': '车端技术要求', 'titleEn': 'On-board Requirements', 'leadZh': '<strong>章节定位</strong>：本章聚焦车端 OBD 远程联网能力的技术实现与控制边界。', 'leadEn': '<strong>Scope</strong>: This chapter focuses on onboard OBD remote-connectivity implementation and control boundaries.', 'navZh': '车端能力、触发机制与寿命周期数据控制。', 'navEn': 'Vehicle-end capability, triggers, and lifecycle data control.', 'summaryZh': '聚焦车端监测、存储、触发条件、寿命累计值与本地可读能力。', 'summaryEn': 'Vehicle-end monitoring, storage, trigger rules, lifecycle counters, and local readout capability.', 'refZh': '条款范围 JD.1-JD.4', 'refEn': 'Quick reference JD.1-JD.4', 'refTipZh': '覆盖车端适用性、数据获取、本地存储、寿命周期累计值控制，以及间隔/事件触发发送窗口等车端要求。', 'refTipEn': 'Covers vehicle-end applicability, data acquisition, local storage, lifecycle counters, and periodic/event-trigger upload windows.', 'keywordsZh': 'MIL / OTA / CALID-CVN / NVM / JD.9', 'keywordsEn': 'MIL / OTA / CALID-CVN / NVM / JD.9', 'zh': '<h2>法规依据（细化条款）</h2>\n<ul>\n  <li>J.3.1.5：适用附件JD车型应可获取规定数据并保证收集/发送完整准确。</li>\n  <li>JD.1.1：具备无线通信功能车型应满足附件JD要求。</li>\n  <li>JD.1.2：车端终端/装置可分布实现监测、存储、远程传输，但需保证准确性与一致性。</li>\n  <li>JD.1.4：全寿命周期开启远程联网功能（有效寿命最低要求约束）。</li>\n  <li>JD.1.6：是否具备远程联网功能需按车型区分。</li>\n  <li>JD.1.7：仓储/库存/运输模式切换时的数据发送前置要求。</li>\n  <li>JD.1.9：满足数据标准化与无限制访问，并符合J.6.2/J.6.3相关要求。</li>\n  <li>JD.2.1：JD.9数据实时监测、存储、收集，返回实际读数，不得默认值/替代值。</li>\n  <li>JD.2.2：寿命周期累计值需NVM存储，确保准确且不可更改。</li>\n  <li>JD.2.3、JD.2.4、JD.2.6：重编程/模块更换/必须删除累计值场景下的数据连续性保全要求。</li>\n  <li>JD.2.5：本地可存储并读取最近至少20条相关数据。</li>\n  <li>JD.2.7：针对JD.2.3~JD.2.5场景形成年度报告。</li>\n  <li>JD.3.1：可通过诊断接口读取JD.2.1数据。</li>\n  <li>JD.4.1.1、JD.4.1.2、JD.4.2.1、JD.4.2.2、JD.4.2.3：车端发送触发与时间窗口要求。</li>\n</ul>\n\n<h2>法规解释与拓展（Q1-Q8）</h2>\n<table><tbody>\n<tr><th>问题</th><th>解释（可落地口径）</th><th>主要条款</th></tr>\n<tr>\n  <td>Q1 具备无线通信功能车型，具体指哪些功能？</td>\n  <td>\n    JD.1.1 给了明确定义：凡是通过移动蜂窝通信或WLAN等外部通信通道实现的功能，均属于“具备无线通信功能”。法规给出的示例包括：车载实时路况显示、远程启动、手机App查车/控车、车载娱乐联网、OTA 等。<br/>\n    审查上建议采用“能力判定”而非“配置判定”：只要车型具备上述任一外部无线功能，即纳入JD适用范围。\n  </td>\n  <td>JD.1.1</td>\n</tr>\n<tr>\n  <td>Q2 如何判定是否具备远程联网功能？如何按车型区分？</td>\n  <td>\n    判定逻辑应分两层：<br/>\n    1) 功能层：是否可完成OBD远程数据“监测-存储-发送”（车端装置可一体或分布式）。<br/>\n    2) 车型层：同一车型型号是否统一具备该能力，需形成型号级清单（具备/不具备）。<br/>\n    对无无线能力车型，走JD.1.5年度抽样报告路径，不应与联网车型混用判定口径。\n  </td>\n  <td>JD.1.2, JD.1.5, JD.1.6</td>\n</tr>\n<tr>\n  <td>Q3 仓储/库存/运输模式分别代表什么？</td>\n  <td>\n    法规核心口径是“正常使用状态之外的非用户驾驶运营状态”。JD.4.2.3明确该类状态切换由生产企业定义操作方法。<br/>\n    实操可按以下理解：仓储模式（长期停放保管）、库存模式（经销/库内周转）、运输模式（物流运输过程）。<br/>\n    关键要求不是命名，而是：进入或退出这类模式前，需先完成一次独立数据发送；完成后才可中断常规发送。\n  </td>\n  <td>JD.1.7, JD.4.2.3</td>\n</tr>\n<tr>\n  <td>Q4 J.6.2 / J.6.3 具体包含什么？</td>\n  <td>\n    J.6.2（诊断接口）：要求车辆安装标准化诊断接口（Type A），并对接口位置、无遮挡可接近性、机械强度、电压保护、不得设置混淆用途接口等做了要求。<br/>\n    J.6.3（与扫描工具通信）：要求通过合规扫描工具和标准协议进行通信（如DoCAN/DoIP场景），并按规范响应功能寻址/物理寻址请求、负响应码使用边界、服务项响应规则等。<br/>\n    对JD场景来说，JD.1.9 与 JD.3.1 要求远程数据同时具备“本地诊断可标准化读取”的一致能力。\n  </td>\n  <td>J.6.2, J.6.3, JD.1.9, JD.3.1</td>\n</tr>\n<tr>\n  <td>Q5 NVM存储是什么存储？</td>\n  <td>\n    NVM 是“非易失性存储器”（Non-Volatile Memory），掉电不丢失。法规要求JD.9中涉及全寿命累计值的参数应存放于NVM，保障长期累计、准确、不可随意更改。<br/>\n    与之对比，KAM属于掉电可能丢失的临时保持存储；因此涉及累计值管理时，不能仅依赖KAM。\n  </td>\n  <td>JD.2.2, JD.2.3</td>\n</tr>\n<tr>\n  <td>Q6 JD.2.3~JD.2.5具体是什么场景？</td>\n  <td>\n    JD.2.3：重编程/存储器重置等导致累计值可能清零的场景（含KAM掉电丢失风险说明）。<br/>\n    JD.2.4：影响累计值计算/存储的故障，或更换存储累计值的电子控制模块。<br/>\n    JD.2.5：需具备本地存储与读取最近至少20条与发送相关记录的能力。<br/>\n    共同要求：触发上述场景前后要做数据保全与连续性控制。\n  </td>\n  <td>JD.2.3, JD.2.4, JD.2.5, JD.2.7</td>\n</tr>\n<tr>\n  <td>Q7 JD.2.1数据具体是哪些数据？</td>\n  <td>\n    JD.2.1指向JD.9信息体数据。按信息类型可分为：<br/>\n    0x01 传统燃油/混动OBD数据；0x02 纯电/燃料电池OBD数据；0x03 控制器软件标定验证信息；0x04 NOVC-HEV能耗；0x05 OVC-HEV能耗；0x06 纯电/燃料电池能耗。<br/>\n    同时，车辆数据单元还包含采集时间、信息流水号、信息类型、发送原因、MIL状态、故障码数量等结构化字段。不同动力类型车型按规定组合发送。\n  </td>\n  <td>JD.2.1, JD.8.8.4, JD.9.1, JD.10</td>\n</tr>\n<tr>\n  <td>Q8 车端发送触发与时间窗口具体是什么？</td>\n  <td>\n    间隔发送（JD.4.1）：每次正常驾驶循环启动/上电3分钟内更新并发送；最长间隔不超过2500km或180天，最短间隔不小于200km或10天。<br/>\n    事件发送（JD.4.2）：CALID/CVN变化、刷写/OTA、MIL点亮并存储故障码、外部工具清码、使用状态切换等事件，需在“下一次驾驶循环启动/上电3分钟内”或“事件发生后3分钟内”完成一次独立发送。<br/>\n    额外要求：MIL持续点亮期间，每个驾驶循环至少发送一次。\n  </td>\n  <td>JD.4.1.1, JD.4.1.2, JD.4.2.1, JD.4.2.2, JD.4.2.3</td>\n</tr>\n</tbody></table>\n\n<h2>实施要求</h2>\n<ul>\n  <li>建立“监测-存储-发送”一体化车端链路，明确每个JD.9参数的数据源、刷新频率、采集时机与单位换算。</li>\n  <li>实现寿命累计值的NVM持久化与防误清零控制；仅在法规允许场景重置，并在重置前执行数据保全。</li>\n  <li>实现双触发发送机制：间隔频次触发 + 事件触发（CALID/CVN变化、OTA、MIL点亮、清码、状态切换）。</li>\n  <li>支持本地历史报送缓存（至少20条）与本地可读接口，保证抽检可回放。</li>\n  <li>对车型差异（有网/无网、功能有效期）建立分型控制策略，避免跨车型混用逻辑。</li>\n</ul>\n<h2>证据留存清单</h2>\n<ul>\n  <li>车端数据字典（JD.9字段映射、来源ECU、采样频率、量纲）。</li>\n  <li>NVM/KAM重置策略与重编程前后数据连续性记录。</li>\n  <li>事件触发发送日志（含触发源、VIN、触发时间、发送完成时间）。</li>\n  <li>最近20条本地数据读取截图或导出证据。</li>\n  <li>车型分型矩阵（是否联网、触发差异、限制条件）。</li>\n</ul>\n<h2>审查检查点（Chapter 1）</h2>\n<table><tbody>\n<tr><th>ID</th><th>检查点</th><th>依据</th><th>判定标准</th><th>结论</th></tr>\n<tr><td>C1-01</td><td>JD适用车型识别</td><td>JD.1.1, JD.1.6</td><td>适用性矩阵完整、可追溯</td><td>□通过/□不通过</td></tr>\n<tr><td>C1-02</td><td>实际值采集与返回</td><td>JD.2.1</td><td>无默认值/替代值回传</td><td>□通过/□不通过</td></tr>\n<tr><td>C1-03</td><td>寿命累计值NVM防篡改</td><td>JD.2.2, JD.2.3</td><td>仅允许场景可重置且有保全</td><td>□通过/□不通过</td></tr>\n<tr><td>C1-04</td><td>本地20条可读能力</td><td>JD.2.5</td><td>可稳定读取最近20条</td><td>□通过/□不通过</td></tr>\n<tr><td>C1-05</td><td>间隔与事件双触发发送</td><td>JD.4.1, JD.4.2</td><td>触发条件与3分钟窗口满足</td><td>□通过/□不通过</td></tr>\n</tbody></table>', 'en': '<h3>Legal Basis</h3>\n<ul>\n  <li>J.3.1.5; JD.1.1; JD.1.2; JD.1.4; JD.1.6; JD.1.7; JD.1.9</li>\n  <li>JD.2.1 to JD.2.7</li>\n  <li>JD.3.1</li>\n  <li>JD.4.1.1; JD.4.1.2; JD.4.2.1; JD.4.2.2; JD.4.2.3</li>\n</ul>\n<h3>Regulatory Clarification Q&amp;A (EN)</h3>\n<table><tbody>\n<tr><th>Question</th><th>Clarification</th><th>Reference</th></tr>\n<tr><td>Q1 What counts as wireless-capable model?</td><td>Any model with external cellular/WLAN-enabled functions such as connected traffic display, remote start, app control/access, or OTA capability.</td><td>JD.1.1</td></tr>\n<tr><td>Q2 How to classify remote connectivity by model?</td><td>Classify by model-level availability of monitor-store-send capability for OBD remote data. Non-connected models follow annual sampling/reporting route.</td><td>JD.1.2, JD.1.5, JD.1.6</td></tr>\n<tr><td>Q3 What are storage/inventory/transport modes?</td><td>They are non-normal-use states. Before entering or exiting these states, a standalone upload is required.</td><td>JD.1.7, JD.4.2.3</td></tr>\n<tr><td>Q4 What do J.6.2 and J.6.3 cover?</td><td>J.6.2 covers standardized diagnostic interface requirements; J.6.3 covers scan-tool communication protocol and response rules.</td><td>J.6.2, J.6.3, JD.1.9, JD.3.1</td></tr>\n<tr><td>Q5 What is NVM storage?</td><td>NVM is non-volatile memory used for lifecycle counters. KAM can lose data on power loss and is insufficient by itself.</td><td>JD.2.2, JD.2.3</td></tr>\n<tr><td>Q6 What are JD.2.3-JD.2.5 scenarios?</td><td>Reprogramming/reset risk, controller replacement or fault impact on lifecycle counters, and local storage/readout of latest records.</td><td>JD.2.3, JD.2.4, JD.2.5, JD.2.7</td></tr>\n<tr><td>Q7 What data are covered by JD.2.1?</td><td>JD.2.1 points to JD.9 payload categories including OBD data, software calibration validation data, and energy-consumption data by vehicle type.</td><td>JD.2.1, JD.8.8.4, JD.9.1, JD.10</td></tr>\n<tr><td>Q8 What are trigger and timing-window rules?</td><td>Periodic uploads plus event-trigger uploads within required 3-minute windows, and at least one upload per cycle while MIL remains on.</td><td>JD.4.1.1, JD.4.1.2, JD.4.2.1, JD.4.2.2, JD.4.2.3</td></tr>\n</tbody></table>\n<h3>Implementation Requirements</h3>\n<ul>\n  <li>Implement an end-to-end onboard chain for monitoring, storage, and transmission of JD.9 data.</li>\n  <li>Ensure lifecycle counters are persisted in non-volatile memory and can only be reset in regulation-allowed scenarios.</li>\n  <li>Support both periodic and event-triggered reporting, including OTA, CALID/CVN changes, MIL on, and DTC clear events.</li>\n  <li>Support local readout of at least the latest 20 relevant records for audit replay.</li>\n  <li>Maintain model-specific control logic for connected and non-connected variants.</li>\n</ul>\n<h3>Evidence Retention List</h3>\n<ul>\n  <li>Onboard data dictionary and JD.9 parameter mapping.</li>\n  <li>NVM/KAM reset control design and pre/post reprogramming continuity logs.</li>\n  <li>Event-trigger logs with VIN, trigger source, trigger timestamp, and send completion timestamp.</li>\n  <li>Local readout evidence for the latest 20 records.</li>\n  <li>Model applicability matrix and control boundary notes.</li>\n</ul>\n<h3>Audit Checklist (EN)</h3>\n<ul>\n  <li>C1-01: JD applicability identification for each model variant is complete and traceable.</li>\n  <li>C1-02: Returned values are actual readings, not defaults or substitutions.</li>\n  <li>C1-03: Lifecycle counters are tamper-protected and reset only under allowed conditions.</li>\n  <li>C1-04: Latest 20 local records are readable and exportable.</li>\n  <li>C1-05: Periodic and event-trigger reporting both satisfy timing windows.</li>\n</ul>'}, 'backend': {'titleZh': '后台技术要求', 'titleEn': 'Backend Requirements', 'leadZh': '<strong>章节定位</strong>：本章聚焦企业平台的数据接入、转发、协议执行与资源能力。', 'leadEn': '<strong>Scope</strong>: This chapter focuses on enterprise-platform data intake, forwarding, protocol execution, and capacity capability.', 'navZh': '企业平台接收、转发与协议执行能力。', 'navEn': 'Enterprise platform intake, forwarding, and protocol execution.', 'summaryZh': '聚焦企业平台的接收、校验、转发、会话与协议执行要求。', 'summaryEn': 'Enterprise platform responsibilities covering receive, validate, forward, and protocol state handling.', 'refZh': '条款范围 J.2.61-JD.9.1', 'refEn': 'Quick reference J.2.61-JD.9.1', 'refTipZh': '覆盖企业平台/国家平台定义、收集与转发链路、协议执行、数据结构和平台义务等后台核心要求。', 'refTipEn': 'Covers enterprise/national platform definitions, collection-forwarding chain, protocol execution, data structure, and platform responsibilities.', 'keywordsZh': 'Enterprise platform / protocol / resend / VIN / 次日24时前', 'keywordsEn': 'Enterprise platform / protocol / resend / VIN / next-day 24:00', 'zh': '<h2>法规依据（细化条款）</h2>\n<ul>\n  <li>J.2.61、J.2.62：企业平台与国家平台定义。</li>\n  <li>JD.1.3：车端至企业平台、企业平台至国家平台的发送链路与时限要求。</li>\n  <li>JD.1.8：远程数据单向传输，不得修改数据。</li>\n  <li>JD.3.2：企业应说明平台基础能力、通信协议、触发/补发机制、解析方法并证明有效性/准确性/不可更改性。</li>\n  <li>JD.3.3：单车数据收集后按JD.4时限统一发送国家平台。</li>\n  <li>JD.4.3：企业平台次日24时前完成发送。</li>\n  <li>JD.7.1：平台可单/多实例部署或委托第三方建设。</li>\n  <li>JD.7.2：平台必须具备接收车端远程监控数据并传输国家平台能力。</li>\n  <li>JD.7.3：平台基础资料注册（服务器、存储、带宽）并获取数据端口。</li>\n  <li>JD.7.4：平台存储/转发空间需满足附件JD要求。</li>\n  <li>JD.7.7：链路异常后恢复补传要求。</li>\n  <li>JD.8.1~JD.8.8：TCP/IP承载、登录鉴权、应答、重试、断开、补传、报文结构、命令标识与数据单元格式。</li>\n  <li>JD.9.1：平台接收车端数据后按JD.8格式发送。</li>\n</ul>\n<h2>法规解释与拓展（Q&amp;A）</h2>\n<table><tbody>\n<tr><th>问题</th><th>解释（可落地口径）</th><th>条款</th></tr>\n<tr><td>Q1 企业平台和国家平台边界怎么理解？</td><td>企业平台负责接收车端数据、管理并按时发送；国家平台负责接收和统一管理。企业平台是生产企业的责任主体边界，国家平台是监管接收边界。</td><td>J.2.61, J.2.62, JD.1.3</td></tr>\n<tr><td>Q2 后台最核心的时限要求是什么？</td><td>企业应每日汇总信息公开账户内车辆数据，并在次日24时前完成发送国家平台，这是硬时限指标。</td><td>JD.4.3</td></tr>\n<tr><td>Q3 链路异常时后台必须做什么？</td><td>应支持异常后补传。异常期间车端本地缓存，恢复后企业平台应接收并补发，确保数据连续且格式一致。</td><td>JD.4.4, JD.7.7, JD.8.5</td></tr>\n<tr><td>Q4 JD.8 协议要求对后台意味着什么？</td><td>后台必须实现协议状态机能力：登入鉴权、应答校验、失败重试、连接断开、报文打包与校验，不能仅做“文件接收”。</td><td>JD.8.1~JD.8.8</td></tr>\n<tr><td>Q5 后台能否改写车端数据后再上报？</td><td>不能。法规强调单向传输且不得修改存储/传输数据；后台可封装传输，但不得篡改业务数据值。</td><td>JD.1.8, JD.7.5</td></tr>\n<tr><td>Q6 后台能力在文档中应证明到什么深度？</td><td>需在信息公开资料中说明服务器/存储/协议/触发补发/解析/安全策略，并证明有效性、准确性、不可更改性。</td><td>JD.3.2, JD.7.3, JD.7.4</td></tr>\n</tbody></table>\n\n<h2>实施要求</h2>\n<ul>\n  <li>构建企业平台端到端流水线：接收、校验、存储、转发、回执、补传与审计。</li>\n  <li>按JD.8协议实现登录会话、命令包/应答包状态机、失败重试和链路恢复。</li>\n  <li>建立统一的VIN级发送追踪，覆盖“车端采集时间-企业接收时间-国家发送时间”。</li>\n  <li>平台容量按峰值VIN并发、异常补传峰值和保留周期进行容量规划与压测。</li>\n  <li>保证车端原始信息体与平台外发数据的一致性，禁止中途改写业务字段。</li>\n</ul>\n<h2>证据留存清单</h2>\n<ul>\n  <li>平台架构图、资源规划、压测报告。</li>\n  <li>平台注册凭证、服务器/存储/带宽配置快照。</li>\n  <li>JD.8协议联调报告（登入、应答、重连、补传、断链恢复）。</li>\n  <li>VIN级发送时序报表（含次日24时前达成率）。</li>\n  <li>车端原始包与平台发送包一致性比对报告。</li>\n</ul>\n<h2>审查检查点（Chapter 2）</h2>\n<table><tbody>\n<tr><th>ID</th><th>检查点</th><th>依据</th><th>判定标准</th><th>结论</th></tr>\n<tr><td>C2-01</td><td>平台注册与端口开通</td><td>JD.7.3</td><td>基础资料完整且可核验</td><td>□通过/□不通过</td></tr>\n<tr><td>C2-02</td><td>接收-转发能力闭环</td><td>JD.7.2, JD.9.1</td><td>可稳定接收并按格式发送</td><td>□通过/□不通过</td></tr>\n<tr><td>C2-03</td><td>次日24时前发送</td><td>JD.4.3</td><td>时限达成率满足要求</td><td>□通过/□不通过</td></tr>\n<tr><td>C2-04</td><td>协议状态机符合JD.8</td><td>JD.8.2~JD.8.4</td><td>登录、应答、重试、断开正确</td><td>□通过/□不通过</td></tr>\n<tr><td>C2-05</td><td>异常恢复与补传</td><td>JD.7.7, JD.8.5</td><td>恢复后补传完整无丢失</td><td>□通过/□不通过</td></tr>\n</tbody></table>', 'en': '<h3>Legal Basis</h3>\n<ul>\n  <li>J.2.61; J.2.62</li>\n  <li>JD.1.3; JD.1.8</li>\n  <li>JD.3.2; JD.3.3; JD.4.3</li>\n  <li>JD.7.1 to JD.7.4; JD.7.7</li>\n  <li>JD.8.1 to JD.8.8; JD.9.1</li>\n</ul>\n<h3>Regulatory Clarification Q&amp;A (EN)</h3>\n<table><tbody>\n<tr><th>Question</th><th>Clarification</th><th>Reference</th></tr>\n<tr><td>Q1 How to define enterprise vs national platform boundary?</td><td>Enterprise platform receives/manages/forwards; national platform receives and centrally governs.</td><td>J.2.61, J.2.62, JD.1.3</td></tr>\n<tr><td>Q2 What is the core backend deadline?</td><td>Submit collected data to national platform before next-day 24:00.</td><td>JD.4.3</td></tr>\n<tr><td>Q3 What must backend do on link failure?</td><td>Support recovery resend after buffering, while preserving continuity and compliant format.</td><td>JD.4.4, JD.7.7, JD.8.5</td></tr>\n<tr><td>Q4 What does JD.8 mean in implementation terms?</td><td>Implement login/auth, validation/response, retry/disconnect handling, packet framing, and checksum control.</td><td>JD.8.1~JD.8.8</td></tr>\n<tr><td>Q5 Can backend rewrite payload values?</td><td>No. Data values must remain unchanged; only protocol encapsulation/forwarding is allowed.</td><td>JD.1.8, JD.7.5</td></tr>\n<tr><td>Q6 What proof depth is required in documentation?</td><td>Document capacity, protocol, trigger/resend, parsing, and security strategy with evidence of validity/accuracy/immutability.</td><td>JD.3.2, JD.7.3, JD.7.4</td></tr>\n</tbody></table>\n<h3>Implementation Requirements</h3>\n<ul>\n  <li>Build an end-to-end enterprise platform pipeline for receive, validate, store, forward, acknowledge, retry, and supplement resend.</li>\n  <li>Implement JD.8 protocol state machine for login, response handling, retry policy, and disconnect recovery.</li>\n  <li>Maintain VIN-level time traceability from onboard capture to enterprise receive and national submission.</li>\n  <li>Plan platform capacity against normal peak and abnormal resend peaks.</li>\n  <li>Ensure payload consistency between onboard raw data unit and forwarded data.</li>\n</ul>\n<h3>Evidence Retention List</h3>\n<ul>\n  <li>Platform architecture, capacity plan, and stress test report.</li>\n  <li>Platform registration records and resource snapshots.</li>\n  <li>JD.8 protocol integration and interoperability logs.</li>\n  <li>VIN-level reporting timeliness dashboard.</li>\n  <li>Payload consistency comparison report.</li>\n</ul>\n<h3>Audit Checklist (EN)</h3>\n<ul>\n  <li>C2-01: Platform registration and data port setup are verifiable.</li>\n  <li>C2-02: Receive-to-forward flow is complete and stable.</li>\n  <li>C2-03: Submission before next-day 24:00 is achieved.</li>\n  <li>C2-04: JD.8 state machine behavior is compliant.</li>\n  <li>C2-05: Recovery and resend mechanism closes data gaps.</li>\n</ul>'}, 'cyber': {'titleZh': '网络安全要求', 'titleEn': 'Cybersecurity Requirements', 'leadZh': '<strong>章节定位</strong>：本章聚焦远程链路中的身份认证、加密、完整性、等保与安全审计。', 'leadEn': '<strong>Scope</strong>: This chapter focuses on authentication, encryption, integrity, protection-level compliance, and auditability in the remote link.', 'navZh': '认证、完整性、加密与审计控制。', 'navEn': 'Authentication, integrity, encryption, and audit controls.', 'summaryZh': '聚焦认证、加密、完整性、不可篡改与等保要求。', 'summaryEn': 'Remote-link security controls including authentication, encryption, integrity, and auditability.', 'refZh': '条款范围 JD.7.5-JD.8.8.3', 'refEn': 'Quick reference JD.7.5-JD.8.8.3', 'refTipZh': '覆盖平台数据安全、等级保护、登录校验、加密方式和密钥交换等远程链路安全控制要求。', 'refTipEn': 'Covers platform data security, protection level, login validation, encryption fields, and key-exchange clauses for the remote link.', 'keywordsZh': '认证 / 加密 / 完整性 / 等保三级 / 密钥交换', 'keywordsEn': 'authentication / encryption / integrity / level-3 / key exchange', 'zh': '<h2>法规依据（细化条款）</h2>\n<ul>\n  <li>JD.1.8：远程数据单向传输，企业不得修改车端及平台存储/传输数据。</li>\n  <li>JD.2.2：全寿命累计值准确性与不可更改性要求。</li>\n  <li>JD.3.2：安全策略需在信息公开资料中说明，并证明数据不可更改性。</li>\n  <li>JD.7.5：平台应保证数据安全，宜采用加密接收与存储；按规定协议传输且确保未修改。</li>\n  <li>JD.7.6：平台应满足GB/T 22239 第三级及以上要求。</li>\n  <li>JD.8.2.1：登录时身份识别与数据校验，校验错误需记录并通知。</li>\n  <li>JD.8.6.3：报文含数据加密方式字段，定义可选算法。</li>\n  <li>JD.8.8.1：平台登录数据单元含用户名、密码、加密规则。</li>\n  <li>JD.8.8.3：支持密钥交换数据格式。</li>\n</ul>\n<h2>法规解释与拓展（Q&amp;A）</h2>\n<table><tbody>\n<tr><th>问题</th><th>解释（可落地口径）</th><th>条款</th></tr>\n<tr><td>Q1 “数据安全”在本章最低要求是什么？</td><td>平台需保证数据安全，建议采用加密接收和存储；同时确保数据未经修改并按规定协议发送。</td><td>JD.7.5</td></tr>\n<tr><td>Q2 等保要求到什么等级？</td><td>企业平台应满足 GB/T 22239 第三级及以上。审查时通常看制度、技术控制和测评结论一致性。</td><td>JD.7.6</td></tr>\n<tr><td>Q3 登录鉴权与数据校验具体要做什么？</td><td>建立连接后应发送登入信息进行身份识别，接收端需校验并返回应答；校验错误必须记录并通知。</td><td>JD.8.2.1</td></tr>\n<tr><td>Q4 加密是“可选”还是“必须”？</td><td>协议定义了多种加密方式编码与密钥交换机制。法规措辞对平台侧为“宜采用加密”接收与存储，但在实际合规中应结合等保要求落地强制加密策略。</td><td>JD.7.5, JD.8.6.3, JD.8.8.3</td></tr>\n<tr><td>Q5 何为“不可更改性”？</td><td>核心是防止业务值在链路中被改写。允许协议封装与转发，不允许篡改车端数据语义和值。</td><td>JD.1.8, JD.2.2, JD.3.2</td></tr>\n<tr><td>Q6 安全证据应留哪些关键材料？</td><td>应至少留存：鉴权/加密配置、密钥管理流程、异常校验日志、安全审计记录、变更评审和回归验证报告。</td><td>JD.7.5, JD.7.6, JD.8.2.1</td></tr>\n</tbody></table>\n\n<h2>实施要求</h2>\n<ul>\n  <li>建立数据最小可改面原则：车端原始数据入平台后仅允许封装，不允许业务值改写。</li>\n  <li>建立登录认证、传输校验、错误应答与安全告警流程，支持失败重试与事件追踪。</li>\n  <li>建立密钥生命周期管理（生成、分发、启用、轮换、失效）与算法兼容策略。</li>\n  <li>以等保三级要求为底线落实访问控制、日志审计、边界防护和数据备份恢复。</li>\n  <li>形成安全基线与变更评审机制，任何协议或安全策略变更均需验证后发布。</li>\n</ul>\n<h2>证据留存清单</h2>\n<ul>\n  <li>等保测评结论或合规证明。</li>\n  <li>账号认证策略、密码策略、密钥管理制度。</li>\n  <li>安全日志（认证失败、校验错误、异常连接、重放防护告警）。</li>\n  <li>数据完整性校验与不可篡改控制测试报告。</li>\n  <li>安全变更评审记录与回归验证报告。</li>\n</ul>\n<h2>审查检查点（Chapter 3）</h2>\n<table><tbody>\n<tr><th>ID</th><th>检查点</th><th>依据</th><th>判定标准</th><th>结论</th></tr>\n<tr><td>C3-01</td><td>单向传输与不改写约束</td><td>JD.1.8</td><td>无中途改写链路或脚本</td><td>□通过/□不通过</td></tr>\n<tr><td>C3-02</td><td>平台安全与加密存储</td><td>JD.7.5</td><td>传输/存储安全控制可验证</td><td>□通过/□不通过</td></tr>\n<tr><td>C3-03</td><td>等保三级及以上</td><td>JD.7.6</td><td>证书或测评结论有效</td><td>□通过/□不通过</td></tr>\n<tr><td>C3-04</td><td>登录识别与校验闭环</td><td>JD.8.2.1</td><td>校验失败可记录可追踪</td><td>□通过/□不通过</td></tr>\n<tr><td>C3-05</td><td>密钥交换与加密规则</td><td>JD.8.6.3, JD.8.8.3</td><td>算法配置与轮换可审计</td><td>□通过/□不通过</td></tr>\n</tbody></table>', 'en': '<h3>Legal Basis</h3>\n<ul>\n  <li>JD.1.8; JD.2.2; JD.3.2</li>\n  <li>JD.7.5; JD.7.6</li>\n  <li>JD.8.2.1; JD.8.6.3; JD.8.8.1; JD.8.8.3</li>\n</ul>\n<h3>Regulatory Clarification Q&amp;A (EN)</h3>\n<table><tbody>\n<tr><th>Question</th><th>Clarification</th><th>Reference</th></tr>\n<tr><td>Q1 What is the minimum security baseline?</td><td>Secure reception/storage plus non-modified forwarding under required protocol controls.</td><td>JD.7.5</td></tr>\n<tr><td>Q2 What security protection level is required?</td><td>Enterprise platform must meet at least GB/T 22239 Level 3.</td><td>JD.7.6</td></tr>\n<tr><td>Q3 What does login/auth validation require?</td><td>Identity recognition, validation response, and traceable handling of validation failures.</td><td>JD.8.2.1</td></tr>\n<tr><td>Q4 Is encryption optional or mandatory?</td><td>Protocol defines encryption/key-exchange methods; in practice, compliance should enforce robust encryption controls.</td><td>JD.7.5, JD.8.6.3, JD.8.8.3</td></tr>\n<tr><td>Q5 What does immutability mean?</td><td>Payload semantics and values cannot be altered in transit or platform processing.</td><td>JD.1.8, JD.2.2, JD.3.2</td></tr>\n<tr><td>Q6 What security evidence should be retained?</td><td>Keep auth/encryption configs, key lifecycle logs, validation-failure logs, audits, and change-regression evidence.</td><td>JD.7.5, JD.7.6, JD.8.2.1</td></tr>\n</tbody></table>\n<h3>Implementation Requirements</h3>\n<ul>\n  <li>Enforce non-modification principle: payload can be encapsulated but not altered.</li>\n  <li>Implement identity verification, transport integrity checks, and incident logging for failed validation.</li>\n  <li>Establish key lifecycle management for generation, distribution, rotation, and expiration.</li>\n  <li>Meet at least Level 3 cybersecurity protection baseline and maintain auditable controls.</li>\n  <li>Apply controlled change management and regression verification for any security/protocol change.</li>\n</ul>\n<h3>Evidence Retention List</h3>\n<ul>\n  <li>Cybersecurity compliance evidence and assessment reports.</li>\n  <li>Authentication policy, password policy, and key management procedures.</li>\n  <li>Security logs for auth failures, checksum failures, and abnormal sessions.</li>\n  <li>Integrity and tamper-resistance test reports.</li>\n  <li>Security change review and regression records.</li>\n</ul>\n<h3>Audit Checklist (EN)</h3>\n<ul>\n  <li>C3-01: One-way transmission and no-overwrite principle is enforced.</li>\n  <li>C3-02: Data encryption and secure storage controls are effective.</li>\n  <li>C3-03: Level-3-or-above compliance evidence is valid.</li>\n  <li>C3-04: Login and validation failure traces are complete.</li>\n  <li>C3-05: Key exchange and crypto rules are auditable.</li>\n</ul>'}, 'reporting': {'titleZh': '报送技术要求', 'titleEn': 'Reporting Requirements', 'leadZh': '<strong>章节定位</strong>：本章聚焦报送对象、发送频次、时限要求、补传机制与联网状态统计。', 'leadEn': '<strong>Scope</strong>: This chapter focuses on reporting targets, frequency, timing windows, resend mechanisms, and connected-state statistics.', 'navZh': '报送频次、事件触发、缓存与补传机制。', 'navEn': 'Upload frequency, event triggers, buffering, and resend logic.', 'summaryZh': '聚焦间隔报送、事件报送、时间窗口、联网统计与补传。', 'summaryEn': 'Periodic and event-driven reporting, timing windows, connected-state logic, and resend handling.', 'refZh': '条款范围 JD.1.3-JD.5.4', 'refEn': 'Quick reference JD.1.3-JD.5.4', 'refTipZh': '覆盖车辆到平台再到国家平台的报送要求、3分钟窗口、事件触发、补传及联网状态统计逻辑。', 'refTipEn': 'Covers reporting obligations from vehicle to enterprise to national platform, 3-minute windows, event uploads, resend, and connected-state logic.', 'keywordsZh': '3分钟窗口 / 间隔报送 / 事件触发 / 补传 / 联网状态', 'keywordsEn': '3-minute window / periodic / trigger / resend / connected state', 'zh': '<h2>法规依据（细化条款）</h2>\n<ul>\n  <li>JD.1.3：车端数据发送企业平台，企业平台按JD.4.3发送国家平台。</li>\n  <li>JD.1.5：不具备无线通信功能车型年度抽样报告要求（样本量与覆盖要求）。</li>\n  <li>JD.1.7：仓储/库存/运输模式切换时的发送前置条件。</li>\n  <li>JD.4.1.1：每次驾驶循环启动/上电3分钟内完成数据记录更新并及时发送。</li>\n  <li>JD.4.1.2：间隔发送上限与下限（里程/天数双约束）。</li>\n  <li>JD.4.2.1：CALID/CVN变化、刷写/OTA、MIL点亮、清码等事件触发发送。</li>\n  <li>JD.4.2.2：MIL点亮期间每个驾驶循环至少一次发送。</li>\n  <li>JD.4.2.3：使用状态切换前需单独完成一次发送。</li>\n  <li>JD.4.3：企业平台次日24时前发送国家平台。</li>\n  <li>JD.4.4：链路异常/延迟/长期未用场景下本地存储与恢复补发。</li>\n  <li>JD.5.1~JD.5.4：有效发送计次、联网状态定义、车型比例与后续评估豁免逻辑。</li>\n  <li>JD.8.5：补传机制定义。</li>\n</ul>\n<h2>法规解释与拓展（Q&amp;A）</h2>\n<table><tbody>\n<tr><th>问题</th><th>解释（可落地口径）</th><th>条款</th></tr>\n<tr><td>Q1 报送分几类？</td><td>分为“间隔频次发送”和“事件触发发送”两类，二者需同时满足，不可互相替代。</td><td>JD.4.1, JD.4.2</td></tr>\n<tr><td>Q2 间隔发送的上下限如何执行？</td><td>单车发送需满足上限不超过2500km或180天、下限不小于200km或10天（先到为准），并在启动/上电3分钟内更新并发送。</td><td>JD.4.1.1, JD.4.1.2</td></tr>\n<tr><td>Q3 哪些事件必须触发单独发送？</td><td>CALID/CVN变化、刷写/OTA、MIL点亮并存储故障码、外部工具清码、使用状态切换等都必须触发独立发送。</td><td>JD.4.2.1, JD.4.2.3</td></tr>\n<tr><td>Q4 MIL期间报送有何特殊要求？</td><td>从MIL点亮并存储故障码到满足熄灭条件期间，每个驾驶循环至少发送一次。</td><td>JD.4.2.2</td></tr>\n<tr><td>Q5 链路异常或车辆长时间未用怎么处理？</td><td>应先本地存储，恢复后边发新数据边补发缓存数据，且补发格式需与实时发送一致。</td><td>JD.4.4, JD.8.5</td></tr>\n<tr><td>Q6 无网车型如何纳入监管口径？</td><td>无无线通信能力车型需按年度抽样报告覆盖JD.9内容，且样本量与场景代表性需满足要求。</td><td>JD.1.5</td></tr>\n</tbody></table>\n\n<h2>实施要求</h2>\n<ul>\n  <li>建立“间隔发送 + 事件发送”双轨报送控制，确保触发条件与时间窗口可验证。</li>\n  <li>建立企业日清机制，按自然日汇聚并在次日24时前完成对国家平台发送。</li>\n  <li>建立异常缓存与恢复补传策略，保证补发数据格式与实时发送一致。</li>\n  <li>建立无网车型年度抽样管理流程，保证样本覆盖真实驾驶场景。</li>\n  <li>建立车型联网状态统计机制，支持年末合规判定与豁免依据输出。</li>\n</ul>\n<h2>证据留存清单</h2>\n<ul>\n  <li>VIN级发送台账（触发类型、发送窗口、发送状态）。</li>\n  <li>日汇总与次日24时前达成率报表。</li>\n  <li>异常缓存与补传成功率统计。</li>\n  <li>无网车型抽样方案、样本清单与年度报告。</li>\n  <li>联网状态统计底稿与车型覆盖率证明材料。</li>\n</ul>\n<h2>审查检查点（Chapter 4）</h2>\n<table><tbody>\n<tr><th>ID</th><th>检查点</th><th>依据</th><th>判定标准</th><th>结论</th></tr>\n<tr><td>C4-01</td><td>3分钟窗口发送</td><td>JD.4.1.1, JD.4.2.1</td><td>符合时效窗口</td><td>□通过/□不通过</td></tr>\n<tr><td>C4-02</td><td>发送间隔上下限</td><td>JD.4.1.2</td><td>无超上限/低于下限异常</td><td>□通过/□不通过</td></tr>\n<tr><td>C4-03</td><td>MIL期间逐循环发送</td><td>JD.4.2.2</td><td>MIL期间每循环至少1次</td><td>□通过/□不通过</td></tr>\n<tr><td>C4-04</td><td>次日24时前平台发送</td><td>JD.4.3</td><td>时限达成率符合要求</td><td>□通过/□不通过</td></tr>\n<tr><td>C4-05</td><td>异常缓存与补传</td><td>JD.4.4, JD.8.5</td><td>恢复后完整补发</td><td>□通过/□不通过</td></tr>\n</tbody></table>', 'en': '<h3>Legal Basis</h3>\n<ul>\n  <li>JD.1.3; JD.1.5; JD.1.7</li>\n  <li>JD.4.1.1; JD.4.1.2; JD.4.2.1; JD.4.2.2; JD.4.2.3; JD.4.3; JD.4.4</li>\n  <li>JD.5.1 to JD.5.4</li>\n  <li>JD.8.5</li>\n</ul>\n<h3>Regulatory Clarification Q&amp;A (EN)</h3>\n<table><tbody>\n<tr><th>Question</th><th>Clarification</th><th>Reference</th></tr>\n<tr><td>Q1 What reporting channels are mandatory?</td><td>Both periodic reporting and event-triggered reporting are mandatory and complementary.</td><td>JD.4.1, JD.4.2</td></tr>\n<tr><td>Q2 How are periodic boundaries applied?</td><td>Periodic uploads must meet upper/lower interval constraints and the startup/on-power 3-minute update/send window.</td><td>JD.4.1.1, JD.4.1.2</td></tr>\n<tr><td>Q3 Which events require standalone upload?</td><td>CALID/CVN change, flashing/OTA, MIL on with stored DTC, external DTC clear, and mode switch events.</td><td>JD.4.2.1, JD.4.2.3</td></tr>\n<tr><td>Q4 What is special during MIL-on period?</td><td>At least one upload is required for every drive cycle while MIL remains on.</td><td>JD.4.2.2</td></tr>\n<tr><td>Q5 How to handle long inactivity or link failure?</td><td>Buffer locally and resend after recovery with the same compliant data format.</td><td>JD.4.4, JD.8.5</td></tr>\n<tr><td>Q6 How are non-connected models governed?</td><td>Through annual sampling/reporting obligations with representative sample and scenario coverage.</td><td>JD.1.5</td></tr>\n</tbody></table>\n<h3>Implementation Requirements</h3>\n<ul>\n  <li>Operate both periodic and event-triggered reporting with clear timing-window control.</li>\n  <li>Run daily enterprise aggregation and complete national submission before next-day 24:00.</li>\n  <li>Implement local buffer and resend strategy for communication exceptions.</li>\n  <li>Implement annual sampling workflow for non-connected model variants.</li>\n  <li>Maintain annual connected-state statistics to support compliance and exemption decisions.</li>\n</ul>\n<h3>Evidence Retention List</h3>\n<ul>\n  <li>VIN-level reporting ledger with trigger type and timestamps.</li>\n  <li>Daily summary and next-day deadline compliance report.</li>\n  <li>Exception, buffering, and resend success statistics.</li>\n  <li>Annual sampling plan and report for non-connected models.</li>\n  <li>Connected-state statistics and coverage calculation workbook.</li>\n</ul>\n<h3>Audit Checklist (EN)</h3>\n<ul>\n  <li>C4-01: 3-minute reporting window compliance is achieved.</li>\n  <li>C4-02: Reporting interval upper/lower limits are respected.</li>\n  <li>C4-03: While MIL is on, at least one report is sent per drive cycle.</li>\n  <li>C4-04: Enterprise platform submits before next-day 24:00.</li>\n  <li>C4-05: Exception recovery and resend are complete and consistent.</li>\n</ul>'}, 'testing': {'titleZh': '测试要求', 'titleEn': 'Testing Requirements', 'leadZh': '<strong>章节定位</strong>：本章聚焦远程联网能力在型式检验、生产一致性和在用符合性中的验证方法。', 'leadEn': '<strong>Scope</strong>: This chapter focuses on verification methods for remote connectivity in type approval, production conformity, and in-use compliance.', 'navZh': '验证方法、测试环境与精度要求。', 'navEn': 'Validation methods, test setup, and accuracy verification.', 'summaryZh': '聚焦测试设备、预检条件、事件验证、平台验证与精度验证。', 'summaryEn': 'Test setup, pre-checks, event verification, platform verification, and accuracy validation rules.', 'refZh': '条款范围 JD.6.1-JD.6.5', 'refEn': 'Quick reference JD.6.1-JD.6.5', 'refTipZh': '覆盖测试设备、远程测试平台、预检要求、事件验证以及燃料/电量精度验证等测试要求。', 'refTipEn': 'Covers test equipment, remote test platform, pre-check conditions, event verification, and fuel/electric accuracy validation.', 'keywordsZh': '扫描工具 / 远程测试平台 / 预检 / 精度验证 / 复测', 'keywordsEn': 'scan tool / remote test platform / pre-check / accuracy / retest', 'zh': '<h2>法规依据（细化条款）</h2>\n<ul>\n  <li>JD.6.1.1：OBD通信设备要求（扫描工具/授权设备）。</li>\n  <li>JD.6.1.2：远程测试平台能力要求（企业平台-检验机构-国家平台数据交互）。</li>\n  <li>JD.6.2.1：可在I型试验/OBD系统试验等场景验证远程联网功能与参数完整准确性。</li>\n  <li>JD.6.2.2(a)：试前协议支持、参数齐全、寿命累计值正确累加验证。</li>\n  <li>JD.6.2.2(b)：车端至企业平台、企业平台至测试平台链路连通性验证。</li>\n  <li>JD.6.3：车端事件触发发送测试方法与判定窗口。</li>\n  <li>JD.6.4：平台发送测试（次日24时前、协议/格式符合JD.9）。</li>\n  <li>JD.6.5.1(a)~(d)：按燃油车/HEV/EV/FCEV分类的精度验证要求。</li>\n  <li>JD.6.5.2.1：燃料量精度判定公式与阈值。</li>\n  <li>JD.6.5.2.2：电量精度判定公式与阈值。</li>\n  <li>JD.6.5.2.3：不满足阈值时可增加试验并按累计结果重算。</li>\n  <li>JD.6.5.2.4：试验总数不得超过3次。</li>\n</ul>\n<h2>法规解释与拓展（Q&amp;A）</h2>\n<table><tbody>\n<tr><th>问题</th><th>解释（可落地口径）</th><th>条款</th></tr>\n<tr><td>Q1 测试设备要求包含什么？</td><td>既包含本地诊断通信设备（扫描工具/授权设备），也包含远程测试平台，需形成端到端数据交互能力。</td><td>JD.6.1.1, JD.6.1.2</td></tr>\n<tr><td>Q2 试前必须验证哪些内容？</td><td>至少验证协议支持、参数可读性、累计值累加逻辑、车端与平台链路连通性，确保可测可判。</td><td>JD.6.2.2(a), JD.6.2.2(b)</td></tr>\n<tr><td>Q3 车端触发测试怎么判定通过？</td><td>按规定触发事件后，需在窗口内完成一次事件发送到企业平台，并可通过日志/抓包证明。</td><td>JD.6.3</td></tr>\n<tr><td>Q4 平台发送测试关注什么？</td><td>关注两点：时限（次日24时前）和格式（协议与数据格式符合JD.9要求）。</td><td>JD.6.4</td></tr>\n<tr><td>Q5 精度验证按什么规则执行？</td><td>按车型类型执行燃料量/电量精度公式计算；若不达标可追加试验并按累计结果重算。</td><td>JD.6.5.1, JD.6.5.2.1, JD.6.5.2.2, JD.6.5.2.3</td></tr>\n<tr><td>Q6 复测次数上限是多少？</td><td>试验总数不得超过3次，应建立失败原因分析与整改闭环，避免无边界重复测试。</td><td>JD.6.5.2.4</td></tr>\n</tbody></table>\n\n<h2>实施要求</h2>\n<ul>\n  <li>建立分车型测试矩阵，覆盖传统车、HEV、OVC-HEV、EV、FCEV等差异化要求。</li>\n  <li>试前完成协议与链路预检，确保参数可读、链路可通、日志可采。</li>\n  <li>按事件触发测试脚本验证“触发-发送-接收”闭环时效。</li>\n  <li>按标准公式计算精度，保留输入参数、原始样本、计算过程与结论。</li>\n  <li>建立不通过复测与缺陷闭环机制，确保复测次数与边界条件合规。</li>\n</ul>\n<h2>证据留存清单</h2>\n<ul>\n  <li>测试计划、测试矩阵、设备与校准清单。</li>\n  <li>试前预检记录（协议支持、参数校验、链路连通）。</li>\n  <li>事件触发测试日志、时序抓包、平台回执。</li>\n  <li>精度计算底稿（公式、输入、阈值判定、复测记录）。</li>\n  <li>问题单、整改记录与回归测试报告。</li>\n</ul>\n<h2>审查检查点（Chapter 5）</h2>\n<table><tbody>\n<tr><th>ID</th><th>检查点</th><th>依据</th><th>判定标准</th><th>结论</th></tr>\n<tr><td>C5-01</td><td>测试设备与平台可用</td><td>JD.6.1.1, JD.6.1.2</td><td>设备/平台均可稳定联通</td><td>□通过/□不通过</td></tr>\n<tr><td>C5-02</td><td>试前预检完整</td><td>JD.6.2.2(a)(b)</td><td>协议、参数、链路全部通过</td><td>□通过/□不通过</td></tr>\n<tr><td>C5-03</td><td>车端事件发送验证</td><td>JD.6.3</td><td>触发后窗口内完成发送</td><td>□通过/□不通过</td></tr>\n<tr><td>C5-04</td><td>平台发送验证</td><td>JD.6.4</td><td>次日24时前发送且格式合规</td><td>□通过/□不通过</td></tr>\n<tr><td>C5-05</td><td>精度阈值与复测规则</td><td>JD.6.5.2.1~JD.6.5.2.4</td><td>阈值满足且复测不超过3次</td><td>□通过/□不通过</td></tr>\n</tbody></table>', 'en': '<h3>Legal Basis</h3>\n<ul>\n  <li>JD.6.1.1; JD.6.1.2</li>\n  <li>JD.6.2.1; JD.6.2.2(a); JD.6.2.2(b)</li>\n  <li>JD.6.3; JD.6.4</li>\n  <li>JD.6.5.1(a) to JD.6.5.1(d)</li>\n  <li>JD.6.5.2.1; JD.6.5.2.2; JD.6.5.2.3; JD.6.5.2.4</li>\n</ul>\n<h3>Regulatory Clarification Q&amp;A (EN)</h3>\n<table><tbody>\n<tr><th>Question</th><th>Clarification</th><th>Reference</th></tr>\n<tr><td>Q1 What testing infrastructure is required?</td><td>Both local diagnostic tools and a remote test platform are required for end-to-end validation.</td><td>JD.6.1.1, JD.6.1.2</td></tr>\n<tr><td>Q2 What must be checked before testing?</td><td>Protocol support, parameter readability, lifecycle counter accumulation behavior, and link connectivity.</td><td>JD.6.2.2(a), JD.6.2.2(b)</td></tr>\n<tr><td>Q3 How is event-trigger test judged as pass?</td><td>Triggered events must produce upload within required window with objective log/trace evidence.</td><td>JD.6.3</td></tr>\n<tr><td>Q4 What does platform-side test verify?</td><td>Deadline compliance before next-day 24:00 and protocol/data format compliance against JD.9.</td><td>JD.6.4</td></tr>\n<tr><td>Q5 How is accuracy verification executed?</td><td>Use vehicle-type-specific fuel/electric formulas; if initial result fails, cumulative recalculation is allowed.</td><td>JD.6.5.1, JD.6.5.2.1, JD.6.5.2.2, JD.6.5.2.3</td></tr>\n<tr><td>Q6 What is retest limit?</td><td>Total number of tests is capped at three with corrective-action closure workflow.</td><td>JD.6.5.2.4</td></tr>\n</tbody></table>\n<h3>Implementation Requirements</h3>\n<ul>\n  <li>Build a model-based test matrix covering ICE, HEV, OVC-HEV, EV, and FCEV variants.</li>\n  <li>Perform pre-test checks for protocol support, parameter availability, and link connectivity.</li>\n  <li>Validate event-triggered end-to-end timing from trigger to platform receive.</li>\n  <li>Compute fuel/electric accuracy with regulation formulas and keep full traceable calculation records.</li>\n  <li>Use controlled retest and defect-closure workflow when thresholds are not met.</li>\n</ul>\n<h3>Evidence Retention List</h3>\n<ul>\n  <li>Test plan, matrix, equipment list, and calibration records.</li>\n  <li>Pre-check logs for protocol, parameters, and connectivity.</li>\n  <li>Trigger test logs, packet traces, and platform acknowledgements.</li>\n  <li>Accuracy calculation workbook and retest evidence.</li>\n  <li>Issue list, corrective actions, and regression reports.</li>\n</ul>\n<h3>Audit Checklist (EN)</h3>\n<ul>\n  <li>C5-01: Test equipment and remote test platform are available and stable.</li>\n  <li>C5-02: Pre-test validation is complete.</li>\n  <li>C5-03: Onboard event-trigger reporting passes timing criteria.</li>\n  <li>C5-04: Platform-side submission timing and format are compliant.</li>\n  <li>C5-05: Accuracy thresholds and retest-count limits are satisfied.</li>\n</ul>'}};
+    const clauseEntries = [
+      { section: 'onboard', clause: 'JD.1.1', zh: '具备无线通信功能的车型纳入附件 JD 适用范围。', en: 'Wireless-capable vehicle models fall under Annex JD applicability.' },
+      { section: 'onboard', clause: 'JD.2.2', zh: '寿命周期累计值需持久化且不可随意更改。', en: 'Lifecycle counters must be persisted and protected from arbitrary change.' },
+      { section: 'onboard', clause: 'JD.4.2.1', zh: 'CALID/CVN 变化、刷写或 OTA、MIL 点亮等事件需触发独立发送。', en: 'CALID/CVN changes, flashing or OTA, and MIL-on events require standalone uploads.' },
+      { section: 'backend', clause: 'J.2.61 / J.2.62', zh: '区分企业平台与国家平台的职责边界。', en: 'Define the responsibility boundary between enterprise and national platforms.' },
+      { section: 'backend', clause: 'JD.4.3', zh: '企业平台需在次日 24 时前完成对国家平台的发送。', en: 'Enterprise platform must submit to the national platform before next-day 24:00.' },
+      { section: 'backend', clause: 'JD.8.1-JD.8.8', zh: '后台需实现协议状态机，包括登录、应答、重试和断链恢复。', en: 'Backend must implement the protocol state machine for login, response, retry, and disconnect recovery.' },
+      { section: 'cyber', clause: 'JD.7.5', zh: '平台需保证数据安全，并确保链路中数据未被改写。', en: 'Platform must secure data and ensure payload is not modified in transit.' },
+      { section: 'cyber', clause: 'JD.7.6', zh: '平台需满足等保三级及以上要求。', en: 'Platform must meet at least Level 3 cybersecurity protection requirements.' },
+      { section: 'cyber', clause: 'JD.8.8.3', zh: '需支持密钥交换相关数据格式与审计。', en: 'Key-exchange data format and auditability must be supported.' },
+      { section: 'reporting', clause: 'JD.4.1.1', zh: '每次驾驶循环启动或上电后 3 分钟内完成更新并发送。', en: 'Update and send within 3 minutes after each drive-cycle start or power-on.' },
+      { section: 'reporting', clause: 'JD.4.4 / JD.8.5', zh: '链路异常时本地缓存，恢复后按合规格式补传。', en: 'Buffer locally during link failure and resend in compliant format after recovery.' },
+      { section: 'reporting', clause: 'JD.5.1-JD.5.4', zh: '联网状态统计、有效发送计次和豁免逻辑需可追踪。', en: 'Connected-state statistics, valid-send counts, and exemption logic must be traceable.' },
+      { section: 'testing', clause: 'JD.6.1-JD.6.5', zh: '测试覆盖设备、预检、事件验证与精度验证。', en: 'Testing covers tools, pre-checks, event verification, and accuracy validation.' },
+      { section: 'testing', clause: 'JD.6.5.2.4', zh: '复测次数受控，需纳入纠正措施闭环。', en: 'Retests are capped and must be handled through a corrective-action loop.' }
+    ];
+
+    const labels = {
+      zh: {
+        title: 'C7 OTA Regulation Hub',
+        subtitle: '统一浏览 C7 OTA 法规五个模块，并通过左侧导航快速进入具体章节。',
+        chips: ['5 个模块', '中英切换', 'C7 OTA 法规'],
+        heroHome: '返回首页',
+        heroOverview: '打开总览',
+        heroStart: '从车端开始',
+        sideNavTitle: '章节导航',
+        sideNavSubtitle: '浏览五个法规章节，并直接跳转到目标内容。',
+        overviewTitle: 'Overview 总览',
+        overviewSubtitle: '先从这里快速浏览 C7 OTA 法规的五个模块，再进入具体章节查看细节。',
+        summaryModules: '五个法规模块统一收敛到一个 portal 页面。',
+        summaryChapters: '总览加五个详细章节，支持一键切换。',
+        summaryDeepLinks: '每个章节都保留独立 URL hash，便于评审和分享。',
+        finderEyebrow: '条款清单',
+        finderTitle: '按条款或主题快速筛选',
+        finderSearchPlaceholder: '搜索 JD.4.3 / OTA / 加密 / 补传',
+        finderFilterAll: '全部模块',
+        finderEmpty: '没有匹配条款。可以试试条款号、模块名或关键词。',
+        finderOpen: '打开章节',
+        overviewAction: '打开章节',
+        panelOverview: '总览页面',
+        panelFallback: '章节',
+        toggle: 'EN',
+        keywordsLabel: '关键词:'
+      },
+      en: {
+        title: 'C7 OTA Regulation Hub',
+        subtitle: 'A unified portal view of the five C7 OTA regulation modules with direct chapter navigation.',
+        chips: ['5 modules', 'Bilingual view', 'C7 OTA regulation'],
+        heroHome: 'Back to home',
+        heroOverview: 'Open overview',
+        heroStart: 'Start with on-board',
+        sideNavTitle: 'Section Navigator',
+        sideNavSubtitle: 'Browse the five regulation sections and switch directly to the target chapter.',
+        overviewTitle: 'Overview',
+        overviewSubtitle: 'Start here for a quick briefing across the five C7 OTA regulation modules before opening each detailed chapter.',
+        summaryModules: 'Regulation modules organized into one portal.',
+        summaryChapters: 'Overview plus five detailed chapters with one-click switching.',
+        summaryDeepLinks: 'Each chapter now keeps a direct URL hash for review and sharing.',
+        finderEyebrow: 'Clause finder',
+        finderTitle: 'Filter by clause or topic',
+        finderSearchPlaceholder: 'Search JD.4.3 / OTA / encryption / resend',
+        finderFilterAll: 'All modules',
+        finderEmpty: 'No clauses matched. Try a clause number, section, or keyword.',
+        finderOpen: 'Open section',
+        overviewAction: 'Open section',
+        panelOverview: 'Overview',
+        panelFallback: 'Section',
+        toggle: 'CN',
+        keywordsLabel: 'Keywords:'
+      }
+    };
+
+    const pageTitle = document.getElementById('pageTitle');
+    const pageSubtitle = document.getElementById('pageSubtitle');
+    const sideNavTitle = document.getElementById('sideNavTitle');
+    const sideNavSubtitle = document.getElementById('sideNavSubtitle');
+    const chipA = document.getElementById('chipA');
+    const chipB = document.getElementById('chipB');
+    const chipC = document.getElementById('chipC');
+    const panelHead = document.getElementById('panelHead');
+    const langToggle = document.getElementById('langToggle');
+    const heroHomeLink = document.getElementById('heroHomeLink');
+    const heroOverviewLink = document.getElementById('heroOverviewLink');
+    const heroStartLink = document.getElementById('heroStartLink');
+    const overviewPane = document.getElementById('overviewPane');
+    const chapterPane = document.getElementById('chapterPane');
+    const chapterContent = document.getElementById('chapterContent');
+    const navItems = Array.from(document.querySelectorAll('.nav-item'));
+    const heroTargetLinks = Array.from(document.querySelectorAll('[data-target-link]'));
+    const overviewTitle = document.getElementById('overviewTitle');
+    const overviewSubtitle = document.getElementById('overviewSubtitle');
+    const summaryModules = document.getElementById('summaryModules');
+    const summaryChapters = document.getElementById('summaryChapters');
+    const summaryDeepLinks = document.getElementById('summaryDeepLinks');
+    const finderEyebrow = document.getElementById('finderEyebrow');
+    const finderTitle = document.getElementById('finderTitle');
+    const finderCount = document.getElementById('finderCount');
+    const clauseSearch = document.getElementById('clauseSearch');
+    const finderFilterList = document.getElementById('finderFilterList');
+    const finderResults = document.getElementById('finderResults');
+    const hitNav = document.getElementById('hitNav');
+    const hitNavLabel = document.getElementById('hitNavLabel');
+    const hitNavCount = document.getElementById('hitNavCount');
+    const hitPrevBtn = document.getElementById('hitPrevBtn');
+    const hitNextBtn = document.getElementById('hitNextBtn');
+
+    let currentLang = 'en';
+    let currentTarget = 'overview';
+    let clauseFilter = 'all';
+    let clauseQuery = '';
+    let activeClauseEntry = null;
+    let highlightedMarks = [];
+    let activeHitIndex = -1;
+    const expandedFinderSections = new Set(['onboard', 'backend', 'cyber', 'reporting', 'testing']);
+    const validTargets = new Set(['overview', ...Object.keys(sections)]);
+
+    function suffix(key) {
+      return key === 'cyber' ? 'Cyber' : key.charAt(0).toUpperCase() + key.slice(1);
+    }
+
+    function sectionTitle(key) {
+      const zhTitles = {
+        onboard: '车端技术要求',
+        backend: '后台技术要求',
+        cyber: '网络安全技术要求',
+        reporting: '数据报送技术要求',
+        testing: '测试技术要求'
+      };
+      if (currentLang === 'zh' && zhTitles[key]) {
+        return zhTitles[key];
+      }
+      return currentLang === 'zh' ? sections[key].titleZh : sections[key].titleEn;
+    }
+
+    function escapeRegExp(value) {
+      return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function clauseTerms(entry) {
+      return entry.clause
+        .split('/')
+        .map((item) => item.trim())
+        .flatMap((item) => {
+          if (!item) {
+            return [];
+          }
+          if (item.includes('-')) {
+            const [start, end] = item.split('-').map((part) => part.trim());
+            return [item, `${start}~${end}`, start, end];
+          }
+          return [item];
+        })
+        .filter(Boolean)
+        .filter((item, index, all) => all.indexOf(item) === index);
+    }
+
+    function highlightTextTerm(root, term) {
+      const nodes = [];
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          if (!node.nodeValue || !node.nodeValue.trim()) {
+            return NodeFilter.FILTER_REJECT;
+          }
+          const parent = node.parentElement;
+          if (!parent || parent.closest('.clause-hit') || ['SCRIPT', 'STYLE'].includes(parent.tagName)) {
+            return NodeFilter.FILTER_REJECT;
+          }
+          return node.nodeValue.toLowerCase().includes(term.toLowerCase())
+            ? NodeFilter.FILTER_ACCEPT
+            : NodeFilter.FILTER_REJECT;
+        }
+      });
+
+      while (walker.nextNode()) {
+        nodes.push(walker.currentNode);
+      }
+
+      const regex = new RegExp(escapeRegExp(term), 'gi');
+      nodes.forEach((node) => {
+        const text = node.nodeValue;
+        let lastIndex = 0;
+        let match;
+        regex.lastIndex = 0;
+        const fragment = document.createDocumentFragment();
+
+        while ((match = regex.exec(text)) !== null) {
+          if (match.index > lastIndex) {
+            fragment.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+          }
+          const mark = document.createElement('mark');
+          mark.className = 'clause-hit';
+          mark.textContent = match[0];
+          fragment.appendChild(mark);
+          lastIndex = match.index + match[0].length;
+        }
+
+        if (lastIndex === 0) {
+          return;
+        }
+
+        if (lastIndex < text.length) {
+          fragment.appendChild(document.createTextNode(text.slice(lastIndex)));
+        }
+        node.parentNode.replaceChild(fragment, node);
+      });
+    }
+
+    function applyClauseHighlight(key) {
+      if (!activeClauseEntry || activeClauseEntry.section !== key) {
+        highlightedMarks = [];
+        activeHitIndex = -1;
+        updateHitNavigator();
+        return;
+      }
+      clauseTerms(activeClauseEntry).forEach((term) => {
+        highlightTextTerm(chapterContent, term);
+      });
+      highlightedMarks = Array.from(chapterContent.querySelectorAll('.clause-hit'));
+      activeHitIndex = highlightedMarks.length ? 0 : -1;
+      if (highlightedMarks.length) {
+        setActiveHit(activeHitIndex, { behavior: 'smooth' });
+      } else {
+        updateHitNavigator();
+      }
+    }
+
+    function updateHitNavigator() {
+      const total = highlightedMarks.length;
+      const hasHits = total > 0;
+      hitNav.hidden = !hasHits;
+      hitPrevBtn.disabled = !hasHits || total === 1;
+      hitNextBtn.disabled = !hasHits || total === 1;
+      hitNavCount.textContent = hasHits ? `${activeHitIndex + 1} / ${total}` : '0 / 0';
+    }
+
+    function setActiveHit(index, options = {}) {
+      const total = highlightedMarks.length;
+      if (!total) {
+        activeHitIndex = -1;
+        updateHitNavigator();
+        return;
+      }
+      const { behavior = 'smooth' } = options;
+      activeHitIndex = ((index % total) + total) % total;
+      highlightedMarks.forEach((mark, markIndex) => {
+        mark.classList.toggle('clause-hit-active', markIndex === activeHitIndex);
+      });
+      highlightedMarks[activeHitIndex].scrollIntoView({ block: 'center', behavior });
+      updateHitNavigator();
+    }
+
+    function renderChapter(key) {
+      const meta = sections[key];
+      const title = sectionTitle(key);
+      const lead = currentLang === 'zh' ? meta.leadZh : meta.leadEn;
+      const body = currentLang === 'zh' ? meta.zh : meta.en;
+      chapterContent.innerHTML = `<h1>${title}</h1><p>${lead}</p>${body}`;
+      applyClauseHighlight(key);
+    }
+
+    function renderOverview() {
+      const dict = labels[currentLang];
+      overviewTitle.textContent = dict.overviewTitle;
+      overviewSubtitle.textContent = dict.overviewSubtitle;
+      ['onboard','backend','cyber','reporting','testing'].forEach((key) => {
+        const meta = sections[key];
+        document.getElementById('overviewCardTitle' + suffix(key)).textContent = sectionTitle(key);
+        document.getElementById('overviewCardText' + suffix(key)).textContent = currentLang === 'zh' ? meta.summaryZh : meta.summaryEn;
+        const refEl = document.getElementById('overviewCardRef' + suffix(key));
+        refEl.textContent = currentLang === 'zh' ? meta.refZh : meta.refEn;
+        refEl.setAttribute('data-tip', currentLang === 'zh' ? meta.refTipZh : meta.refTipEn);
+        document.getElementById('overviewCardKeywords' + suffix(key)).innerHTML = `<span>${dict.keywordsLabel}</span> ${currentLang === 'zh' ? meta.keywordsZh : meta.keywordsEn}`;
+        document.getElementById('overviewCardAction' + suffix(key)).textContent = dict.overviewAction;
+      });
+    }
+
+    function sectionDisplayName(key) {
+      if (key === 'all') {
+        return labels[currentLang].finderFilterAll;
+      }
+      return sectionTitle(key);
+    }
+
+    function renderClauseFinder() {
+      const dict = labels[currentLang];
+      const query = clauseQuery.trim().toLowerCase();
+      const filtered = clauseEntries.filter((entry) => {
+        if (clauseFilter !== 'all' && entry.section !== clauseFilter) {
+          return false;
+        }
+        if (!query) {
+          return true;
+        }
+        const haystack = [
+          entry.clause,
+          entry.section,
+          sectionDisplayName(entry.section),
+          entry.zh,
+          entry.en
+        ].join(' ').toLowerCase();
+        return haystack.includes(query);
+      });
+
+      finderCount.textContent = currentLang === 'zh' ? `共 ${filtered.length} 条` : `${filtered.length} matches`;
+      finderFilterList.innerHTML = ['all', 'onboard', 'backend', 'cyber', 'reporting', 'testing']
+        .map((key) => `<button class="finder-filter${clauseFilter === key ? ' active' : ''}" data-filter="${key}" type="button">${sectionDisplayName(key)}</button>`)
+        .join('');
+
+      if (!filtered.length) {
+        finderResults.innerHTML = `<p class="finder-empty">${dict.finderEmpty}</p>`;
+        return;
+      }
+
+      const groupKeys = ['onboard', 'backend', 'cyber', 'reporting', 'testing'];
+      finderResults.innerHTML = groupKeys
+        .map((groupKey) => {
+          const items = filtered.filter((entry) => entry.section === groupKey);
+          if (!items.length) {
+            return '';
+          }
+          const openAttr = expandedFinderSections.has(groupKey) ? ' open' : '';
+          const rows = items.map((entry) => `
+            <button class="finder-result" data-target="${entry.section}" data-entry-index="${clauseEntries.indexOf(entry)}" type="button">
+              <span class="finder-result-top">
+                <span class="finder-result-meta">
+                  <span class="finder-clause">${entry.clause}</span>
+                  <span class="finder-section">${sectionDisplayName(entry.section)}</span>
+                </span>
+                <span class="finder-open">${dict.finderOpen}</span>
+              </span>
+              <p class="finder-result-text">${currentLang === 'zh' ? entry.zh : entry.en}</p>
+            </button>
+          `).join('');
+
+          return `
+            <details class="finder-group" data-group="${groupKey}"${openAttr}>
+              <summary class="finder-group-head">
+                <span>${sectionDisplayName(groupKey)}</span>
+                <span class="finder-group-count">${items.length}</span>
+              </summary>
+              <div class="finder-group-body">${rows}</div>
+            </details>
+          `;
+        })
+        .join('');
+    }
+
+    function activateTarget(target, options = {}) {
+      const { syncUrl = true } = options;
+      if (!validTargets.has(target)) {
+        target = 'overview';
+      }
+      currentTarget = target;
+      navItems.forEach((item) => item.classList.toggle('active', item.dataset.target === target));
+      overviewPane.classList.toggle('active', target === 'overview');
+      chapterPane.classList.toggle('active', target !== 'overview');
+      if (target === 'overview') {
+        highlightedMarks = [];
+        activeHitIndex = -1;
+        updateHitNavigator();
+        panelHead.textContent = labels[currentLang].panelOverview;
+      } else {
+        panelHead.textContent = currentLang === 'zh' ? sectionTitle(target) + ' 页面' : sectionTitle(target) + ' Section';
+        renderChapter(target);
+      }
+      if (syncUrl) {
+        history.replaceState(null, '', `#${target}`);
+      }
+    }
+
+    function applyLanguage() {
+      const dict = labels[currentLang];
+      pageTitle.textContent = dict.title;
+      pageSubtitle.textContent = dict.subtitle;
+      document.title = dict.title;
+      sideNavTitle.textContent = dict.sideNavTitle;
+      sideNavSubtitle.textContent = dict.sideNavSubtitle;
+      chipA.textContent = dict.chips[0];
+      chipB.textContent = dict.chips[1];
+      chipC.textContent = dict.chips[2];
+      langToggle.textContent = dict.toggle;
+      heroHomeLink.textContent = dict.heroHome;
+      heroOverviewLink.textContent = dict.heroOverview;
+      heroStartLink.textContent = dict.heroStart;
+      summaryModules.textContent = dict.summaryModules;
+      summaryChapters.textContent = dict.summaryChapters;
+      summaryDeepLinks.textContent = dict.summaryDeepLinks;
+      finderEyebrow.textContent = dict.finderEyebrow;
+      finderTitle.textContent = dict.finderTitle;
+      hitNavLabel.textContent = currentLang === 'zh' ? '章节条款命中' : 'In-chapter clause matches';
+      hitPrevBtn.textContent = currentLang === 'zh' ? '上一个' : 'Previous';
+      hitNextBtn.textContent = currentLang === 'zh' ? '下一个' : 'Next';
+      clauseSearch.placeholder = dict.finderSearchPlaceholder;
+      document.documentElement.lang = currentLang === 'zh' ? 'zh-CN' : 'en';
+
+      navItems.forEach((item) => {
+        const key = item.dataset.target;
+        const label = item.querySelector('.nav-label');
+        const desc = item.querySelector('.nav-desc');
+        if (key === 'overview') {
+          label.textContent = currentLang === 'zh' ? '总览' : 'Overview';
+          desc.textContent = currentLang === 'zh' ? '五个法规章节的摘要入口与快速导览。' : 'Summary entry and quick orientation across all five chapters.';
+        } else {
+          label.textContent = sectionTitle(key);
+          desc.textContent = currentLang === 'zh' ? sections[key].navZh : sections[key].navEn;
+        }
+      });
+
+      renderOverview();
+      renderClauseFinder();
+      activateTarget(currentTarget, { syncUrl: false });
+    }
+
+    document.getElementById('navList').addEventListener('click', (event) => {
+      const item = event.target.closest('.nav-item');
+      if (!item) return;
+      activateTarget(item.dataset.target);
+    });
+
+    document.getElementById('overviewGrid').addEventListener('click', (event) => {
+      const action = event.target.closest('.overview-card-action');
+      if (!action) return;
+      activateTarget(action.dataset.target);
+    });
+
+    clauseSearch.addEventListener('input', (event) => {
+      clauseQuery = event.target.value;
+      renderClauseFinder();
+    });
+
+    finderFilterList.addEventListener('click', (event) => {
+      const action = event.target.closest('[data-filter]');
+      if (!action) return;
+      clauseFilter = action.dataset.filter;
+      renderClauseFinder();
+    });
+
+    finderResults.addEventListener('click', (event) => {
+      const action = event.target.closest('[data-target]');
+      if (!action) return;
+      activeClauseEntry = clauseEntries[Number(action.dataset.entryIndex)] || null;
+      activateTarget(action.dataset.target);
+    });
+
+    finderResults.addEventListener('toggle', (event) => {
+      const group = event.target;
+      if (!group.matches('.finder-group')) {
+        return;
+      }
+      const key = group.dataset.group;
+      if (!key) {
+        return;
+      }
+      if (group.open) {
+        expandedFinderSections.add(key);
+      } else {
+        expandedFinderSections.delete(key);
+      }
+    }, true);
+
+    hitPrevBtn.addEventListener('click', () => {
+      setActiveHit(activeHitIndex - 1);
+    });
+
+    hitNextBtn.addEventListener('click', () => {
+      setActiveHit(activeHitIndex + 1);
+    });
+
+    heroTargetLinks.forEach((item) => {
+      item.addEventListener('click', () => {
+        activateTarget(item.dataset.targetLink);
+      });
+    });
+
+    langToggle.addEventListener('click', () => {
+      currentLang = currentLang === 'en' ? 'zh' : 'en';
+      applyLanguage();
+    });
+
+    window.addEventListener('hashchange', () => {
+      const target = window.location.hash.replace('#', '');
+      if (!target || target === currentTarget) {
+        return;
+      }
+      activateTarget(target, { syncUrl: false });
+    });
+
+    applyLanguage();
+    activateTarget(window.location.hash.replace('#', ''), { syncUrl: false });
+  </script>
+</body>
+</html>
