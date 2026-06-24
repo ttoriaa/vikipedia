@@ -1,7 +1,7 @@
 ---
 name: vikipedia-github-landing-sync
 description: "在 ttoriaa/vikipedia 中检测 GitHub 新建仓库或新公开项目站点，并定期更新 landing page 的 sites 数据源。Use when you need to refresh Vikipedia landing page from GitHub repositories on a schedule or on demand."
-argument-hint: "可选参数: username=ttoriaa, limit=9, output=assets/github-projects.json, include_homepage_any_domain=false, auto_commit=true|false, auto_push=true|false, install_workflow=true|false"
+argument-hint: "推荐发布模式: username=ttoriaa, limit=9, output=assets/github-projects.json, auto_commit=true, auto_push=true；可选参数: include_homepage_any_domain=false, include_project_boards=true|false, project_board_limit=20, install_workflow=true|false"
 user-invocable: true
 disable-model-invocation: false
 ---
@@ -41,9 +41,16 @@ disable-model-invocation: false
   - `true`: 也收录任何配置了 homepage 的仓库。
 - `include_project_boards` (optional, default `true` in workflow / `false` in bare CLI unless env is set): 是否收录公开 GitHub Projects V2 看板。
 - `project_board_limit` (optional, default `20`): 预抓取多少个看板，再与仓库混排后截断。
-- `auto_commit` (optional, default `false`): 是否自动提交 JSON 更新。
-- `auto_push` (optional, default `false`): 是否自动推送远端。
+- `auto_commit` (optional, recommended `true`): 是否自动提交 JSON 更新。
+- `auto_push` (optional, recommended `true`): 是否自动推送远端。
 - `install_workflow` (optional, default `false`): 若目标仓库缺少自动化，是否安装模板 workflow 与脚本。
+
+推荐发布组合:
+- 需要“一次同步并上线”时，使用 `auto_commit=true auto_push=true`。
+
+默认执行倾向:
+- 若用户未明确说明“只本地预览”，优先按发布模式执行（`auto_commit=true auto_push=true`）。
+- 若用户明确要求本地验证或 dry-run，再切换为不提交不推送。
 
 ## Existing Implementation Surface
 当前仓库已有可直接复用的实现：
@@ -71,10 +78,11 @@ disable-model-invocation: false
 - 若 `include_project_boards=true`，追加 `--include-project-boards --project-board-limit <n>`
 4. 检查输出文件是否生成且 `projects` 数组非空或符合预期。
 5. 若 `auto_commit=true`：
-- `git add <output>`
-- `git commit -m "chore: sync GitHub projects feed"`
+- 优先执行: `git add <output>`
+- 若输出文件被 `.gitignore` 忽略（例如全局 `*.json` 规则），改为: `git add -f <output>`
+- 仅在 staged 非空时提交: `git commit -m "chore: sync GitHub projects feed"`
 6. 若 `auto_push=true`：
-- `git push`
+- 在 commit 成功后执行: `git push`
 7. 若需要定时运行：
 - 启用 `.github/workflows/sync-github-projects.yml`
 - 使用 `schedule` + `workflow_dispatch` 进行自动和手动触发。
@@ -92,6 +100,8 @@ disable-model-invocation: false
 - 检查 `GITHUB_TOKEN` 是否可用于 GraphQL；若无 token，脚本会跳过看板同步。
 - 输出文件为空或项目缺失：
 - 检查仓库是否为 fork/private/archived，或是否缺少 Pages/homepage 配置。
+- `auto_commit=true` 但提交失败且提示文件被忽略：
+- 检查 `.gitignore` 规则，改用 `git add -f <output>` 后重试。
 - workflow 成功但页面未更新：
 - 检查部署链路是否会把最新 `assets/github-projects.json` 发布到站点。
 
@@ -107,6 +117,6 @@ disable-model-invocation: false
 - Next action when failed
 
 ## Example Prompts
-- `/vikipedia-github-landing-sync username=ttoriaa limit=9 include_project_boards=true install_workflow=true`
+- `/vikipedia-github-landing-sync username=ttoriaa limit=9 auto_commit=true auto_push=true include_project_boards=true install_workflow=true`
 - `/vikipedia-github-landing-sync username=ttoriaa include_homepage_any_domain=true include_project_boards=true auto_commit=true auto_push=true`
 - `帮我给 ttoriaa/vikipedia 加一个定时同步 GitHub 项目到 landing page 的技能和 workflow。`
