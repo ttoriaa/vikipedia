@@ -451,9 +451,70 @@
     body[data-active-tab="resume"] .story-timeline,
     body[data-active-tab="resume"] .scroll-progress,
     body[data-active-tab="skills"] .story-timeline,
-    body[data-active-tab="skills"] .scroll-progress {
+    body[data-active-tab="skills"] .scroll-progress,
+    body[data-active-tab="token"] .story-timeline,
+    body[data-active-tab="token"] .scroll-progress {
       opacity: 0;
       pointer-events: none;
+    }
+
+    .token-shell {
+      min-height: 62vh;
+    }
+
+    .token-lead {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .token-actions {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .token-frame {
+      margin-top: 14px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: var(--card-strong);
+      box-shadow: 0 16px 34px rgba(16, 24, 32, 0.12);
+      overflow: hidden;
+      min-height: 70vh;
+    }
+
+    .token-frame iframe {
+      width: 100%;
+      height: 70vh;
+      min-height: 620px;
+      border: 0;
+      background: #fff;
+    }
+
+    .token-summary-card {
+      margin-top: 14px;
+    }
+
+    .token-summary-group + .token-summary-group {
+      margin-top: 12px;
+    }
+
+    .token-summary-group h4 {
+      margin: 0 0 6px;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .token-summary-group ul {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 6px;
     }
 
     .hero {
@@ -2105,6 +2166,7 @@
         <button class="top-tab is-active" type="button" data-tab-target="index" data-i18n="tabIndex">Home</button>
         <button class="top-tab" type="button" data-tab-target="skills" data-i18n="tabSkills">Skills</button>
         <button class="top-tab" type="button" data-tab-target="resume" data-i18n="tabResume">Resume</button>
+        <button class="top-tab" type="button" data-tab-target="token" data-i18n="tabToken">Token</button>
       </div>
       <nav class="top-links" aria-label="快速入口">
         <button id="langToggle" class="lang-toggle" type="button">中文</button>
@@ -2309,7 +2371,7 @@
           <h3>时髦小姨 Podcast</h3>
           <p data-i18n="sitePodcastSummary">A podcast experience designed to reduce noise and create clarity in an entropic world.</p>
           <div class="site-actions">
-            <a href="https://ttoriaa.github.io/shimai-podcast-site/index.html?lang=zh#home" target="_blank" rel="noreferrer">Open</a>
+            <a href="https://ttoriaa.github.io/shimai-podcast-site/index.html?lang=zh#home" target="_blank" rel="noreferrer" data-i18n="siteOpen">Open</a>
           </div>
         </article>
 
@@ -2330,7 +2392,29 @@
           <h3>懂车帝 Battery &amp; Charging</h3>
           <p data-i18n="siteChargingSummary">A deep-dive benchmark on HVB vehicles and charging performance, from specs to decision-ready insights.</p>
           <div class="site-actions">
-            <a href="https://ttoriaa.github.io/automotive-benchmarking" target="_blank" rel="noreferrer">Open</a>
+            <a href="https://ttoriaa.github.io/automotive-benchmarking" target="_blank" rel="noreferrer" data-i18n="siteOpen">Open</a>
+          </div>
+        </article>
+
+        <article class="site-card">
+          <div class="site-thumb site-thumb--auto">
+            <div class="thumb-top"><span></span><span></span><span></span></div>
+            <div class="thumb-body">
+              <div class="thumb-title">C7</div>
+              <div class="thumb-micro"><span>OTA</span><span>Portal</span><span>Bilingual</span></div>
+              <div class="thumb-line long"></div>
+              <div class="thumb-line mid"></div>
+              <div class="thumb-line short"></div>
+            </div>
+          </div>
+          <div class="site-tags">
+            <span class="site-tag">Regulation</span>
+            <span class="site-tag">Portal</span>
+          </div>
+          <h3>C7 OTA Regulation Hub</h3>
+          <p data-i18n="siteC7Summary">A bilingual regulation portal that organizes five C7 OTA modules into one review-ready navigation flow.</p>
+          <div class="site-actions">
+            <a href="c7_regulation_tabs.html" target="_blank" rel="noreferrer" data-i18n="siteOpen">Open</a>
           </div>
         </article>
 
@@ -2352,7 +2436,7 @@
           <h3>Market Watch</h3>
           <p>Track semiconductor, AI compute, energy, and gold with multi-source updates, alerts, and digest summaries.</p>
           <div class="site-actions">
-            <a href="https://ttoriaa.github.io/vikipedia/market_watch/" target="_blank" rel="noreferrer">Open</a>
+            <a href="https://ttoriaa.github.io/vikipedia/market_watch/" target="_blank" rel="noreferrer" data-i18n="siteOpen">Open</a>
           </div>
         </article>
 
@@ -2374,7 +2458,29 @@
           <h3>GitHub Copilot Quickstart Guide</h3>
           <p>一页快速说明 GitHub Copilot 是什么、我们为什么要搭、怎么搭，以及它已经能支撑的典型 use cases。</p>
           <div class="site-actions">
-            <a href="copilot_quickstart_guide.html" target="_blank" rel="noreferrer">Open</a>
+            <a href="copilot_quickstart_guide.html" target="_blank" rel="noreferrer" data-i18n="siteOpen">Open</a>
+          </div>
+        </article>
+
+        <article class="site-card">
+          <div class="site-thumb site-thumb--auto">
+            <div class="thumb-top"><span></span><span></span><span></span></div>
+            <div class="thumb-body">
+              <div class="thumb-title">Token</div>
+              <div class="thumb-micro"><span>KB</span><span>Logs</span><span>Evidence</span></div>
+              <div class="thumb-line long"></div>
+              <div class="thumb-line mid"></div>
+              <div class="thumb-line short"></div>
+            </div>
+          </div>
+          <div class="site-tags">
+            <span class="site-tag">Knowledge</span>
+            <span class="site-tag">Token</span>
+          </div>
+          <h3>Token</h3>
+          <p data-i18n="siteTokenSummary">Your personal knowledge base surface with latest snapshots, decision logs, and report evidence.</p>
+          <div class="site-actions">
+            <a href="assets/token/index.html" target="_blank" rel="noreferrer" data-i18n="siteOpen">Open</a>
           </div>
         </article>
 
@@ -2395,7 +2501,7 @@
           <h3>///M Playground</h3>
           <p data-i18n="siteGamingSummary">A brain-message playground blending chess, sudoku, snake, and 2048 into one branded interaction layer.</p>
           <div class="site-actions">
-            <a href="https://ttoriaa.github.io/gaming-vikipedia/" target="_blank" rel="noreferrer">Open</a>
+            <a href="https://ttoriaa.github.io/gaming-vikipedia/" target="_blank" rel="noreferrer" data-i18n="siteOpen">Open</a>
           </div>
         </article>
       </div>
@@ -2540,6 +2646,29 @@
         <div id="skillsGrid" class="sites-grid skills-grid" aria-live="polite"></div>
       </section>
     </main>
+
+    <main id="panel-token" class="tab-panel" aria-hidden="true">
+      <section class="section token-shell">
+        <div class="section-head">
+          <div>
+            <h2 data-i18n="tokenTitle">Token</h2>
+            <p class="token-lead" data-i18n="tokenIntro">A direct web view of your personal knowledge base, including skill snapshots, project evidence, and decision logs.</p>
+          </div>
+        </div>
+        <div class="token-actions">
+          <a id="tokenOpenSiteLink" class="resume-btn" href="assets/token/index.html" target="_blank" rel="noopener noreferrer" data-i18n="tokenOpenSite">Open Token Site</a>
+          <a class="resume-btn" href="assets/token/latest.md" target="_blank" rel="noopener noreferrer" data-i18n="tokenOpenLatest">Open latest.md</a>
+        </div>
+        <div id="tokenSummaryStatus" class="auto-projects-status" data-i18n="tokenSummaryLoading">Loading auto summary...</div>
+        <article id="tokenSummaryCard" class="resume-card token-summary-card" style="display:none;">
+          <h3 data-i18n="tokenSummaryTitle">Auto Summary and Lessons</h3>
+          <div id="tokenSummaryContent"></div>
+        </article>
+        <div class="token-frame">
+          <iframe id="tokenKnowledgeFrame" src="assets/token/index.html" title="Token Knowledge Base" loading="lazy"></iframe>
+        </div>
+      </section>
+    </main>
   </div>
   <script>
     (() => {
@@ -2550,7 +2679,8 @@
       const tabPanels = {
         index: document.getElementById('panel-index'),
         resume: document.getElementById('panel-resume'),
-        skills: document.getElementById('panel-skills')
+        skills: document.getElementById('panel-skills'),
+        token: document.getElementById('panel-token')
       };
       const anchorLinks = Array.from(document.querySelectorAll('.story-timeline a[data-anchor]'));
       const heroSteps = Array.from(document.querySelectorAll('.hero-step'));
@@ -2563,7 +2693,13 @@
       const skillsSearch = document.getElementById('skillsSearch');
       const skillsFilter = document.getElementById('skillsFilter');
       const skillsCount = document.getElementById('skillsCount');
+      const tokenSummaryStatus = document.getElementById('tokenSummaryStatus');
+      const tokenSummaryCard = document.getElementById('tokenSummaryCard');
+      const tokenSummaryContent = document.getElementById('tokenSummaryContent');
+      const tokenKnowledgeFrame = document.getElementById('tokenKnowledgeFrame');
+      const tokenOpenSiteLink = document.getElementById('tokenOpenSiteLink');
       let skillsCatalog = [];
+      let tokenSummary = null;
       const anchorTargets = anchorLinks
         .map(link => {
           const id = link.getAttribute('href')?.replace('#', '');
@@ -2583,6 +2719,8 @@
           tabIndex: 'Home',
           tabResume: 'Resume',
           tabSkills: 'Skills',
+          tabToken: 'Token',
+          siteOpen: 'Open',
           eyebrow: 'Portfolio of live pages',
           heroTitleLine1: 'Vikipedia:',
           heroTitleLine2: "Let's roll.",
@@ -2612,6 +2750,8 @@
           autoProjectOpen: 'Open Project',
           sitePodcastSummary: 'A podcast experience designed to reduce noise and create clarity in an entropic world.',
           siteChargingSummary: 'A deep-dive benchmark on HVB vehicles and charging performance, from specs to decision-ready insights.',
+          siteC7Summary: 'A bilingual regulation portal that organizes five C7 OTA modules into one review-ready navigation flow.',
+          siteTokenSummary: 'Your personal knowledge base surface with latest snapshots, decision logs, and report evidence.',
           siteGamingSummary: 'A brain-message playground blending chess, sudoku, snake, and 2048 into one branded interaction layer.',
           liveMapTitle: 'Current live map',
           liveMapDesc: 'This landing page now behaves like a lightweight portfolio homepage: stable visual previews, concise case-study framing, and direct links to live production pages.',
@@ -2670,15 +2810,28 @@
           skillsCountLabel: '{{count}} skills',
           skillsTag: 'Skill',
           skillsOpen: 'Open Skill',
+          tokenTitle: 'Token',
+          tokenIntro: 'A direct web view of your personal knowledge base, including skill snapshots, project evidence, and decision logs.',
+          tokenOpenSite: 'Open Token Site',
+          tokenOpenLatest: 'Open latest.md',
+          tokenSummaryTitle: 'Auto Summary and Lessons',
+          tokenSummaryLoading: 'Loading auto summary...',
+          tokenSummaryError: 'Unable to load summary right now.',
+          tokenOverviewTitle: 'Overview',
+          tokenPatternsTitle: 'Patterns Observed',
+          tokenLessonsTitle: 'Experience and Lessons',
+          tokenNextActionsTitle: 'Next Actions',
           langButton: '中文'
         },
         zh: {
           pageTitle: "Vikipedia: Let's roll.",
           brandTitle: "Vikipedia: Let's roll.",
           brandSubtitle: '一个紧凑的案例作品首页，连接你所有线上项目。',
-          tabIndex: 'Home',
+          tabIndex: '首页',
           tabResume: '简历',
-          tabSkills: 'Skills',
+          tabSkills: '技能',
+          tabToken: 'Token',
+          siteOpen: '打开',
           eyebrow: '线上项目作品集入口',
           heroTitleLine1: 'Vikipedia:',
           heroTitleLine2: "Let's roll.",
@@ -2708,6 +2861,8 @@
           autoProjectOpen: '打开项目',
           sitePodcastSummary: '一个播客站点，在信息熵增的世界里，用内容节奏和结构帮助用户做熵减。',
           siteChargingSummary: '聚焦 HVB 车型与充电性能的深度 benchmark，从参数到决策洞察一体化呈现。',
+          siteC7Summary: '一个双语法规 portal，把 C7 OTA 五个模块整合成适合评审和导航的统一入口。',
+          siteTokenSummary: '你的个人知识库入口，聚合最新快照、决策日志与报告证据。',
           siteGamingSummary: '一个融合 chess、sudoku、snake、2048 的脑力互动场，把品牌表达做成可玩体验。',
           liveMapTitle: '当前线上地图',
           liveMapDesc: '这个 landing page 现在是轻量作品集首页：稳定预览、清晰案例框架、直达线上页面。',
@@ -2749,7 +2904,7 @@
           resumeSkill2: '从数据到洞察的可视化与仪表盘体验设计',
           resumeSkill3: 'HTML / CSS / JavaScript 快速原型构建',
           resumeSkill4: '中英双语沟通与内容交付',
-          skillsTitle: 'Skills 能力库',
+          skillsTitle: '技能库',
           skillsIntro: '这里集中展示仓库中已训练的 skills。每张卡片都可直接跳转到对应 skill 目录。',
           skillsLoading: '正在从仓库加载 skills...',
           skillsEmpty: '在 .github/skills 下暂未发现 skill 目录。',
@@ -2764,8 +2919,19 @@
           skillsStatusStable: '稳定',
           skillsStatusExperimental: '实验中',
           skillsCountLabel: '{{count}} 个 skill',
-          skillsTag: 'Skill',
-          skillsOpen: '打开 Skill',
+          skillsTag: '技能',
+          skillsOpen: '打开技能',
+          tokenTitle: 'Token',
+          tokenIntro: '直接查看你的个人知识库网页，包含技能快照、项目证据与决策日志。',
+          tokenOpenSite: '打开 Token 页面',
+          tokenOpenLatest: '打开 latest.md',
+          tokenSummaryTitle: '自动总结与经验',
+          tokenSummaryLoading: '正在加载自动总结...',
+          tokenSummaryError: '当前无法加载总结，请稍后重试。',
+          tokenOverviewTitle: '总体概览',
+          tokenPatternsTitle: '观察到的模式',
+          tokenLessonsTitle: '经验与沉淀',
+          tokenNextActionsTitle: '下一步建议',
           langButton: 'English'
         }
       };
@@ -2859,6 +3025,80 @@
             </article>
           `;
         }).join('');
+      };
+
+      const renderTokenSummary = (lang) => {
+        if (!tokenSummaryContent || !tokenSummaryCard || !tokenSummaryStatus) {
+          return;
+        }
+        const dict = i18n[lang] || i18n.en;
+        if (!tokenSummary) {
+          tokenSummaryCard.style.display = 'none';
+          tokenSummaryStatus.style.display = '';
+          tokenSummaryStatus.textContent = dict.tokenSummaryLoading;
+          return;
+        }
+
+        const localizedSummary = tokenSummary[lang] || tokenSummary.en || tokenSummary.zh || tokenSummary;
+        const groups = [
+          { title: dict.tokenOverviewTitle, items: localizedSummary.overview || [] },
+          { title: dict.tokenPatternsTitle, items: localizedSummary.patterns || [] },
+          { title: dict.tokenLessonsTitle, items: localizedSummary.lessons || [] },
+          { title: dict.tokenNextActionsTitle, items: localizedSummary.next_actions || [] }
+        ];
+
+        tokenSummaryContent.innerHTML = groups.map((group) => {
+          const items = (Array.isArray(group.items) ? group.items : [])
+            .map((item) => `<li>${escapeHtml(item)}</li>`)
+            .join('');
+          return `
+            <section class="token-summary-group">
+              <h4>${escapeHtml(group.title)}</h4>
+              <ul>${items || '<li>n/a</li>'}</ul>
+            </section>
+          `;
+        }).join('');
+
+        tokenSummaryStatus.style.display = 'none';
+        tokenSummaryCard.style.display = '';
+      };
+
+      const loadTokenSummary = async (lang) => {
+        if (!tokenSummaryStatus) {
+          return;
+        }
+        const dict = i18n[lang] || i18n.en;
+        tokenSummaryStatus.style.display = '';
+        tokenSummaryStatus.textContent = dict.tokenSummaryLoading;
+
+        try {
+          const response = await fetch('assets/token/latest.json', { cache: 'no-store' });
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+          const payload = await response.json();
+          tokenSummary = payload?.auto_summary || null;
+          renderTokenSummary(lang);
+        } catch (error) {
+          tokenSummary = null;
+          if (tokenSummaryCard) {
+            tokenSummaryCard.style.display = 'none';
+          }
+          tokenSummaryStatus.style.display = '';
+          tokenSummaryStatus.textContent = dict.tokenSummaryError;
+        }
+      };
+
+      const syncTokenKnowledgeLanguage = (lang) => {
+        const target = lang === 'zh'
+          ? 'assets/token/index.zh.html'
+          : 'assets/token/index.html';
+        if (tokenKnowledgeFrame && tokenKnowledgeFrame.getAttribute('src') !== target) {
+          tokenKnowledgeFrame.setAttribute('src', target);
+        }
+        if (tokenOpenSiteLink) {
+          tokenOpenSiteLink.setAttribute('href', target);
+        }
       };
 
       const renderSkills = (lang) => {
@@ -3011,6 +3251,8 @@
 
         renderSkills(lang);
         renderImpact(lang);
+        syncTokenKnowledgeLanguage(lang);
+        renderTokenSummary(lang);
 
         if (Array.isArray(autoProjects) && autoProjects.length > 0) {
           renderAutoProjects(lang);
@@ -3021,6 +3263,7 @@
       applyLanguage(currentLang);
       loadSkillsCatalog(currentLang);
       loadAutoProjects(currentLang);
+      loadTokenSummary(currentLang);
       if (skillsSearch) {
         skillsSearch.addEventListener('input', () => renderSkills(currentLang));
       }
