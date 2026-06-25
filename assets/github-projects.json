@@ -1,18 +1,7 @@
 {
-  "generated_at": "2026-06-24T06:30:47.031928+00:00",
+  "generated_at": "2026-06-25T06:28:38.596420+00:00",
   "source": "https://github.com/ttoriaa",
   "projects": [
-    {
-      "name": "vikipedia",
-      "description": "",
-      "url": "https://ttoriaa.github.io/vikipedia/",
-      "url_type": "pages",
-      "target_label": "Live",
-      "repo_url": "https://github.com/ttoriaa/vikipedia",
-      "language": "HTML",
-      "category": "Project",
-      "pushed_at": "2026-06-24T06:29:15Z"
-    },
     {
       "name": "shimai-podcast-site",
       "description": "For podcast website.",
@@ -22,18 +11,29 @@
       "repo_url": "https://github.com/ttoriaa/shimai-podcast-site",
       "language": "JavaScript",
       "category": "Project",
-      "pushed_at": "2026-06-24T05:35:44Z"
+      "pushed_at": "2026-06-25T04:44:50Z"
     },
     {
-      "name": "resume-tailor",
+      "name": "C7-OTA-Hub",
       "description": "",
-      "url": "https://github.com/ttoriaa/resume-tailor",
-      "url_type": "repo",
-      "target_label": "Repo",
-      "repo_url": "https://github.com/ttoriaa/resume-tailor",
-      "language": "Python",
+      "url": "https://ttoriaa.github.io/C7-OTA-Hub/",
+      "url_type": "pages",
+      "target_label": "Live",
+      "repo_url": "https://github.com/ttoriaa/C7-OTA-Hub",
+      "language": "HTML",
       "category": "Project",
-      "pushed_at": "2026-06-24T05:52:56Z"
+      "pushed_at": "2026-06-25T02:00:40Z"
+    },
+    {
+      "name": "vikipedia",
+      "description": "",
+      "url": "https://ttoriaa.github.io/vikipedia/",
+      "url_type": "pages",
+      "target_label": "Live",
+      "repo_url": "https://github.com/ttoriaa/vikipedia",
+      "language": "HTML",
+      "category": "Project",
+      "pushed_at": "2026-06-24T06:32:49Z"
     },
     {
       "name": "market-research",
@@ -78,17 +78,6 @@
       "language": "HTML",
       "category": "Project",
       "pushed_at": "2026-06-12T05:25:53Z"
-    },
-    {
-      "name": "ttoriaa",
-      "description": "Config files for my GitHub profile.",
-      "url": "https://github.com/ttoriaa",
-      "url_type": "homepage",
-      "target_label": "Live",
-      "repo_url": "https://github.com/ttoriaa/ttoriaa",
-      "language": "",
-      "category": "Config",
-      "pushed_at": "2023-06-19T14:37:00Z"
     }
   ]
 }
