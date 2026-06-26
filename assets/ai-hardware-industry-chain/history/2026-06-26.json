@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-26T09:48:02.236162+00:00",
+  "generated_at": "2026-06-26T10:14:45.156231+00:00",
   "date": "2026-06-26",
   "perspective": "buyer",
   "horizon": "12-24m",
@@ -223,27 +223,59 @@
     }
   ],
   "ai_pcb_metrics": {
-    "summary": "AI PCB 是服务器整机交付的关键承接层，低损耗、高层数与高速信号完整性共同决定供给弹性。",
-    "drivers": [
-      "AI 服务器平台刷新带动高层板需求",
-      "更高功耗/更高速率提升材料要求",
-      "板级设计复杂度继续上升"
-    ],
-    "bottlenecks": [
-      "高层数板制程",
-      "低损耗材料供应",
-      "认证周期与良率爬坡"
-    ],
-    "weekly_report": {
-      "this_week": [
-        "高层板与 HDI 交付周期仍是核心变量，客户对双供的偏好更明确"
+    "summary_i18n": {
+      "zh": "AI PCB 是服务器整机交付的关键承接层，低损耗、高层数与高速信号完整性共同决定供给弹性。",
+      "en": "AI PCB is a critical execution layer for server delivery, where low-loss materials, high-layer builds, and SI integrity define supply elasticity."
+    },
+    "drivers_i18n": {
+      "zh": [
+        "AI 服务器平台刷新带动高层板需求",
+        "更高功耗/更高速率提升材料要求",
+        "板级设计复杂度继续上升"
       ],
-      "next_week": [
-        "重点看主力厂接单节奏和认证推进，判断产能是否开始松动"
-      ],
-      "risk_flags": [
-        "若低损耗材料供应或良率爬坡跟不上，交付压力会快速回升"
+      "en": [
+        "Platform refresh supports high-layer PCB demand",
+        "Higher power and speed tighten material requirements",
+        "Board-level design complexity continues to rise"
       ]
+    },
+    "bottlenecks_i18n": {
+      "zh": [
+        "高层数板制程",
+        "低损耗材料供应",
+        "认证周期与良率爬坡"
+      ],
+      "en": [
+        "High-layer board process capability",
+        "Low-loss material supply",
+        "Qualification cycle and yield ramp"
+      ]
+    },
+    "weekly_report_i18n": {
+      "this_week": {
+        "zh": [
+          "高层板与 HDI 交付周期仍是核心变量，客户对双供的偏好更明确"
+        ],
+        "en": [
+          "High-layer and HDI lead times remained key variables, with stronger dual-source preference"
+        ]
+      },
+      "next_week": {
+        "zh": [
+          "重点看主力厂接单节奏和认证推进，判断产能是否开始松动"
+        ],
+        "en": [
+          "Focus on booking pace and qualification progress to gauge early supply easing"
+        ]
+      },
+      "risk_flags": {
+        "zh": [
+          "若低损耗材料供应或良率爬坡跟不上，交付压力会快速回升"
+        ],
+        "en": [
+          "Lagging material supply or yield ramp could quickly re-accelerate delivery pressure"
+        ]
+      }
     },
     "cycle_position": "design_complexity_up",
     "market_signal_avg_change_pct": null,
@@ -253,7 +285,10 @@
     "delivery_pressure_score": 70,
     "demand_heat_score": 65,
     "supply_tightness_score": 55,
-    "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
+    "turning_point_signal_i18n": {
+      "zh": "当紧缺分连续 2 周下行且交付执行稳定时，拐点信号增强",
+      "en": "Turning-point confidence rises when shortage score declines for 2+ weeks with stable lead-time execution"
+    },
     "leaders": {
       "tier1": [
         "Compeq",
@@ -269,40 +304,86 @@
         "Regional backup EMS/PCB partners"
       ]
     },
-    "procurement_focus": [
-      "Lock framework capacity and keep alternate source path warm",
-      "Set dual-source readiness checkpoints for each new generation",
-      "Prioritize critical SKUs in constrained periods"
-    ],
-    "outlook_points": [
-      "Demand remains structurally supported by AI infrastructure upgrades",
-      "Supply bottlenecks are likely to ease gradually but remain uneven",
-      "Turning-point confidence improves with 14-30 day trend consistency"
-    ]
+    "procurement_focus_i18n": {
+      "zh": [
+        "锁定框架产能并保持替代来源可切换",
+        "为每代产品设置双供 readiness 检查点",
+        "在约束期优先保障关键 SKU"
+      ],
+      "en": [
+        "Lock framework capacity and keep alternate source paths warm",
+        "Set dual-source readiness checkpoints per generation",
+        "Prioritize critical SKUs during constrained windows"
+      ]
+    },
+    "outlook_points_i18n": {
+      "zh": [
+        "AI 基础设施升级仍提供结构性需求支撑",
+        "供给瓶颈有望逐步缓解但节奏不均",
+        "14-30 天趋势一致性越高，拐点判断越可靠"
+      ],
+      "en": [
+        "AI infrastructure upgrades continue to support structural demand",
+        "Supply bottlenecks are likely to ease gradually but unevenly",
+        "Turning-point confidence improves with 14-30 day trend consistency"
+      ]
+    }
   },
   "layer_focus_cards": {
     "GPU / AI Accelerator": {
-      "summary": "需求主轴仍在模型训练、推理扩容与服务器刷新，GPU 仍是整个链条的最强定价锚。",
-      "drivers": [
-        "超大规模训练集群持续扩容",
-        "推理侧带来更广泛的出货基础",
-        "新架构迭代同时抬升封装和 HBM 拉动"
-      ],
-      "bottlenecks": [
-        "HBM 供给节拍",
-        "先进封装排产",
-        "整机功耗与散热设计"
-      ],
-      "weekly_report": {
-        "this_week": [
-          "云厂商 capex 维持高位，主流平台出货节奏仍偏强"
+      "summary_i18n": {
+        "zh": "需求主轴仍在模型训练、推理扩容与服务器刷新，GPU 仍是整个链条的最强定价锚。",
+        "en": "Demand remains anchored by training and inference expansion, with GPU still the strongest pricing pillar across the chain."
+      },
+      "drivers_i18n": {
+        "zh": [
+          "超大规模训练集群持续扩容",
+          "推理侧带来更广泛的出货基础",
+          "新架构迭代同时抬升封装和 HBM 拉动"
         ],
-        "next_week": [
-          "继续观察新平台 SKU 放量和整机交付 lead time 是否稳定"
-        ],
-        "risk_flags": [
-          "若 HBM 或封装排产再度吃紧，GPU 端交付会被动拉长"
+        "en": [
+          "Hyperscale training clusters keep expanding",
+          "Inference demand broadens shipment base",
+          "New GPU cycles pull both packaging and HBM demand"
         ]
+      },
+      "bottlenecks_i18n": {
+        "zh": [
+          "HBM 供给节拍",
+          "先进封装排产",
+          "整机功耗与散热设计"
+        ],
+        "en": [
+          "HBM supply cadence",
+          "Advanced packaging slotting",
+          "System-level power and thermal constraints"
+        ]
+      },
+      "weekly_report_i18n": {
+        "this_week": {
+          "zh": [
+            "云厂商 capex 维持高位，主流平台出货节奏仍偏强"
+          ],
+          "en": [
+            "Cloud capex stayed elevated and major platform shipments remained strong"
+          ]
+        },
+        "next_week": {
+          "zh": [
+            "继续观察新平台 SKU 放量和整机交付 lead time 是否稳定"
+          ],
+          "en": [
+            "Watch whether new SKU ramps and system lead-time execution remain stable"
+          ]
+        },
+        "risk_flags": {
+          "zh": [
+            "若 HBM 或封装排产再度吃紧，GPU 端交付会被动拉长"
+          ],
+          "en": [
+            "If HBM or packaging tightens again, GPU system lead times may extend"
+          ]
+        }
       },
       "cycle_position": "structural_upcycle",
       "market_signal_avg_change_pct": null,
@@ -312,7 +393,10 @@
       "delivery_pressure_score": 95,
       "demand_heat_score": 90,
       "supply_tightness_score": 80,
-      "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
+      "turning_point_signal_i18n": {
+        "zh": "当紧缺分连续 2 周下行且交付执行稳定时，拐点信号增强",
+        "en": "Turning-point confidence rises when shortage score declines for 2+ weeks with stable lead-time execution"
+      },
       "leaders": {
         "tier1": [
           "NVIDIA",
@@ -326,39 +410,85 @@
           "Cambricon"
         ]
       },
-      "procurement_focus": [
-        "Lock framework capacity and keep alternate source path warm",
-        "Set dual-source readiness checkpoints for each new generation",
-        "Prioritize critical SKUs in constrained periods"
-      ],
-      "outlook_points": [
-        "Demand remains structurally supported by AI infrastructure upgrades",
-        "Supply bottlenecks are likely to ease gradually but remain uneven",
-        "Turning-point confidence improves with 14-30 day trend consistency"
-      ]
+      "procurement_focus_i18n": {
+        "zh": [
+          "锁定框架产能并保持替代来源可切换",
+          "为每代产品设置双供 readiness 检查点",
+          "在约束期优先保障关键 SKU"
+        ],
+        "en": [
+          "Lock framework capacity and keep alternate source paths warm",
+          "Set dual-source readiness checkpoints per generation",
+          "Prioritize critical SKUs during constrained windows"
+        ]
+      },
+      "outlook_points_i18n": {
+        "zh": [
+          "AI 基础设施升级仍提供结构性需求支撑",
+          "供给瓶颈有望逐步缓解但节奏不均",
+          "14-30 天趋势一致性越高，拐点判断越可靠"
+        ],
+        "en": [
+          "AI infrastructure upgrades continue to support structural demand",
+          "Supply bottlenecks are likely to ease gradually but unevenly",
+          "Turning-point confidence improves with 14-30 day trend consistency"
+        ]
+      }
     },
     "HBM": {
-      "summary": "HBM 仍是 AI 服务器最关键的紧缺件之一，容量扩张与良率爬坡决定供需改善速度。",
-      "drivers": [
-        "训练/推理都在提高单卡带宽要求",
-        "高堆叠容量已成为平台升级前提",
-        "HBM3E/HBM4 认证推进带来替换窗口"
-      ],
-      "bottlenecks": [
-        "封装与测试产能",
-        "高堆叠良率",
-        "先进节点材料与基板协同"
-      ],
-      "weekly_report": {
-        "this_week": [
-          "头部厂扩产继续推进，但有效供给释放仍受良率约束"
+      "summary_i18n": {
+        "zh": "HBM 仍是 AI 服务器最关键的紧缺件之一，容量扩张与良率爬坡决定供需改善速度。",
+        "en": "HBM remains a core constraint in AI servers, and the pace of capacity and yield ramp drives normalization speed."
+      },
+      "drivers_i18n": {
+        "zh": [
+          "训练/推理都在提高单卡带宽要求",
+          "高堆叠容量已成为平台升级前提",
+          "HBM3E/HBM4 认证推进带来替换窗口"
         ],
-        "next_week": [
-          "关注客户认证结果和季度出货结构是否向更高堆叠产品迁移"
-        ],
-        "risk_flags": [
-          "若认证延后或良率改善慢于预期，紧缺度会维持高位"
+        "en": [
+          "Training and inference both raise per-device bandwidth demand",
+          "Higher stack capacity is now a platform prerequisite",
+          "HBM3E/HBM4 qualification creates replacement windows"
         ]
+      },
+      "bottlenecks_i18n": {
+        "zh": [
+          "封装与测试产能",
+          "高堆叠良率",
+          "先进节点材料与基板协同"
+        ],
+        "en": [
+          "Packaging and test capacity",
+          "High-stack yield improvement",
+          "Coordination with advanced-node materials and substrate"
+        ]
+      },
+      "weekly_report_i18n": {
+        "this_week": {
+          "zh": [
+            "头部厂扩产继续推进，但有效供给释放仍受良率约束"
+          ],
+          "en": [
+            "Capacity expansion progressed, but effective supply remains yield-constrained"
+          ]
+        },
+        "next_week": {
+          "zh": [
+            "关注客户认证结果和季度出货结构是否向更高堆叠产品迁移"
+          ],
+          "en": [
+            "Track qualification outcomes and shipment mix migration to higher stacks"
+          ]
+        },
+        "risk_flags": {
+          "zh": [
+            "若认证延后或良率改善慢于预期，紧缺度会维持高位"
+          ],
+          "en": [
+            "Delayed qualification or slower yield gains could keep tightness elevated"
+          ]
+        }
       },
       "cycle_position": "tight_capacity",
       "market_signal_avg_change_pct": null,
@@ -368,7 +498,10 @@
       "delivery_pressure_score": 95,
       "demand_heat_score": 90,
       "supply_tightness_score": 80,
-      "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
+      "turning_point_signal_i18n": {
+        "zh": "当紧缺分连续 2 周下行且交付执行稳定时，拐点信号增强",
+        "en": "Turning-point confidence rises when shortage score declines for 2+ weeks with stable lead-time execution"
+      },
       "leaders": {
         "tier1": [
           "SK hynix",
@@ -381,39 +514,85 @@
           "Regional memory ecosystem suppliers"
         ]
       },
-      "procurement_focus": [
-        "Lock framework capacity and keep alternate source path warm",
-        "Set dual-source readiness checkpoints for each new generation",
-        "Prioritize critical SKUs in constrained periods"
-      ],
-      "outlook_points": [
-        "Demand remains structurally supported by AI infrastructure upgrades",
-        "Supply bottlenecks are likely to ease gradually but remain uneven",
-        "Turning-point confidence improves with 14-30 day trend consistency"
-      ]
+      "procurement_focus_i18n": {
+        "zh": [
+          "锁定框架产能并保持替代来源可切换",
+          "为每代产品设置双供 readiness 检查点",
+          "在约束期优先保障关键 SKU"
+        ],
+        "en": [
+          "Lock framework capacity and keep alternate source paths warm",
+          "Set dual-source readiness checkpoints per generation",
+          "Prioritize critical SKUs during constrained windows"
+        ]
+      },
+      "outlook_points_i18n": {
+        "zh": [
+          "AI 基础设施升级仍提供结构性需求支撑",
+          "供给瓶颈有望逐步缓解但节奏不均",
+          "14-30 天趋势一致性越高，拐点判断越可靠"
+        ],
+        "en": [
+          "AI infrastructure upgrades continue to support structural demand",
+          "Supply bottlenecks are likely to ease gradually but unevenly",
+          "Turning-point confidence improves with 14-30 day trend consistency"
+        ]
+      }
     },
     "Advanced Packaging": {
-      "summary": "先进封装是 GPU/HBM 放量的同步约束，产能与工艺窗口决定整条链的兑现速度。",
-      "drivers": [
-        "Chiplet 和高算力平台渗透率上升",
-        "2.5D/3D 方案提高单位封装价值量",
-        "大客户拉货对产线优先级的虹吸效应"
-      ],
-      "bottlenecks": [
-        "CoWoS/类似产线排程",
-        "ABF/载板/中介层协同",
-        "测试与良率爬坡"
-      ],
-      "weekly_report": {
-        "this_week": [
-          "大客户需求仍在虹吸产线，扩产节奏继续是市场关注点"
+      "summary_i18n": {
+        "zh": "先进封装是 GPU/HBM 放量的同步约束，产能与工艺窗口决定整条链的兑现速度。",
+        "en": "Advanced packaging remains a synchronized constraint for GPU/HBM ramp, with capacity and process windows determining chain throughput."
+      },
+      "drivers_i18n": {
+        "zh": [
+          "Chiplet 和高算力平台渗透率上升",
+          "2.5D/3D 方案提高单位封装价值量",
+          "大客户拉货对产线优先级的虹吸效应"
         ],
-        "next_week": [
-          "观察封装厂扩产计划和中介层/基板备料是否同步到位"
-        ],
-        "risk_flags": [
-          "若测试良率或排产受阻，整条 AI 服务器链交付会继续被拖慢"
+        "en": [
+          "Rising Chiplet and high-compute platform penetration",
+          "2.5D/3D adoption lifts packaging value per unit",
+          "Large-customer pull continues to absorb line priority"
         ]
+      },
+      "bottlenecks_i18n": {
+        "zh": [
+          "CoWoS/类似产线排程",
+          "ABF/载板/中介层协同",
+          "测试与良率爬坡"
+        ],
+        "en": [
+          "CoWoS-like line scheduling",
+          "ABF/substrate/interposer coordination",
+          "Test throughput and yield ramp"
+        ]
+      },
+      "weekly_report_i18n": {
+        "this_week": {
+          "zh": [
+            "大客户需求仍在虹吸产线，扩产节奏继续是市场关注点"
+          ],
+          "en": [
+            "Key-customer demand kept absorbing line priority, and expansion pace stayed in focus"
+          ]
+        },
+        "next_week": {
+          "zh": [
+            "观察封装厂扩产计划和中介层/基板备料是否同步到位"
+          ],
+          "en": [
+            "Watch whether packaging expansion and interposer/substrate material readiness stay aligned"
+          ]
+        },
+        "risk_flags": {
+          "zh": [
+            "若测试良率或排产受阻，整条 AI 服务器链交付会继续被拖慢"
+          ],
+          "en": [
+            "If testing yield or scheduling slips, AI server delivery could remain constrained"
+          ]
+        }
       },
       "cycle_position": "capacity_constrained",
       "market_signal_avg_change_pct": null,
@@ -423,7 +602,10 @@
       "delivery_pressure_score": 95,
       "demand_heat_score": 90,
       "supply_tightness_score": 80,
-      "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
+      "turning_point_signal_i18n": {
+        "zh": "当紧缺分连续 2 周下行且交付执行稳定时，拐点信号增强",
+        "en": "Turning-point confidence rises when shortage score declines for 2+ weeks with stable lead-time execution"
+      },
       "leaders": {
         "tier1": [],
         "tier2": [],
@@ -431,39 +613,85 @@
           "Regional ecosystem suppliers"
         ]
       },
-      "procurement_focus": [
-        "Lock framework capacity and keep alternate source path warm",
-        "Set dual-source readiness checkpoints for each new generation",
-        "Prioritize critical SKUs in constrained periods"
-      ],
-      "outlook_points": [
-        "Demand remains structurally supported by AI infrastructure upgrades",
-        "Supply bottlenecks are likely to ease gradually but remain uneven",
-        "Turning-point confidence improves with 14-30 day trend consistency"
-      ]
+      "procurement_focus_i18n": {
+        "zh": [
+          "锁定框架产能并保持替代来源可切换",
+          "为每代产品设置双供 readiness 检查点",
+          "在约束期优先保障关键 SKU"
+        ],
+        "en": [
+          "Lock framework capacity and keep alternate source paths warm",
+          "Set dual-source readiness checkpoints per generation",
+          "Prioritize critical SKUs during constrained windows"
+        ]
+      },
+      "outlook_points_i18n": {
+        "zh": [
+          "AI 基础设施升级仍提供结构性需求支撑",
+          "供给瓶颈有望逐步缓解但节奏不均",
+          "14-30 天趋势一致性越高，拐点判断越可靠"
+        ],
+        "en": [
+          "AI infrastructure upgrades continue to support structural demand",
+          "Supply bottlenecks are likely to ease gradually but unevenly",
+          "Turning-point confidence improves with 14-30 day trend consistency"
+        ]
+      }
     },
     "ABF Substrate": {
-      "summary": "ABF 基板处于高端载板供给的咽喉位置，AI 芯片叠层复杂度持续抬升单位面积需求。",
-      "drivers": [
-        "高 I/O 高层数封装需求上升",
-        "服务器平台升级推高材料规格",
-        "低损耗/高层数产品占比提升"
-      ],
-      "bottlenecks": [
-        "高层数良率",
-        "玻纤/树脂/铜箔材料协同",
-        "扩产爬坡周期长"
-      ],
-      "weekly_report": {
-        "this_week": [
-          "高层数和低损耗料号仍是主线，头部厂排产优先级较高"
+      "summary_i18n": {
+        "zh": "ABF 基板处于高端载板供给的咽喉位置，AI 芯片叠层复杂度持续抬升单位面积需求。",
+        "en": "ABF sits at the chokepoint of high-end substrate supply as AI chip stacking complexity keeps raising area demand."
+      },
+      "drivers_i18n": {
+        "zh": [
+          "高 I/O 高层数封装需求上升",
+          "服务器平台升级推高材料规格",
+          "低损耗/高层数产品占比提升"
         ],
-        "next_week": [
-          "跟踪主力厂扩线公告和客户试产节奏，判断供给改善拐点"
-        ],
-        "risk_flags": [
-          "若玻纤/树脂/铜箔协同不足，ABF 仍会在局部规格上卡脖子"
+        "en": [
+          "Higher I/O and layer-count packaging demand",
+          "Server platform upgrades push material specs upward",
+          "Share of low-loss/high-layer products keeps rising"
         ]
+      },
+      "bottlenecks_i18n": {
+        "zh": [
+          "高层数良率",
+          "玻纤/树脂/铜箔材料协同",
+          "扩产爬坡周期长"
+        ],
+        "en": [
+          "High layer-count yield",
+          "Glass fiber/resin/copper coordination",
+          "Long ramp cycle for capacity additions"
+        ]
+      },
+      "weekly_report_i18n": {
+        "this_week": {
+          "zh": [
+            "高层数和低损耗料号仍是主线，头部厂排产优先级较高"
+          ],
+          "en": [
+            "High-layer and low-loss parts remained priority with stronger line allocation at top suppliers"
+          ]
+        },
+        "next_week": {
+          "zh": [
+            "跟踪主力厂扩线公告和客户试产节奏，判断供给改善拐点"
+          ],
+          "en": [
+            "Track line-expansion announcements and customer pilot cadence for a supply inflection read"
+          ]
+        },
+        "risk_flags": {
+          "zh": [
+            "若玻纤/树脂/铜箔协同不足，ABF 仍会在局部规格上卡脖子"
+          ],
+          "en": [
+            "Insufficient material coordination could keep ABF tight in select specifications"
+          ]
+        }
       },
       "cycle_position": "selectively_tight",
       "market_signal_avg_change_pct": null,
@@ -473,7 +701,10 @@
       "delivery_pressure_score": 70,
       "demand_heat_score": 65,
       "supply_tightness_score": 55,
-      "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
+      "turning_point_signal_i18n": {
+        "zh": "当紧缺分连续 2 周下行且交付执行稳定时，拐点信号增强",
+        "en": "Turning-point confidence rises when shortage score declines for 2+ weeks with stable lead-time execution"
+      },
       "leaders": {
         "tier1": [],
         "tier2": [],
@@ -481,39 +712,85 @@
           "Regional ecosystem suppliers"
         ]
       },
-      "procurement_focus": [
-        "Lock framework capacity and keep alternate source path warm",
-        "Set dual-source readiness checkpoints for each new generation",
-        "Prioritize critical SKUs in constrained periods"
-      ],
-      "outlook_points": [
-        "Demand remains structurally supported by AI infrastructure upgrades",
-        "Supply bottlenecks are likely to ease gradually but remain uneven",
-        "Turning-point confidence improves with 14-30 day trend consistency"
-      ]
+      "procurement_focus_i18n": {
+        "zh": [
+          "锁定框架产能并保持替代来源可切换",
+          "为每代产品设置双供 readiness 检查点",
+          "在约束期优先保障关键 SKU"
+        ],
+        "en": [
+          "Lock framework capacity and keep alternate source paths warm",
+          "Set dual-source readiness checkpoints per generation",
+          "Prioritize critical SKUs during constrained windows"
+        ]
+      },
+      "outlook_points_i18n": {
+        "zh": [
+          "AI 基础设施升级仍提供结构性需求支撑",
+          "供给瓶颈有望逐步缓解但节奏不均",
+          "14-30 天趋势一致性越高，拐点判断越可靠"
+        ],
+        "en": [
+          "AI infrastructure upgrades continue to support structural demand",
+          "Supply bottlenecks are likely to ease gradually but unevenly",
+          "Turning-point confidence improves with 14-30 day trend consistency"
+        ]
+      }
     },
     "AI PCB": {
-      "summary": "AI PCB 是服务器整机交付的关键承接层，低损耗、高层数与高速信号完整性共同决定供给弹性。",
-      "drivers": [
-        "AI 服务器平台刷新带动高层板需求",
-        "更高功耗/更高速率提升材料要求",
-        "板级设计复杂度继续上升"
-      ],
-      "bottlenecks": [
-        "高层数板制程",
-        "低损耗材料供应",
-        "认证周期与良率爬坡"
-      ],
-      "weekly_report": {
-        "this_week": [
-          "高层板与 HDI 交付周期仍是核心变量，客户对双供的偏好更明确"
+      "summary_i18n": {
+        "zh": "AI PCB 是服务器整机交付的关键承接层，低损耗、高层数与高速信号完整性共同决定供给弹性。",
+        "en": "AI PCB is a critical execution layer for server delivery, where low-loss materials, high-layer builds, and SI integrity define supply elasticity."
+      },
+      "drivers_i18n": {
+        "zh": [
+          "AI 服务器平台刷新带动高层板需求",
+          "更高功耗/更高速率提升材料要求",
+          "板级设计复杂度继续上升"
         ],
-        "next_week": [
-          "重点看主力厂接单节奏和认证推进，判断产能是否开始松动"
-        ],
-        "risk_flags": [
-          "若低损耗材料供应或良率爬坡跟不上，交付压力会快速回升"
+        "en": [
+          "Platform refresh supports high-layer PCB demand",
+          "Higher power and speed tighten material requirements",
+          "Board-level design complexity continues to rise"
         ]
+      },
+      "bottlenecks_i18n": {
+        "zh": [
+          "高层数板制程",
+          "低损耗材料供应",
+          "认证周期与良率爬坡"
+        ],
+        "en": [
+          "High-layer board process capability",
+          "Low-loss material supply",
+          "Qualification cycle and yield ramp"
+        ]
+      },
+      "weekly_report_i18n": {
+        "this_week": {
+          "zh": [
+            "高层板与 HDI 交付周期仍是核心变量，客户对双供的偏好更明确"
+          ],
+          "en": [
+            "High-layer and HDI lead times remained key variables, with stronger dual-source preference"
+          ]
+        },
+        "next_week": {
+          "zh": [
+            "重点看主力厂接单节奏和认证推进，判断产能是否开始松动"
+          ],
+          "en": [
+            "Focus on booking pace and qualification progress to gauge early supply easing"
+          ]
+        },
+        "risk_flags": {
+          "zh": [
+            "若低损耗材料供应或良率爬坡跟不上，交付压力会快速回升"
+          ],
+          "en": [
+            "Lagging material supply or yield ramp could quickly re-accelerate delivery pressure"
+          ]
+        }
       },
       "cycle_position": "design_complexity_up",
       "market_signal_avg_change_pct": null,
@@ -523,7 +800,10 @@
       "delivery_pressure_score": 70,
       "demand_heat_score": 65,
       "supply_tightness_score": 55,
-      "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
+      "turning_point_signal_i18n": {
+        "zh": "当紧缺分连续 2 周下行且交付执行稳定时，拐点信号增强",
+        "en": "Turning-point confidence rises when shortage score declines for 2+ weeks with stable lead-time execution"
+      },
       "leaders": {
         "tier1": [
           "Compeq",
@@ -539,39 +819,85 @@
           "Regional backup EMS/PCB partners"
         ]
       },
-      "procurement_focus": [
-        "Lock framework capacity and keep alternate source path warm",
-        "Set dual-source readiness checkpoints for each new generation",
-        "Prioritize critical SKUs in constrained periods"
-      ],
-      "outlook_points": [
-        "Demand remains structurally supported by AI infrastructure upgrades",
-        "Supply bottlenecks are likely to ease gradually but remain uneven",
-        "Turning-point confidence improves with 14-30 day trend consistency"
-      ]
+      "procurement_focus_i18n": {
+        "zh": [
+          "锁定框架产能并保持替代来源可切换",
+          "为每代产品设置双供 readiness 检查点",
+          "在约束期优先保障关键 SKU"
+        ],
+        "en": [
+          "Lock framework capacity and keep alternate source paths warm",
+          "Set dual-source readiness checkpoints per generation",
+          "Prioritize critical SKUs during constrained windows"
+        ]
+      },
+      "outlook_points_i18n": {
+        "zh": [
+          "AI 基础设施升级仍提供结构性需求支撑",
+          "供给瓶颈有望逐步缓解但节奏不均",
+          "14-30 天趋势一致性越高，拐点判断越可靠"
+        ],
+        "en": [
+          "AI infrastructure upgrades continue to support structural demand",
+          "Supply bottlenecks are likely to ease gradually but unevenly",
+          "Turning-point confidence improves with 14-30 day trend consistency"
+        ]
+      }
     },
     "High-speed Connectors": {
-      "summary": "高速连接器的价值在于信号完整性和装配可靠性，平台升级会放大头部供应商的认证壁垒。",
-      "drivers": [
-        "GPU/交换机/机柜链路速率提升",
-        "更高功耗推动高可靠连接方案",
-        "模块化平台加大接口数量"
-      ],
-      "bottlenecks": [
-        "材料与接触电阻控制",
-        "高速认证周期",
-        "结构件和装配公差"
-      ],
-      "weekly_report": {
-        "this_week": [
-          "接口速率升级带动新品导入，头部厂仍占据认证优势"
+      "summary_i18n": {
+        "zh": "高速连接器的价值在于信号完整性和装配可靠性，平台升级会放大头部供应商的认证壁垒。",
+        "en": "High-speed connector value is concentrated in signal integrity and assembly reliability, where platform upgrades reinforce top-vendor qualification barriers."
+      },
+      "drivers_i18n": {
+        "zh": [
+          "GPU/交换机/机柜链路速率提升",
+          "更高功耗推动高可靠连接方案",
+          "模块化平台加大接口数量"
         ],
-        "next_week": [
-          "观察平台接口规格变化和 OEM 新料号导入节奏"
-        ],
-        "risk_flags": [
-          "若材料或接触电阻控制不稳，高速链路良率会先受影响"
+        "en": [
+          "Rising link rates across GPU/switch/rack paths",
+          "Higher power pushes high-reliability connector designs",
+          "Modular platforms increase interface count"
         ]
+      },
+      "bottlenecks_i18n": {
+        "zh": [
+          "材料与接触电阻控制",
+          "高速认证周期",
+          "结构件和装配公差"
+        ],
+        "en": [
+          "Material and contact-resistance control",
+          "High-speed qualification cycle",
+          "Mechanical tolerance and assembly precision"
+        ]
+      },
+      "weekly_report_i18n": {
+        "this_week": {
+          "zh": [
+            "接口速率升级带动新品导入，头部厂仍占据认证优势"
+          ],
+          "en": [
+            "Rate upgrades supported new program introductions and top vendors retained qualification advantage"
+          ]
+        },
+        "next_week": {
+          "zh": [
+            "观察平台接口规格变化和 OEM 新料号导入节奏"
+          ],
+          "en": [
+            "Monitor interface spec changes and OEM new part-number introductions"
+          ]
+        },
+        "risk_flags": {
+          "zh": [
+            "若材料或接触电阻控制不稳，高速链路良率会先受影响"
+          ],
+          "en": [
+            "Unstable material/contact control may impact high-speed link yield first"
+          ]
+        }
       },
       "cycle_position": "spec_upgrade",
       "market_signal_avg_change_pct": null,
@@ -581,7 +907,10 @@
       "delivery_pressure_score": 70,
       "demand_heat_score": 65,
       "supply_tightness_score": 55,
-      "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
+      "turning_point_signal_i18n": {
+        "zh": "当紧缺分连续 2 周下行且交付执行稳定时，拐点信号增强",
+        "en": "Turning-point confidence rises when shortage score declines for 2+ weeks with stable lead-time execution"
+      },
       "leaders": {
         "tier1": [],
         "tier2": [],
@@ -589,39 +918,85 @@
           "Regional ecosystem suppliers"
         ]
       },
-      "procurement_focus": [
-        "Lock framework capacity and keep alternate source path warm",
-        "Set dual-source readiness checkpoints for each new generation",
-        "Prioritize critical SKUs in constrained periods"
-      ],
-      "outlook_points": [
-        "Demand remains structurally supported by AI infrastructure upgrades",
-        "Supply bottlenecks are likely to ease gradually but remain uneven",
-        "Turning-point confidence improves with 14-30 day trend consistency"
-      ]
+      "procurement_focus_i18n": {
+        "zh": [
+          "锁定框架产能并保持替代来源可切换",
+          "为每代产品设置双供 readiness 检查点",
+          "在约束期优先保障关键 SKU"
+        ],
+        "en": [
+          "Lock framework capacity and keep alternate source paths warm",
+          "Set dual-source readiness checkpoints per generation",
+          "Prioritize critical SKUs during constrained windows"
+        ]
+      },
+      "outlook_points_i18n": {
+        "zh": [
+          "AI 基础设施升级仍提供结构性需求支撑",
+          "供给瓶颈有望逐步缓解但节奏不均",
+          "14-30 天趋势一致性越高，拐点判断越可靠"
+        ],
+        "en": [
+          "AI infrastructure upgrades continue to support structural demand",
+          "Supply bottlenecks are likely to ease gradually but unevenly",
+          "Turning-point confidence improves with 14-30 day trend consistency"
+        ]
+      }
     },
     "MLCC": {
-      "summary": "MLCC 在 AI 服务器链中更偏稳定消耗件，但高容高压与高频料号仍会出现局部紧张。",
-      "drivers": [
-        "电源管理与去耦需求提升",
-        "服务器功耗上行带来更高规格料号占比",
-        "车规/工控与 AI 共享产能"
-      ],
-      "bottlenecks": [
-        "高端小型化料号产能",
-        "关键客户配额",
-        "高频高容规格切换"
-      ],
-      "weekly_report": {
-        "this_week": [
-          "整体偏稳定，但高规格料号仍能看到局部拉货"
+      "summary_i18n": {
+        "zh": "MLCC 在 AI 服务器链中更偏稳定消耗件，但高容高压与高频料号仍会出现局部紧张。",
+        "en": "MLCC is generally more stable in AI servers, though high-cap/high-voltage and high-frequency parts can still tighten selectively."
+      },
+      "drivers_i18n": {
+        "zh": [
+          "电源管理与去耦需求提升",
+          "服务器功耗上行带来更高规格料号占比",
+          "车规/工控与 AI 共享产能"
         ],
-        "next_week": [
-          "继续跟踪头部厂稼动率、高端料号交期和客户库存回补节奏"
-        ],
-        "risk_flags": [
-          "若客户集中补库，高频高容料号会先出现周期性紧张"
+        "en": [
+          "Power management and decoupling demand rise",
+          "Server power growth increases high-spec part mix",
+          "Automotive/industrial demand shares capacity with AI"
         ]
+      },
+      "bottlenecks_i18n": {
+        "zh": [
+          "高端小型化料号产能",
+          "关键客户配额",
+          "高频高容规格切换"
+        ],
+        "en": [
+          "Capacity for advanced miniaturized parts",
+          "Priority allocation to key accounts",
+          "Switching cadence for high-frequency/high-cap specs"
+        ]
+      },
+      "weekly_report_i18n": {
+        "this_week": {
+          "zh": [
+            "整体偏稳定，但高规格料号仍能看到局部拉货"
+          ],
+          "en": [
+            "Overall conditions were stable, while selective pull-ins appeared in premium SKUs"
+          ]
+        },
+        "next_week": {
+          "zh": [
+            "继续跟踪头部厂稼动率、高端料号交期和客户库存回补节奏"
+          ],
+          "en": [
+            "Keep tracking utilization, premium-SKU lead time, and customer restocking rhythm"
+          ]
+        },
+        "risk_flags": {
+          "zh": [
+            "若客户集中补库，高频高容料号会先出现周期性紧张"
+          ],
+          "en": [
+            "Concentrated restocking could tighten high-frequency/high-cap SKUs first"
+          ]
+        }
       },
       "cycle_position": "mostly_stable",
       "market_signal_avg_change_pct": null,
@@ -631,7 +1006,10 @@
       "delivery_pressure_score": 45,
       "demand_heat_score": 40,
       "supply_tightness_score": 30,
-      "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
+      "turning_point_signal_i18n": {
+        "zh": "当紧缺分连续 2 周下行且交付执行稳定时，拐点信号增强",
+        "en": "Turning-point confidence rises when shortage score declines for 2+ weeks with stable lead-time execution"
+      },
       "leaders": {
         "tier1": [],
         "tier2": [],
@@ -639,16 +1017,30 @@
           "Regional ecosystem suppliers"
         ]
       },
-      "procurement_focus": [
-        "Lock framework capacity and keep alternate source path warm",
-        "Set dual-source readiness checkpoints for each new generation",
-        "Prioritize critical SKUs in constrained periods"
-      ],
-      "outlook_points": [
-        "Demand remains structurally supported by AI infrastructure upgrades",
-        "Supply bottlenecks are likely to ease gradually but remain uneven",
-        "Turning-point confidence improves with 14-30 day trend consistency"
-      ]
+      "procurement_focus_i18n": {
+        "zh": [
+          "锁定框架产能并保持替代来源可切换",
+          "为每代产品设置双供 readiness 检查点",
+          "在约束期优先保障关键 SKU"
+        ],
+        "en": [
+          "Lock framework capacity and keep alternate source paths warm",
+          "Set dual-source readiness checkpoints per generation",
+          "Prioritize critical SKUs during constrained windows"
+        ]
+      },
+      "outlook_points_i18n": {
+        "zh": [
+          "AI 基础设施升级仍提供结构性需求支撑",
+          "供给瓶颈有望逐步缓解但节奏不均",
+          "14-30 天趋势一致性越高，拐点判断越可靠"
+        ],
+        "en": [
+          "AI infrastructure upgrades continue to support structural demand",
+          "Supply bottlenecks are likely to ease gradually but unevenly",
+          "Turning-point confidence improves with 14-30 day trend consistency"
+        ]
+      }
     }
   }
 }

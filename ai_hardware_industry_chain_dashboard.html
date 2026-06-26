@@ -664,6 +664,16 @@
       return I18N[currentLang][key] || key;
     }
 
+    function pickI18n(obj, fallback = "-") {
+      if (!obj || typeof obj !== "object") return fallback;
+      return obj[currentLang] || obj.zh || obj.en || fallback;
+    }
+
+    function pickI18nList(obj, fallback = []) {
+      const value = pickI18n(obj, fallback);
+      return Array.isArray(value) ? value : fallback;
+    }
+
     function riskClass(shortage) {
       if (shortage === "High") return "high";
       if (shortage === "Medium") return "medium";
@@ -1002,24 +1012,27 @@
       const list = (items) => items && items.length ? `<ul>${items.map((x) => `<li>${x}</li>`).join("")}</ul>` : "<p>-</p>";
       const section = (title, items) => `<div class="weekly-section"><p class="weekly-section-title"><strong>${title}</strong></p>${list(items)}</div>`;
       const leaders = metrics.leaders || {};
-      const actions = Array.isArray(metrics.procurement_focus) ? metrics.procurement_focus : [];
-      const outlook = Array.isArray(metrics.outlook_points) ? metrics.outlook_points : [];
-      const drivers = Array.isArray(metrics.drivers) ? metrics.drivers : [];
-      const bottlenecks = Array.isArray(metrics.bottlenecks) ? metrics.bottlenecks : [];
+      const actions = pickI18nList(metrics.procurement_focus_i18n, Array.isArray(metrics.procurement_focus) ? metrics.procurement_focus : []);
+      const outlook = pickI18nList(metrics.outlook_points_i18n, Array.isArray(metrics.outlook_points) ? metrics.outlook_points : []);
+      const drivers = pickI18nList(metrics.drivers_i18n, Array.isArray(metrics.drivers) ? metrics.drivers : []);
+      const bottlenecks = pickI18nList(metrics.bottlenecks_i18n, Array.isArray(metrics.bottlenecks) ? metrics.bottlenecks : []);
+      const weeklyReportI18n = metrics.weekly_report_i18n || {};
       const weeklyReport = metrics.weekly_report || {};
-      const thisWeek = Array.isArray(weeklyReport.this_week) ? weeklyReport.this_week : [];
-      const nextWeek = Array.isArray(weeklyReport.next_week) ? weeklyReport.next_week : [];
-      const riskFlags = Array.isArray(weeklyReport.risk_flags) ? weeklyReport.risk_flags : [];
+      const thisWeek = pickI18nList(weeklyReportI18n.this_week, Array.isArray(weeklyReport.this_week) ? weeklyReport.this_week : []);
+      const nextWeek = pickI18nList(weeklyReportI18n.next_week, Array.isArray(weeklyReport.next_week) ? weeklyReport.next_week : []);
+      const riskFlags = pickI18nList(weeklyReportI18n.risk_flags, Array.isArray(weeklyReport.risk_flags) ? weeklyReport.risk_flags : []);
       const marketSignal = Number.isFinite(Number(metrics.market_signal_avg_change_pct)) ? Number(metrics.market_signal_avg_change_pct) : null;
       const quoteCount = Number.isFinite(Number(metrics.market_signal_quote_count)) ? Number(metrics.market_signal_quote_count) : null;
+      const summaryText = pickI18n(metrics.summary_i18n, metrics.summary || "-");
+      const turningPointSignal = pickI18n(metrics.turning_point_signal_i18n, metrics.turning_point_signal || "-");
 
-      driversBody.innerHTML = `<p><strong>${currentFocusLayer}:</strong> ${metrics.summary || "-"}</p><p><strong>${t("weeklySummaryJudgement")}:</strong> ${metrics.cycle_position || "-"}</p>${list(drivers)}`;
+      driversBody.innerHTML = `<p><strong>${currentFocusLayer}:</strong> ${summaryText}</p><p><strong>${t("weeklySummaryJudgement")}:</strong> ${metrics.cycle_position || "-"}</p>${list(drivers)}`;
       bottleneckBody.innerHTML = list(bottlenecks);
       watchBody.innerHTML = `${section(t("weeklyThisWeek"), thisWeek)}${section(t("weeklyNextWeek"), nextWeek)}${section(t("weeklyRiskTip"), riskFlags)}<p><strong>${t("weeklySummaryMarketSignal")}:</strong> ${metrics.market_signal_avg_change_pct !== null && metrics.market_signal_avg_change_pct !== undefined ? Number(metrics.market_signal_avg_change_pct).toFixed(2) : "-"}</p>`;
       leaderBody.innerHTML = `<p><strong>${t("aiPcbTier1")}:</strong> ${(leaders.tier1 || []).join(", ") || "-"}</p><p><strong>${t("aiPcbTier2")}:</strong> ${(leaders.tier2 || []).join(", ") || "-"}</p><p><strong>${t("aiPcbTier3")}:</strong> ${(leaders.tier3 || []).join(", ") || "-"}</p>`;
       heatBody.innerHTML = `<p><strong>${t("aiPcbShortageLevel")}:</strong> ${displayShortage(metrics.shortage_level || "Medium")}</p><p><strong>${t("aiPcbShortageScore")}:</strong> ${metrics.shortage_score ?? "-"}</p><p><strong>${t("aiPcbDeliveryPressure")}:</strong> ${metrics.delivery_pressure_score ?? "-"}</p><p><strong>${t("aiPcbDemandHeat")}:</strong> ${metrics.demand_heat_score ?? "-"}</p><p><strong>${t("aiPcbSupplyTightness")}:</strong> ${metrics.supply_tightness_score ?? "-"}</p><p><strong>${t("weeklySummaryMarketSignal")}:</strong> ${marketSignal !== null ? marketSignal.toFixed(2) : "-"}${quoteCount !== null ? ` | ${quoteCount}` : ""}</p>`;
       actionBody.innerHTML = list(actions);
-      trendBody.innerHTML = `<p><strong>${t("aiPcbTurningSignal")}:</strong> ${metrics.turning_point_signal || "-"}</p>${list(outlook)}`;
+      trendBody.innerHTML = `<p><strong>${t("aiPcbTurningSignal")}:</strong> ${turningPointSignal}</p>${list(outlook)}`;
       weeklyBody.innerHTML = buildWeeklySummaryHtml(currentFocusLayer);
     }
 
