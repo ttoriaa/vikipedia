@@ -245,6 +245,12 @@
             <option value="aggressive">aggressive</option>
           </select>
         </div>
+        <div class="control">
+          <label for="snapshotDate">数据日期（最近7天）</label>
+          <select id="snapshotDate">
+            <option value="latest" selected>latest（实时）</option>
+          </select>
+        </div>
       </div>
     </section>
 
@@ -381,6 +387,19 @@
     }
 
     let currentLayers = [...fallbackLayers];
+    let currentDataSource = "fallback";
+    let currentGeneratedAt = null;
+
+    function toDateKey(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, "0");
+      const d = String(date.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+
+    function historyUrlByDate(dateKey) {
+      return `assets/ai-hardware-industry-chain/history/${dateKey}.json`;
+    }
 
     function normalizeLayersFromPayload(payload) {
       if (!payload || !Array.isArray(payload.layers) || payload.layers.length === 0) {
@@ -403,8 +422,7 @@
       el.textContent = text;
     }
 
-    async function loadLatestData() {
-      const url = `assets/ai-hardware-industry-chain/latest.json?t=${Date.now()}`;
+    async function loadPayloadFromUrl(url, sourceLabel) {
       try {
         const resp = await fetch(url, { cache: "no-store" });
         if (!resp.ok) {
@@ -412,12 +430,60 @@
         }
         const payload = await resp.json();
         currentLayers = normalizeLayersFromPayload(payload);
-        const generatedAt = payload.generated_at ? new Date(payload.generated_at).toLocaleString() : "unknown";
-        updateStatus(`数据源：latest.json | generated_at: ${generatedAt}`);
+        currentDataSource = sourceLabel;
+        currentGeneratedAt = payload.generated_at || null;
+        const generatedAtText = currentGeneratedAt ? new Date(currentGeneratedAt).toLocaleString() : "unknown";
+        updateStatus(`数据源：${sourceLabel} | generated_at: ${generatedAtText}`);
+        return true;
       } catch (err) {
-        currentLayers = [...fallbackLayers];
-        updateStatus(`数据源：内置兜底数据（latest.json 读取失败：${err.message}）`);
+        return false;
       }
+    }
+
+    async function loadLatestData() {
+      const ok = await loadPayloadFromUrl(`assets/ai-hardware-industry-chain/latest.json?t=${Date.now()}`, "latest.json");
+      if (ok) return;
+      currentLayers = [...fallbackLayers];
+      currentDataSource = "fallback";
+      currentGeneratedAt = null;
+      updateStatus("数据源：内置兜底数据（latest.json 读取失败）");
+    }
+
+    async function loadHistoryByDate(dateKey) {
+      const url = `${historyUrlByDate(dateKey)}?t=${Date.now()}`;
+      const ok = await loadPayloadFromUrl(url, `history/${dateKey}.json`);
+      if (ok) return true;
+      await loadLatestData();
+      return false;
+    }
+
+    async function initRecentHistoryOptions() {
+      const select = document.getElementById("snapshotDate");
+      const today = new Date();
+      const probes = [];
+
+      for (let i = 0; i < 7; i += 1) {
+        const d = new Date(today);
+        d.setDate(today.getDate() - i);
+        probes.push(toDateKey(d));
+      }
+
+      const checks = await Promise.all(probes.map(async (dateKey) => {
+        const url = `${historyUrlByDate(dateKey)}?t=${Date.now()}`;
+        try {
+          const resp = await fetch(url, { method: "HEAD", cache: "no-store" });
+          return resp.ok ? dateKey : null;
+        } catch (err) {
+          return null;
+        }
+      }));
+
+      checks.filter(Boolean).forEach((dateKey) => {
+        const opt = document.createElement("option");
+        opt.value = dateKey;
+        opt.textContent = dateKey;
+        select.appendChild(opt);
+      });
     }
 
     function render() {
@@ -468,7 +534,18 @@
       document.getElementById(id).addEventListener("change", render);
     });
 
+    document.getElementById("snapshotDate").addEventListener("change", async (event) => {
+      const selected = event.target.value;
+      if (selected === "latest") {
+        await loadLatestData();
+      } else {
+        await loadHistoryByDate(selected);
+      }
+      render();
+    });
+
     (async () => {
+      await initRecentHistoryOptions();
       await loadLatestData();
       render();
     })();
