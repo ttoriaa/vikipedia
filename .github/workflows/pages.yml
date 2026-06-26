@@ -18,6 +18,10 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      GLM_API_KEY: ${{ secrets.GLM_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || secrets.GLM_API_KEY }}
+      OPENAI_BASE_URL: ${{ vars.OPENAI_BASE_URL || vars.GLM_BASE_URL || 'https://open.bigmodel.cn/api/paas/v4' }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
