@@ -1,0 +1,43 @@
+name: Sync AI Hardware Industry Chain Data
+
+on:
+  schedule:
+    - cron: "31 1 * * *"
+  workflow_dispatch:
+    inputs:
+      timeout:
+        description: "Quote API timeout in seconds"
+        required: false
+        default: "15"
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Refresh AI hardware JSON
+        run: |
+          python scripts/sync_ai_hardware_industry_chain.py --output assets/ai-hardware-industry-chain/latest.json --history-dir assets/ai-hardware-industry-chain/history --timeout "${{ inputs.timeout || '15' }}"
+
+      - name: Commit changes
+        run: |
+          if git diff --quiet -- assets/ai-hardware-industry-chain/latest.json assets/ai-hardware-industry-chain/history; then
+            echo "No data changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/ai-hardware-industry-chain/latest.json assets/ai-hardware-industry-chain/history
+          git commit -m "chore: sync AI hardware industry chain data"
+          git push

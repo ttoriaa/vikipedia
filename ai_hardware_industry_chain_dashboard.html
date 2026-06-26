@@ -45,6 +45,13 @@
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
     }
 
+    .hero-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
     .hero h1 {
       margin: 0 0 8px;
       font-size: clamp(24px, 4vw, 36px);
@@ -92,6 +99,21 @@
       background: #111827;
       color: var(--text);
       padding: 8px;
+    }
+
+    .lang-btn {
+      border: 1px solid #3a465f;
+      border-radius: 10px;
+      background: #0f172a;
+      color: var(--text);
+      padding: 8px 12px;
+      font-weight: 700;
+      cursor: pointer;
+      min-width: 56px;
+    }
+
+    .lang-btn:hover {
+      border-color: var(--accent);
     }
 
     .grid {
@@ -208,6 +230,25 @@
       font-size: 12px;
     }
 
+    .trend-wrap {
+      padding: 14px 16px 18px;
+    }
+
+    .trend-svg {
+      width: 100%;
+      min-height: 190px;
+      background: #0a1220;
+      border: 1px solid #24324a;
+      border-radius: 12px;
+    }
+
+    .trend-meta {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
     @media (max-width: 780px) {
       .hero { padding: 16px; }
       .panel h2 { font-size: 16px; }
@@ -217,13 +258,18 @@
 <body>
   <div class="wrap">
     <section class="hero">
-      <h1>AI硬件产业链看板</h1>
-      <p>展示 GPU / HBM / 先进封装 / ABF / PCB / MLCC / 连接器 的层级关系、BOM 占比、紧缺概率与自动采购动作建议。</p>
+      <div class="hero-head">
+        <div>
+          <h1 id="titleText">AI硬件产业链看板</h1>
+          <p id="subtitleText">展示 GPU / HBM / 先进封装 / ABF / PCB / MLCC / 连接器 的层级关系、BOM 占比、紧缺概率与自动采购动作建议。</p>
+        </div>
+        <button id="langToggle" class="lang-btn" type="button">EN</button>
+      </div>
       <div id="dataStatus" class="status">数据源：加载中...</div>
 
       <div class="controls">
         <div class="control">
-          <label for="perspective">视角</label>
+          <label id="labelPerspective" for="perspective">视角</label>
           <select id="perspective">
             <option value="buyer" selected>buyer</option>
             <option value="supplier">supplier</option>
@@ -231,14 +277,14 @@
           </select>
         </div>
         <div class="control">
-          <label for="horizon">周期</label>
+          <label id="labelHorizon" for="horizon">周期</label>
           <select id="horizon">
             <option value="12-24m" selected>12-24m</option>
             <option value="24-36m">24-36m</option>
           </select>
         </div>
         <div class="control">
-          <label for="mode">risk_to_action_mode</label>
+          <label id="labelMode" for="mode">risk_to_action_mode</label>
           <select id="mode">
             <option value="standard" selected>standard</option>
             <option value="conservative">conservative</option>
@@ -246,7 +292,7 @@
           </select>
         </div>
         <div class="control">
-          <label for="snapshotDate">数据日期（最近7天）</label>
+          <label id="labelSnapshot" for="snapshotDate">数据日期（最近7天）</label>
           <select id="snapshotDate">
             <option value="latest" selected>latest（实时）</option>
           </select>
@@ -256,37 +302,102 @@
 
     <div class="grid">
       <section class="panel">
-        <h2>产业链关系图（Buyer默认）</h2>
+        <h2 id="flowTitle">产业链关系图（Buyer默认）</h2>
         <div class="diagram">
           <div id="flow" class="flow"></div>
         </div>
       </section>
 
       <section class="panel">
-        <h2>分层表：厂商、BOM、紧缺概率、采购动作</h2>
+        <h2 id="trendTitle">趋势模式：Shortage 高/中/低-中（最近7天）</h2>
+        <div class="trend-wrap">
+          <svg id="trendSvg" class="trend-svg" viewBox="0 0 740 220" preserveAspectRatio="none"></svg>
+          <div id="trendMeta" class="trend-meta"></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 id="tableTitle">分层表：厂商、BOM、紧缺概率、采购动作</h2>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th>Layer</th>
-                <th>Representative Companies</th>
-                <th>BOM</th>
-                <th>Shortage</th>
-                <th>Lock Volume</th>
-                <th>Dual Source</th>
-                <th>Buffer</th>
-                <th>Delivery Plan</th>
+                <th id="thLayer">Layer</th>
+                <th id="thCompanies">Representative Companies</th>
+                <th id="thBom">BOM</th>
+                <th id="thShortage">Shortage</th>
+                <th id="thLock">Lock Volume</th>
+                <th id="thDual">Dual Source</th>
+                <th id="thBuffer">Buffer</th>
+                <th id="thPlan">Delivery Plan</th>
               </tr>
             </thead>
             <tbody id="tbody"></tbody>
           </table>
         </div>
-        <div class="legend">提示：这个页面是“展示层”，默认用 skill 中的规则；若要每天自动更新，需要再加一个定时抓取脚本 + GitHub Actions 或本地计划任务。</div>
+        <div id="legendText" class="legend">提示：这个页面是“展示层”，默认用 skill 中的规则；可通过定时脚本 + GitHub Actions 每天自动刷新。</div>
       </section>
     </div>
   </div>
 
   <script>
+    const I18N = {
+      zh: {
+        title: "AI硬件产业链看板",
+        subtitle: "展示 GPU / HBM / 先进封装 / ABF / PCB / MLCC / 连接器 的层级关系、BOM 占比、紧缺概率与自动采购动作建议。",
+        labelPerspective: "视角",
+        labelHorizon: "周期",
+        labelMode: "risk_to_action_mode",
+        labelSnapshot: "数据日期（最近7天）",
+        flowTitle: "产业链关系图（Buyer默认）",
+        trendTitle: "趋势模式：Shortage 高/中/低-中（最近7天）",
+        tableTitle: "分层表：厂商、BOM、紧缺概率、采购动作",
+        thLayer: "Layer",
+        thCompanies: "Representative Companies",
+        thBom: "BOM",
+        thShortage: "Shortage",
+        thLock: "Lock Volume",
+        thDual: "Dual Source",
+        thBuffer: "Buffer",
+        thPlan: "Delivery Plan",
+        legendText: "提示：这个页面是“展示层”，默认用 skill 中的规则；可通过定时脚本 + GitHub Actions 每天自动刷新。",
+        latestOption: "latest（实时）",
+        statusPrefix: "数据源",
+        generatedAt: "生成时间",
+        fallbackStatus: "内置兜底数据（latest.json 读取失败）",
+        trendLegend: "图例：高风险(红) / 中风险(橙) / 低-中风险(绿)",
+        trendDates: "日期",
+        noTrendData: "最近7天暂无可用 history 数据",
+      },
+      en: {
+        title: "AI Hardware Industry Chain Dashboard",
+        subtitle: "Visualize GPU / HBM / Advanced Packaging / ABF / PCB / MLCC / Connectors with BOM share, shortage risk, and procurement actions.",
+        labelPerspective: "Perspective",
+        labelHorizon: "Horizon",
+        labelMode: "risk_to_action_mode",
+        labelSnapshot: "Snapshot Date (Last 7 Days)",
+        flowTitle: "Supply Chain Flow (Buyer Default)",
+        trendTitle: "Trend Mode: Shortage High/Medium/Low-Medium (Last 7 Days)",
+        tableTitle: "Layer Table: Companies, BOM, Shortage, Procurement Actions",
+        thLayer: "Layer",
+        thCompanies: "Representative Companies",
+        thBom: "BOM",
+        thShortage: "Shortage",
+        thLock: "Lock Volume",
+        thDual: "Dual Source",
+        thBuffer: "Buffer",
+        thPlan: "Delivery Plan",
+        legendText: "Note: This page is the presentation layer and can be auto-refreshed daily via scheduled script + GitHub Actions.",
+        latestOption: "latest (live)",
+        statusPrefix: "Source",
+        generatedAt: "generated_at",
+        fallbackStatus: "Built-in fallback data (latest.json load failed)",
+        trendLegend: "Legend: High (red) / Medium (orange) / Low-Medium (green)",
+        trendDates: "Dates",
+        noTrendData: "No available history data in the last 7 days",
+      },
+    };
+
     const fallbackLayers = [
       {
         layer: "GPU / AI Accelerator",
@@ -336,6 +447,13 @@
       if (shortage === "High") return "high";
       if (shortage === "Medium") return "medium";
       return "low-medium";
+    }
+
+    function displayShortage(shortage) {
+      if (currentLang === "en") return shortage;
+      if (shortage === "High") return "高";
+      if (shortage === "Medium") return "中";
+      return "低-中";
     }
 
     function actionsFor(shortage, mode) {
@@ -389,6 +507,44 @@
     let currentLayers = [...fallbackLayers];
     let currentDataSource = "fallback";
     let currentGeneratedAt = null;
+    let currentLang = "zh";
+    const historyPayloadByDate = new Map();
+    let availableHistoryDates = [];
+
+    function t(key) {
+      return I18N[currentLang][key] || key;
+    }
+
+    function setText(id, key) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = t(key);
+    }
+
+    function applyI18n() {
+      setText("titleText", "title");
+      setText("subtitleText", "subtitle");
+      setText("labelPerspective", "labelPerspective");
+      setText("labelHorizon", "labelHorizon");
+      setText("labelMode", "labelMode");
+      setText("labelSnapshot", "labelSnapshot");
+      setText("flowTitle", "flowTitle");
+      setText("trendTitle", "trendTitle");
+      setText("tableTitle", "tableTitle");
+      setText("thLayer", "thLayer");
+      setText("thCompanies", "thCompanies");
+      setText("thBom", "thBom");
+      setText("thShortage", "thShortage");
+      setText("thLock", "thLock");
+      setText("thDual", "thDual");
+      setText("thBuffer", "thBuffer");
+      setText("thPlan", "thPlan");
+      setText("legendText", "legendText");
+      document.documentElement.lang = currentLang === "zh" ? "zh-CN" : "en";
+      document.getElementById("langToggle").textContent = currentLang === "zh" ? "EN" : "中";
+      const latestOpt = document.querySelector('#snapshotDate option[value="latest"]');
+      if (latestOpt) latestOpt.textContent = t("latestOption");
+      refreshStatusText();
+    }
 
     function toDateKey(date) {
       const y = date.getFullYear();
@@ -422,6 +578,15 @@
       el.textContent = text;
     }
 
+    function refreshStatusText() {
+      if (currentDataSource === "fallback") {
+        updateStatus(`${t("statusPrefix")}: ${t("fallbackStatus")}`);
+        return;
+      }
+      const generatedAtText = currentGeneratedAt ? new Date(currentGeneratedAt).toLocaleString() : "unknown";
+      updateStatus(`${t("statusPrefix")}: ${currentDataSource} | ${t("generatedAt")}: ${generatedAtText}`);
+    }
+
     async function loadPayloadFromUrl(url, sourceLabel) {
       try {
         const resp = await fetch(url, { cache: "no-store" });
@@ -432,27 +597,29 @@
         currentLayers = normalizeLayersFromPayload(payload);
         currentDataSource = sourceLabel;
         currentGeneratedAt = payload.generated_at || null;
-        const generatedAtText = currentGeneratedAt ? new Date(currentGeneratedAt).toLocaleString() : "unknown";
-        updateStatus(`数据源：${sourceLabel} | generated_at: ${generatedAtText}`);
-        return true;
+        refreshStatusText();
+        return payload;
       } catch (err) {
-        return false;
+        return null;
       }
     }
 
     async function loadLatestData() {
-      const ok = await loadPayloadFromUrl(`assets/ai-hardware-industry-chain/latest.json?t=${Date.now()}`, "latest.json");
-      if (ok) return;
+      const payload = await loadPayloadFromUrl(`assets/ai-hardware-industry-chain/latest.json?t=${Date.now()}`, "latest.json");
+      if (payload) return;
       currentLayers = [...fallbackLayers];
       currentDataSource = "fallback";
       currentGeneratedAt = null;
-      updateStatus("数据源：内置兜底数据（latest.json 读取失败）");
+      refreshStatusText();
     }
 
     async function loadHistoryByDate(dateKey) {
       const url = `${historyUrlByDate(dateKey)}?t=${Date.now()}`;
-      const ok = await loadPayloadFromUrl(url, `history/${dateKey}.json`);
-      if (ok) return true;
+      const payload = await loadPayloadFromUrl(url, `history/${dateKey}.json`);
+      if (payload) {
+        historyPayloadByDate.set(dateKey, payload);
+        return true;
+      }
       await loadLatestData();
       return false;
     }
@@ -471,19 +638,98 @@
       const checks = await Promise.all(probes.map(async (dateKey) => {
         const url = `${historyUrlByDate(dateKey)}?t=${Date.now()}`;
         try {
-          const resp = await fetch(url, { method: "HEAD", cache: "no-store" });
-          return resp.ok ? dateKey : null;
+          const resp = await fetch(url, { cache: "no-store" });
+          if (!resp.ok) return null;
+          const payload = await resp.json();
+          historyPayloadByDate.set(dateKey, payload);
+          return dateKey;
         } catch (err) {
           return null;
         }
       }));
 
-      checks.filter(Boolean).forEach((dateKey) => {
+      availableHistoryDates = checks.filter(Boolean);
+
+      availableHistoryDates.forEach((dateKey) => {
         const opt = document.createElement("option");
         opt.value = dateKey;
         opt.textContent = dateKey;
         select.appendChild(opt);
       });
+    }
+
+    function computeShortageCounts(layers) {
+      const counts = { High: 0, Medium: 0, "Low-Medium": 0 };
+      layers.forEach((item) => {
+        const key = item.shortage || "Low-Medium";
+        if (Object.prototype.hasOwnProperty.call(counts, key)) {
+          counts[key] += 1;
+        }
+      });
+      return counts;
+    }
+
+    function renderTrendChart() {
+      const svg = document.getElementById("trendSvg");
+      const meta = document.getElementById("trendMeta");
+      const dateKeys = [...availableHistoryDates].sort();
+
+      if (dateKeys.length === 0) {
+        svg.innerHTML = `<text x="24" y="40" fill="#94a3b8" font-size="14">${t("noTrendData")}</text>`;
+        meta.textContent = t("trendLegend");
+        return;
+      }
+
+      const high = [];
+      const medium = [];
+      const lowMedium = [];
+      dateKeys.forEach((dateKey) => {
+        const payload = historyPayloadByDate.get(dateKey);
+        const layers = normalizeLayersFromPayload(payload);
+        const counts = computeShortageCounts(layers);
+        high.push(counts.High);
+        medium.push(counts.Medium);
+        lowMedium.push(counts["Low-Medium"]);
+      });
+
+      const allValues = [...high, ...medium, ...lowMedium];
+      const maxVal = Math.max(1, ...allValues);
+      const width = 740;
+      const height = 220;
+      const padX = 44;
+      const padY = 24;
+      const chartW = width - padX * 2;
+      const chartH = height - padY * 2;
+
+      function toPolyline(values) {
+        return values.map((value, idx) => {
+          const x = padX + (chartW * idx) / Math.max(1, values.length - 1);
+          const y = padY + chartH - (chartH * value) / maxVal;
+          return `${x.toFixed(2)},${y.toFixed(2)}`;
+        }).join(" ");
+      }
+
+      const xLabels = dateKeys.map((key, idx) => {
+        const x = padX + (chartW * idx) / Math.max(1, dateKeys.length - 1);
+        return `<text x="${x.toFixed(2)}" y="210" text-anchor="middle" fill="#94a3b8" font-size="11">${key.slice(5)}</text>`;
+      }).join("");
+
+      const yLabels = [0, Math.ceil(maxVal / 2), maxVal].map((v) => {
+        const y = padY + chartH - (chartH * v) / maxVal;
+        return `<text x="14" y="${(y + 4).toFixed(2)}" fill="#94a3b8" font-size="11">${v}</text>`;
+      }).join("");
+
+      svg.innerHTML = `
+        <line x1="${padX}" y1="${padY + chartH}" x2="${padX + chartW}" y2="${padY + chartH}" stroke="#334155" stroke-width="1" />
+        <line x1="${padX}" y1="${padY}" x2="${padX}" y2="${padY + chartH}" stroke="#334155" stroke-width="1" />
+        <polyline points="${toPolyline(high)}" fill="none" stroke="#ef4444" stroke-width="2.5" />
+        <polyline points="${toPolyline(medium)}" fill="none" stroke="#f59e0b" stroke-width="2.5" />
+        <polyline points="${toPolyline(lowMedium)}" fill="none" stroke="#34d399" stroke-width="2.5" />
+        ${xLabels}
+        ${yLabels}
+      `;
+
+      meta.textContent = `${t("trendLegend")} | ${t("trendDates")}: ${dateKeys.join(" / ")}`;
     }
 
     function render() {
@@ -505,7 +751,7 @@
           <td>${item.layer}</td>
           <td>${item.companies}</td>
           <td>${item.bom}</td>
-          <td><span class="chip chip-${risk}">${item.shortage}</span></td>
+          <td><span class="chip chip-${risk}">${displayShortage(item.shortage)}</span></td>
           <td>${actions.lock}</td>
           <td>${actions.dual}</td>
           <td>${actions.buffer}</td>
@@ -517,7 +763,7 @@
         node.className = `node risk-${risk}`;
         node.innerHTML = `
           <div class="name">${item.layer}</div>
-          <div class="meta">BOM: ${item.bom}<br/>Shortage: ${item.shortage}</div>
+          <div class="meta">BOM: ${item.bom}<br/>Shortage: ${displayShortage(item.shortage)}</div>
         `;
         flow.appendChild(node);
 
@@ -528,6 +774,8 @@
           flow.appendChild(arrow);
         }
       });
+
+      renderTrendChart();
     }
 
     ["perspective", "horizon", "mode"].forEach((id) => {
@@ -544,8 +792,15 @@
       render();
     });
 
+    document.getElementById("langToggle").addEventListener("click", () => {
+      currentLang = currentLang === "zh" ? "en" : "zh";
+      applyI18n();
+      render();
+    });
+
     (async () => {
       await initRecentHistoryOptions();
+      applyI18n();
       await loadLatestData();
       render();
     })();
