@@ -289,6 +289,17 @@ LAYER_FOCUS_PROFILES: dict[str, dict[str, Any]] = {
     },
 }
 
+CYCLE_POSITION_I18N: dict[str, dict[str, str]] = {
+    "structural_upcycle": {"zh": "结构上行", "en": "Structural Upcycle"},
+    "tight_capacity": {"zh": "产能偏紧", "en": "Tight Capacity"},
+    "capacity_constrained": {"zh": "产能受限", "en": "Capacity Constrained"},
+    "selectively_tight": {"zh": "局部偏紧", "en": "Selectively Tight"},
+    "design_complexity_up": {"zh": "复杂度上行", "en": "Design Complexity Up"},
+    "spec_upgrade": {"zh": "规格升级期", "en": "Spec Upgrade"},
+    "mostly_stable": {"zh": "整体稳定", "en": "Mostly Stable"},
+    "balanced": {"zh": "相对平衡", "en": "Balanced"},
+}
+
 
 def build_layer_profile(layer_name: str, shortage: str, layer: dict[str, Any] | None = None) -> dict[str, Any]:
     profile = LAYER_FOCUS_PROFILES.get(layer_name, {})
@@ -297,6 +308,8 @@ def build_layer_profile(layer_name: str, shortage: str, layer: dict[str, Any] | 
     market_signal = (layer or {}).get("market_signal") or {}
     avg_change_pct = market_signal.get("avg_change_pct") if isinstance(market_signal, dict) else None
     quote_count = market_signal.get("quote_count") if isinstance(market_signal, dict) else None
+
+    cycle_position = profile.get("cycle_position") or "balanced"
 
     return {
         "summary_i18n": profile.get("summary_i18n") or {
@@ -325,7 +338,8 @@ def build_layer_profile(layer_name: str, shortage: str, layer: dict[str, Any] | 
                 "en": ["If supply release lags demand, selected specs may stay tight"],
             },
         },
-        "cycle_position": profile.get("cycle_position") or "balanced",
+        "cycle_position": cycle_position,
+        "cycle_position_i18n": CYCLE_POSITION_I18N.get(cycle_position, CYCLE_POSITION_I18N["balanced"]),
         "market_signal_avg_change_pct": avg_change_pct,
         "market_signal_quote_count": quote_count,
         "shortage_level": shortage,

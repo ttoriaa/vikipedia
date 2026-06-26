@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-26T10:14:45.156231+00:00",
+  "generated_at": "2026-06-26T10:18:39.978240+00:00",
   "date": "2026-06-26",
   "perspective": "buyer",
   "horizon": "12-24m",
@@ -278,6 +278,10 @@
       }
     },
     "cycle_position": "design_complexity_up",
+    "cycle_position_i18n": {
+      "zh": "复杂度上行",
+      "en": "Design Complexity Up"
+    },
     "market_signal_avg_change_pct": null,
     "market_signal_quote_count": 0,
     "shortage_level": "Medium",
@@ -386,6 +390,10 @@
         }
       },
       "cycle_position": "structural_upcycle",
+      "cycle_position_i18n": {
+        "zh": "结构上行",
+        "en": "Structural Upcycle"
+      },
       "market_signal_avg_change_pct": null,
       "market_signal_quote_count": 0,
       "shortage_level": "High",
@@ -491,6 +499,10 @@
         }
       },
       "cycle_position": "tight_capacity",
+      "cycle_position_i18n": {
+        "zh": "产能偏紧",
+        "en": "Tight Capacity"
+      },
       "market_signal_avg_change_pct": null,
       "market_signal_quote_count": 0,
       "shortage_level": "High",
@@ -595,6 +607,10 @@
         }
       },
       "cycle_position": "capacity_constrained",
+      "cycle_position_i18n": {
+        "zh": "产能受限",
+        "en": "Capacity Constrained"
+      },
       "market_signal_avg_change_pct": null,
       "market_signal_quote_count": 0,
       "shortage_level": "High",
@@ -694,6 +710,10 @@
         }
       },
       "cycle_position": "selectively_tight",
+      "cycle_position_i18n": {
+        "zh": "局部偏紧",
+        "en": "Selectively Tight"
+      },
       "market_signal_avg_change_pct": null,
       "market_signal_quote_count": 0,
       "shortage_level": "Medium",
@@ -793,6 +813,10 @@
         }
       },
       "cycle_position": "design_complexity_up",
+      "cycle_position_i18n": {
+        "zh": "复杂度上行",
+        "en": "Design Complexity Up"
+      },
       "market_signal_avg_change_pct": null,
       "market_signal_quote_count": 0,
       "shortage_level": "Medium",
@@ -900,6 +924,10 @@
         }
       },
       "cycle_position": "spec_upgrade",
+      "cycle_position_i18n": {
+        "zh": "规格升级期",
+        "en": "Spec Upgrade"
+      },
       "market_signal_avg_change_pct": null,
       "market_signal_quote_count": 0,
       "shortage_level": "Medium",
@@ -999,6 +1027,10 @@
         }
       },
       "cycle_position": "mostly_stable",
+      "cycle_position_i18n": {
+        "zh": "整体稳定",
+        "en": "Mostly Stable"
+      },
       "market_signal_avg_change_pct": null,
       "market_signal_quote_count": 0,
       "shortage_level": "Low-Medium",
