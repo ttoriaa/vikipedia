@@ -370,7 +370,11 @@
         <button id="tabBtnHome" class="tab-btn active" type="button" data-tab="home">总览看板</button>
         <button id="tabBtnGpu" class="tab-btn" type="button" data-tab="focus" data-layer="GPU / AI Accelerator">GPU/AI 专题</button>
         <button id="tabBtnHbm" class="tab-btn" type="button" data-tab="focus" data-layer="HBM">HBM 专题</button>
+        <button id="tabBtnAdvPkg" class="tab-btn" type="button" data-tab="focus" data-layer="Advanced Packaging">Advanced Packaging 专题</button>
+        <button id="tabBtnAbf" class="tab-btn" type="button" data-tab="focus" data-layer="ABF Substrate">ABF 专题</button>
         <button id="tabBtnAiPcb" class="tab-btn" type="button" data-tab="focus" data-layer="AI PCB">AI PCB 专题</button>
+        <button id="tabBtnConn" class="tab-btn" type="button" data-tab="focus" data-layer="High-speed Connectors">High-speed Connectors 专题</button>
+        <button id="tabBtnMlcc" class="tab-btn" type="button" data-tab="focus" data-layer="MLCC">MLCC 专题</button>
       </div>
     </section>
 
@@ -472,7 +476,11 @@
         tabHome: "总览看板",
         tabGpu: "GPU/AI 专题",
         tabHbm: "HBM 专题",
+        tabAdvPkg: "Advanced Packaging 专题",
+        tabAbf: "ABF 专题",
         tabAiPcb: "AI PCB 专题",
+        tabConn: "High-speed Connectors 专题",
+        tabMlcc: "MLCC 专题",
         focusTitle: "专题卡",
         flowTitle: "产业链关系图（Buyer默认）",
         trendTitle: "趋势模式：Shortage 高/中/低-中（最近30天）",
@@ -525,7 +533,11 @@
         tabHome: "Overview",
         tabGpu: "GPU/AI Focus",
         tabHbm: "HBM Focus",
+        tabAdvPkg: "Advanced Packaging Focus",
+        tabAbf: "ABF Focus",
         tabAiPcb: "AI PCB Focus",
+        tabConn: "High-speed Connectors Focus",
+        tabMlcc: "MLCC Focus",
         focusTitle: "Focus Card",
         flowTitle: "Supply Chain Flow (Buyer Default)",
         trendTitle: "Trend Mode: Shortage High/Medium/Low-Medium (Last 30 Days)",
@@ -648,7 +660,11 @@
       document.getElementById("tabBtnHome").textContent = t("tabHome");
       document.getElementById("tabBtnGpu").textContent = t("tabGpu");
       document.getElementById("tabBtnHbm").textContent = t("tabHbm");
+      document.getElementById("tabBtnAdvPkg").textContent = t("tabAdvPkg");
+      document.getElementById("tabBtnAbf").textContent = t("tabAbf");
       document.getElementById("tabBtnAiPcb").textContent = t("tabAiPcb");
+      document.getElementById("tabBtnConn").textContent = t("tabConn");
+      document.getElementById("tabBtnMlcc").textContent = t("tabMlcc");
       document.getElementById("exportPng").textContent = t("exportPng");
       document.querySelector('#snapshotDate option[value="latest"]').textContent = t("latestOption");
       document.querySelector('#trendDimension option[value="risk"]').textContent = t("trendDimensionRisk");
@@ -662,9 +678,10 @@
       document.getElementById("tab-home").classList.toggle("active", onHome);
       document.getElementById("tab-focus").classList.toggle("active", !onHome);
       document.getElementById("tabBtnHome").classList.toggle("active", onHome);
-      document.getElementById("tabBtnGpu").classList.toggle("active", !onHome && currentFocusLayer === "GPU / AI Accelerator");
-      document.getElementById("tabBtnHbm").classList.toggle("active", !onHome && currentFocusLayer === "HBM");
-      document.getElementById("tabBtnAiPcb").classList.toggle("active", !onHome && currentFocusLayer === "AI PCB");
+      document.querySelectorAll('.tab-btn[data-tab="focus"]').forEach((btn) => {
+        const layer = btn.getAttribute("data-layer") || "";
+        btn.classList.toggle("active", !onHome && layer === currentFocusLayer);
+      });
     }
 
     function openFocusTab(layerName) {
@@ -979,7 +996,11 @@
     document.getElementById("tabBtnHome").addEventListener("click", () => switchTab("home"));
     document.getElementById("tabBtnGpu").addEventListener("click", () => openFocusTab("GPU / AI Accelerator"));
     document.getElementById("tabBtnHbm").addEventListener("click", () => openFocusTab("HBM"));
+    document.getElementById("tabBtnAdvPkg").addEventListener("click", () => openFocusTab("Advanced Packaging"));
+    document.getElementById("tabBtnAbf").addEventListener("click", () => openFocusTab("ABF Substrate"));
     document.getElementById("tabBtnAiPcb").addEventListener("click", () => openFocusTab("AI PCB"));
+    document.getElementById("tabBtnConn").addEventListener("click", () => openFocusTab("High-speed Connectors"));
+    document.getElementById("tabBtnMlcc").addEventListener("click", () => openFocusTab("MLCC"));
 
     (async () => {
       await initRecentHistoryOptions();
