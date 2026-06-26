@@ -234,6 +234,33 @@
       padding: 14px 16px 18px;
     }
 
+    .trend-toolbar {
+      display: flex;
+      gap: 10px;
+      align-items: end;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .trend-toolbar .control {
+      min-width: 220px;
+      padding: 8px 10px;
+    }
+
+    .btn {
+      border: 1px solid #3a465f;
+      border-radius: 10px;
+      background: #0f172a;
+      color: var(--text);
+      padding: 9px 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      border-color: var(--accent);
+    }
+
     .trend-svg {
       width: 100%;
       min-height: 190px;
@@ -311,6 +338,16 @@
       <section class="panel">
         <h2 id="trendTitle">趋势模式：Shortage 高/中/低-中（最近7天）</h2>
         <div class="trend-wrap">
+          <div class="trend-toolbar">
+            <div class="control">
+              <label id="labelTrendDimension" for="trendDimension">趋势维度</label>
+              <select id="trendDimension">
+                <option value="risk" selected>按风险级别看趋势</option>
+                <option value="layer">按层看趋势</option>
+              </select>
+            </div>
+            <button id="exportPng" class="btn" type="button">导出 PNG</button>
+          </div>
           <svg id="trendSvg" class="trend-svg" viewBox="0 0 740 220" preserveAspectRatio="none"></svg>
           <div id="trendMeta" class="trend-meta"></div>
         </div>
@@ -349,8 +386,12 @@
         labelHorizon: "周期",
         labelMode: "risk_to_action_mode",
         labelSnapshot: "数据日期（最近7天）",
+        labelTrendDimension: "趋势维度",
         flowTitle: "产业链关系图（Buyer默认）",
         trendTitle: "趋势模式：Shortage 高/中/低-中（最近7天）",
+        trendDimensionRisk: "按风险级别看趋势",
+        trendDimensionLayer: "按层看趋势",
+        exportPng: "导出 PNG",
         tableTitle: "分层表：厂商、BOM、紧缺概率、采购动作",
         thLayer: "Layer",
         thCompanies: "Representative Companies",
@@ -368,6 +409,8 @@
         trendLegend: "图例：高风险(红) / 中风险(橙) / 低-中风险(绿)",
         trendDates: "日期",
         noTrendData: "最近7天暂无可用 history 数据",
+        riskModeLegend: "风险维度：高风险(红) / 中风险(橙) / 低-中风险(绿)",
+        layerModeLegend: "分层维度：Y 轴=紧缺评分（High=3 / Medium=2 / Low-Medium=1）",
       },
       en: {
         title: "AI Hardware Industry Chain Dashboard",
@@ -376,8 +419,12 @@
         labelHorizon: "Horizon",
         labelMode: "risk_to_action_mode",
         labelSnapshot: "Snapshot Date (Last 7 Days)",
+        labelTrendDimension: "Trend Dimension",
         flowTitle: "Supply Chain Flow (Buyer Default)",
         trendTitle: "Trend Mode: Shortage High/Medium/Low-Medium (Last 7 Days)",
+        trendDimensionRisk: "By risk level",
+        trendDimensionLayer: "By layer",
+        exportPng: "Export PNG",
         tableTitle: "Layer Table: Companies, BOM, Shortage, Procurement Actions",
         thLayer: "Layer",
         thCompanies: "Representative Companies",
@@ -395,6 +442,8 @@
         trendLegend: "Legend: High (red) / Medium (orange) / Low-Medium (green)",
         trendDates: "Dates",
         noTrendData: "No available history data in the last 7 days",
+        riskModeLegend: "Risk mode: High (red) / Medium (orange) / Low-Medium (green)",
+        layerModeLegend: "Layer mode: Y-axis shortage score (High=3 / Medium=2 / Low-Medium=1)",
       },
     };
 
@@ -527,6 +576,7 @@
       setText("labelHorizon", "labelHorizon");
       setText("labelMode", "labelMode");
       setText("labelSnapshot", "labelSnapshot");
+      setText("labelTrendDimension", "labelTrendDimension");
       setText("flowTitle", "flowTitle");
       setText("trendTitle", "trendTitle");
       setText("tableTitle", "tableTitle");
@@ -541,6 +591,12 @@
       setText("legendText", "legendText");
       document.documentElement.lang = currentLang === "zh" ? "zh-CN" : "en";
       document.getElementById("langToggle").textContent = currentLang === "zh" ? "EN" : "中";
+      const trendDimension = document.getElementById("trendDimension");
+      const riskOpt = trendDimension.querySelector('option[value="risk"]');
+      const layerOpt = trendDimension.querySelector('option[value="layer"]');
+      if (riskOpt) riskOpt.textContent = t("trendDimensionRisk");
+      if (layerOpt) layerOpt.textContent = t("trendDimensionLayer");
+      document.getElementById("exportPng").textContent = t("exportPng");
       const latestOpt = document.querySelector('#snapshotDate option[value="latest"]');
       if (latestOpt) latestOpt.textContent = t("latestOption");
       refreshStatusText();
@@ -646,31 +702,139 @@
         } catch (err) {
           return null;
         }
+
+        function shortageScore(shortage) {
+          if (shortage === "High") return 3;
+          if (shortage === "Medium") return 2;
+          return 1;
+        }
       }));
 
       availableHistoryDates = checks.filter(Boolean);
 
       availableHistoryDates.forEach((dateKey) => {
+          const trendDimension = document.getElementById("trendDimension").value;
         const opt = document.createElement("option");
         opt.value = dateKey;
         opt.textContent = dateKey;
-        select.appendChild(opt);
+            meta.textContent = trendDimension === "risk" ? t("riskModeLegend") : t("layerModeLegend");
       });
     }
 
-    function computeShortageCounts(layers) {
-      const counts = { High: 0, Medium: 0, "Low-Medium": 0 };
-      layers.forEach((item) => {
-        const key = item.shortage || "Low-Medium";
-        if (Object.prototype.hasOwnProperty.call(counts, key)) {
-          counts[key] += 1;
+          const width = 740;
+          const height = 220;
+          const padX = 44;
+          const padY = 24;
+          const chartW = width - padX * 2;
+          const chartH = height - padY * 2;
+
+          function makePoints(values, maxVal) {
+            return values.map((value, idx) => {
+              const x = padX + (chartW * idx) / Math.max(1, values.length - 1);
+              const y = padY + chartH - (chartH * value) / maxVal;
+              return `${x.toFixed(2)},${y.toFixed(2)}`;
+            }).join(" ");
+          }
+
+          const xLabels = dateKeys.map((key, idx) => {
+            const x = padX + (chartW * idx) / Math.max(1, dateKeys.length - 1);
+            return `<text x="${x.toFixed(2)}" y="210" text-anchor="middle" fill="#94a3b8" font-size="11">${key.slice(5)}</text>`;
+          }).join("");
+
+          const grid = `
+            <line x1="${padX}" y1="${padY + chartH}" x2="${padX + chartW}" y2="${padY + chartH}" stroke="#334155" stroke-width="1" />
+            <line x1="${padX}" y1="${padY}" x2="${padX}" y2="${padY + chartH}" stroke="#334155" stroke-width="1" />
+          `;
+
+          if (trendDimension === "risk") {
+            const high = [];
+            const medium = [];
+            const lowMedium = [];
+            dateKeys.forEach((dateKey) => {
+              const payload = historyPayloadByDate.get(dateKey);
+              const layers = normalizeLayersFromPayload(payload);
+              const counts = computeShortageCounts(layers);
+              high.push(counts.High);
+              medium.push(counts.Medium);
+              lowMedium.push(counts["Low-Medium"]);
+            });
+
+            const allValues = [...high, ...medium, ...lowMedium];
+            const maxVal = Math.max(1, ...allValues);
+
+            const yLabels = [0, Math.ceil(maxVal / 2), maxVal].map((v) => {
+              const y = padY + chartH - (chartH * v) / maxVal;
+              return `<text x="14" y="${(y + 4).toFixed(2)}" fill="#94a3b8" font-size="11">${v}</text>`;
+            }).join("");
+
+            svg.innerHTML = `
+              ${grid}
+              <polyline points="${makePoints(high, maxVal)}" fill="none" stroke="#ef4444" stroke-width="2.5" />
+              <polyline points="${makePoints(medium, maxVal)}" fill="none" stroke="#f59e0b" stroke-width="2.5" />
+              <polyline points="${makePoints(lowMedium, maxVal)}" fill="none" stroke="#34d399" stroke-width="2.5" />
+              ${xLabels}
+              ${yLabels}
+            `;
+            meta.textContent = `${t("riskModeLegend")} | ${t("trendDates")}: ${dateKeys.join(" / ")}`;
+            return;
+          }
+
+          const palette = ["#60a5fa", "#22d3ee", "#a78bfa", "#f472b6", "#f59e0b", "#34d399", "#f97316", "#c084fc"];
+          const layerNames = normalizeLayersFromPayload(historyPayloadByDate.get(dateKeys[0])).map((x) => x.layer);
+          const series = layerNames.map((layerName, idx) => {
+            const values = dateKeys.map((dateKey) => {
+              const payload = historyPayloadByDate.get(dateKey);
+              const layers = normalizeLayersFromPayload(payload);
+              const found = layers.find((x) => x.layer === layerName);
+              return shortageScore(found ? found.shortage : "Low-Medium");
+            });
+            return {
+              name: layerName,
+              color: palette[idx % palette.length],
+              values,
+            };
+          });
+
+          const maxVal = 3;
+          const yLabels = [1, 2, 3].map((v) => {
+            const y = padY + chartH - (chartH * v) / maxVal;
+            return `<text x="10" y="${(y + 4).toFixed(2)}" fill="#94a3b8" font-size="11">${v}</text>`;
+          }).join("");
+
+          const lines = series.map((item) => {
+            return `<polyline points="${makePoints(item.values, maxVal)}" fill="none" stroke="${item.color}" stroke-width="2" />`;
+          }).join("");
+
+          svg.innerHTML = `${grid}${lines}${xLabels}${yLabels}`;
+          const layerLegend = series.map((item) => `${item.name}`).join(" | ");
+          meta.textContent = `${t("layerModeLegend")} | ${t("trendDates")}: ${dateKeys.join(" / ")} | ${layerLegend}`;
         }
-      });
-      return counts;
-    }
 
-    function renderTrendChart() {
-      const svg = document.getElementById("trendSvg");
+        function exportTrendPng() {
+          const svg = document.getElementById("trendSvg");
+          const serializer = new XMLSerializer();
+          const svgText = serializer.serializeToString(svg);
+          const blob = new Blob([svgText], { type: "image/svg+xml;charset=utf-8" });
+          const url = URL.createObjectURL(blob);
+          const img = new Image();
+
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = 1480;
+            canvas.height = 440;
+            const ctx = canvas.getContext("2d");
+            ctx.fillStyle = "#0a1220";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            URL.revokeObjectURL(url);
+
+            const a = document.createElement("a");
+            a.href = canvas.toDataURL("image/png");
+            a.download = `ai_hardware_trend_${new Date().toISOString().slice(0, 10)}.png`;
+            a.click();
+          };
+
+          img.src = url;
       const meta = document.getElementById("trendMeta");
       const dateKeys = [...availableHistoryDates].sort();
 
@@ -790,6 +954,14 @@
         await loadHistoryByDate(selected);
       }
       render();
+    });
+
+    document.getElementById("trendDimension").addEventListener("change", () => {
+      renderTrendChart();
+    });
+
+    document.getElementById("exportPng").addEventListener("click", () => {
+      exportTrendPng();
     });
 
     document.getElementById("langToggle").addEventListener("click", () => {
