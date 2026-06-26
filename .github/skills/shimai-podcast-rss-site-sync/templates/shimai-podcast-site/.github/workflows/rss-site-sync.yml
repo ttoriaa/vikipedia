@@ -1,0 +1,70 @@
+name: RSS Site Sync
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+    inputs:
+      rss_url:
+        description: RSS feed URL override
+        required: false
+        type: string
+      update_command:
+        description: Data update command override
+        required: false
+        type: string
+      changed_paths:
+        description: Comma-separated required output paths
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      RSS_URL: ${{ inputs.rss_url || vars.PODCAST_RSS_URL }}
+      UPDATE_COMMAND: ${{ inputs.update_command || vars.PODCAST_UPDATE_COMMAND || 'npm run update:data' }}
+      CHANGED_PATHS: ${{ inputs.changed_paths || vars.PODCAST_CHANGED_PATHS || 'public/data' }}
+      STATE_FILE: .cache/rss_state.json
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install deps when package lock exists
+        run: |
+          if [ -f package.json ]; then
+            if [ -f package-lock.json ]; then
+              npm ci
+            else
+              npm install
+            fi
+          fi
+
+      - name: Sync RSS to site data
+        id: rss_sync
+        run: node scripts/rss-sync.mjs
+
+      - name: Commit and push when changed
+        if: steps.rss_sync.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if [ -n "$(git status --porcelain)" ]; then
+            git commit -m "chore: auto sync podcast site data from RSS"
+            git push
+          else
+            echo "No file changes to commit."
+          fi
+
+      - name: No change summary
+        if: steps.rss_sync.outputs.changed != 'true'
+        run: echo "RSS not changed, skip commit."
