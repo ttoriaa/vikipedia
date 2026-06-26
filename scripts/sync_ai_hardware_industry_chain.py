@@ -83,6 +83,102 @@ LAYER_LEADER_TIERS: dict[str, dict[str, list[str]]] = {
     },
 }
 
+LAYER_FOCUS_PROFILES: dict[str, dict[str, list[str] | str]] = {
+    "GPU / AI Accelerator": {
+        "summary": "需求主轴仍在模型训练、推理扩容与服务器刷新，GPU 仍是整个链条的最强定价锚。",
+        "drivers": ["超大规模训练集群持续扩容", "推理侧带来更广泛的出货基础", "新架构迭代同时抬升封装和 HBM 拉动"],
+        "bottlenecks": ["HBM 供给节拍", "先进封装排产", "整机功耗与散热设计"],
+        "watch_points": ["云厂商 capex 指引", "新平台 SKU 放量节奏", "整机交付 lead time 变化"],
+        "cycle_position": "structural_upcycle",
+    },
+    "HBM": {
+        "summary": "HBM 仍是 AI 服务器最关键的紧缺件之一，容量扩张与良率爬坡决定供需改善速度。",
+        "drivers": ["训练/推理都在提高单卡带宽要求", "高堆叠容量已成为平台升级前提", "HBM3E/HBM4 认证推进带来替换窗口"],
+        "bottlenecks": ["封装与测试产能", "高堆叠良率", "先进节点材料与基板协同"],
+        "watch_points": ["头部 DRAM 厂扩产进度", "客户认证结果", "每季度出货结构变化"],
+        "cycle_position": "tight_capacity",
+    },
+    "Advanced Packaging": {
+        "summary": "先进封装是 GPU/HBM 放量的同步约束，产能与工艺窗口决定整条链的兑现速度。",
+        "drivers": ["Chiplet 和高算力平台渗透率上升", "2.5D/3D 方案提高单位封装价值量", "大客户拉货对产线优先级的虹吸效应"],
+        "bottlenecks": ["CoWoS/类似产线排程", "ABF/载板/中介层协同", "测试与良率爬坡"],
+        "watch_points": ["封装厂扩产计划", "中介层和基板备料", "高端封装价格和交期"],
+        "cycle_position": "capacity_constrained",
+    },
+    "ABF Substrate": {
+        "summary": "ABF 基板处于高端载板供给的咽喉位置，AI 芯片叠层复杂度持续抬升单位面积需求。",
+        "drivers": ["高 I/O 高层数封装需求上升", "服务器平台升级推高材料规格", "低损耗/高层数产品占比提升"],
+        "bottlenecks": ["高层数良率", "玻纤/树脂/铜箔材料协同", "扩产爬坡周期长"],
+        "watch_points": ["主力厂扩线公告", "客户认证与试产节奏", "高端载板报价变化"],
+        "cycle_position": "selectively_tight",
+    },
+    "AI PCB": {
+        "summary": "AI PCB 是服务器整机交付的关键承接层，低损耗、高层数与高速信号完整性共同决定供给弹性。",
+        "drivers": ["AI 服务器平台刷新带动高层板需求", "更高功耗/更高速率提升材料要求", "板级设计复杂度继续上升"],
+        "bottlenecks": ["高层数板制程", "低损耗材料供应", "认证周期与良率爬坡"],
+        "watch_points": ["主力厂接单节奏", "高层板/HDI 交付周期", "客户是否要求双供"],
+        "cycle_position": "design_complexity_up",
+    },
+    "High-speed Connectors": {
+        "summary": "高速连接器的价值在于信号完整性和装配可靠性，平台升级会放大头部供应商的认证壁垒。",
+        "drivers": ["GPU/交换机/机柜链路速率提升", "更高功耗推动高可靠连接方案", "模块化平台加大接口数量"],
+        "bottlenecks": ["材料与接触电阻控制", "高速认证周期", "结构件和装配公差"],
+        "watch_points": ["平台接口规格变化", "头部厂商出货节奏", "服务器 OEM 新料号导入"],
+        "cycle_position": "spec_upgrade",
+    },
+    "MLCC": {
+        "summary": "MLCC 在 AI 服务器链中更偏稳定消耗件，但高容高压与高频料号仍会出现局部紧张。",
+        "drivers": ["电源管理与去耦需求提升", "服务器功耗上行带来更高规格料号占比", "车规/工控与 AI 共享产能"],
+        "bottlenecks": ["高端小型化料号产能", "关键客户配额", "高频高容规格切换"],
+        "watch_points": ["头部厂稼动率", "高端料号交期", "客户库存回补节奏"],
+        "cycle_position": "mostly_stable",
+    },
+}
+
+
+def build_layer_profile(layer_name: str, shortage: str, layer: dict[str, Any] | None = None) -> dict[str, Any]:
+    profile = LAYER_FOCUS_PROFILES.get(layer_name, {})
+    shortage_score_map = {"High": 85, "Medium": 60, "Low-Medium": 35}
+    shortage_score = shortage_score_map.get(shortage, 60)
+    market_signal = (layer or {}).get("market_signal") or {}
+    avg_change_pct = market_signal.get("avg_change_pct") if isinstance(market_signal, dict) else None
+    quote_count = market_signal.get("quote_count") if isinstance(market_signal, dict) else None
+
+    return {
+        "summary": profile.get("summary") or f"{layer_name} 仍受 AI 服务器链条驱动，供需改善速度取决于上游产能释放与客户认证节奏。",
+        "drivers": profile.get("drivers") or ["AI 服务器需求延续", "平台升级带来的规格提升", "客户认证推动头部集中度上升"],
+        "bottlenecks": profile.get("bottlenecks") or ["供给端扩产节拍", "高规格材料/工艺门槛", "量产良率与认证周期"],
+        "watch_points": profile.get("watch_points") or ["产能扩张进度", "报价与交期变化", "双供导入推进情况"],
+        "cycle_position": profile.get("cycle_position") or "balanced",
+        "market_signal_avg_change_pct": avg_change_pct,
+        "market_signal_quote_count": quote_count,
+        "shortage_level": shortage,
+        "shortage_score": shortage_score,
+        "delivery_pressure_score": min(100, max(20, shortage_score + 10)),
+        "demand_heat_score": min(100, max(20, shortage_score + 5)),
+        "supply_tightness_score": min(100, max(20, shortage_score - 5)),
+        "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
+        "leaders": LAYER_LEADER_TIERS.get(
+            layer_name,
+            {
+                "tier1": [],
+                "tier2": [],
+                "tier3": ["Regional ecosystem suppliers"],
+            },
+        ),
+        "procurement_focus": [
+            "Lock framework capacity and keep alternate source path warm",
+            "Set dual-source readiness checkpoints for each new generation",
+            "Prioritize critical SKUs in constrained periods",
+        ],
+        "outlook_points": [
+            "Demand remains structurally supported by AI infrastructure upgrades",
+            "Supply bottlenecks are likely to ease gradually but remain uneven",
+            "Turning-point confidence improves with 14-30 day trend consistency",
+        ],
+    }
+
+
 
 def fetch_quotes(symbols: list[str], timeout: int) -> dict[str, dict[str, Any]]:
     if not symbols:
@@ -175,41 +271,12 @@ def build_ai_pcb_metrics(layers: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def build_layer_focus_cards(layers: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
-    shortage_score_map = {"High": 85, "Medium": 60, "Low-Medium": 35}
     cards: dict[str, dict[str, Any]] = {}
 
     for layer in layers:
         layer_name = str(layer.get("layer") or "")
         shortage = str(layer.get("shortage") or "Medium")
-        shortage_score = shortage_score_map.get(shortage, 60)
-        leaders = LAYER_LEADER_TIERS.get(
-            layer_name,
-            {
-                "tier1": (layer.get("companies") or [])[:2],
-                "tier2": (layer.get("companies") or [])[2:4],
-                "tier3": ["Regional ecosystem suppliers"],
-            },
-        )
-
-        cards[layer_name] = {
-            "shortage_level": shortage,
-            "shortage_score": shortage_score,
-            "delivery_pressure_score": min(100, max(20, shortage_score + 10)),
-            "demand_heat_score": min(100, max(20, shortage_score + 5)),
-            "supply_tightness_score": min(100, max(20, shortage_score - 5)),
-            "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
-            "leaders": leaders,
-            "procurement_focus": [
-                "Lock framework capacity and keep alternate source path warm",
-                "Set dual-source readiness checkpoints for each new generation",
-                "Prioritize critical SKUs in constrained periods",
-            ],
-            "outlook_points": [
-                "Demand remains structurally supported by AI infrastructure upgrades",
-                "Supply bottlenecks are likely to ease gradually but remain uneven",
-                "Turning-point confidence improves with 14-30 day trend consistency",
-            ],
-        }
+        cards[layer_name] = build_layer_profile(layer_name, shortage, layer)
 
     return cards
 

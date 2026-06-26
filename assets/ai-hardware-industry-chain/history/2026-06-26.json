@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-26T09:07:24.542438+00:00",
+  "generated_at": "2026-06-26T09:40:12.658638+00:00",
   "date": "2026-06-26",
   "perspective": "buyer",
   "horizon": "12-24m",
@@ -223,6 +223,25 @@
     }
   ],
   "ai_pcb_metrics": {
+    "summary": "AI PCB 是服务器整机交付的关键承接层，低损耗、高层数与高速信号完整性共同决定供给弹性。",
+    "drivers": [
+      "AI 服务器平台刷新带动高层板需求",
+      "更高功耗/更高速率提升材料要求",
+      "板级设计复杂度继续上升"
+    ],
+    "bottlenecks": [
+      "高层数板制程",
+      "低损耗材料供应",
+      "认证周期与良率爬坡"
+    ],
+    "watch_points": [
+      "主力厂接单节奏",
+      "高层板/HDI 交付周期",
+      "客户是否要求双供"
+    ],
+    "cycle_position": "design_complexity_up",
+    "market_signal_avg_change_pct": null,
+    "market_signal_quote_count": 0,
     "shortage_level": "Medium",
     "shortage_score": 60,
     "delivery_pressure_score": 70,
@@ -257,6 +276,25 @@
   },
   "layer_focus_cards": {
     "GPU / AI Accelerator": {
+      "summary": "需求主轴仍在模型训练、推理扩容与服务器刷新，GPU 仍是整个链条的最强定价锚。",
+      "drivers": [
+        "超大规模训练集群持续扩容",
+        "推理侧带来更广泛的出货基础",
+        "新架构迭代同时抬升封装和 HBM 拉动"
+      ],
+      "bottlenecks": [
+        "HBM 供给节拍",
+        "先进封装排产",
+        "整机功耗与散热设计"
+      ],
+      "watch_points": [
+        "云厂商 capex 指引",
+        "新平台 SKU 放量节奏",
+        "整机交付 lead time 变化"
+      ],
+      "cycle_position": "structural_upcycle",
+      "market_signal_avg_change_pct": null,
+      "market_signal_quote_count": 0,
       "shortage_level": "High",
       "shortage_score": 85,
       "delivery_pressure_score": 95,
@@ -288,6 +326,25 @@
       ]
     },
     "HBM": {
+      "summary": "HBM 仍是 AI 服务器最关键的紧缺件之一，容量扩张与良率爬坡决定供需改善速度。",
+      "drivers": [
+        "训练/推理都在提高单卡带宽要求",
+        "高堆叠容量已成为平台升级前提",
+        "HBM3E/HBM4 认证推进带来替换窗口"
+      ],
+      "bottlenecks": [
+        "封装与测试产能",
+        "高堆叠良率",
+        "先进节点材料与基板协同"
+      ],
+      "watch_points": [
+        "头部 DRAM 厂扩产进度",
+        "客户认证结果",
+        "每季度出货结构变化"
+      ],
+      "cycle_position": "tight_capacity",
+      "market_signal_avg_change_pct": null,
+      "market_signal_quote_count": 0,
       "shortage_level": "High",
       "shortage_score": 85,
       "delivery_pressure_score": 95,
@@ -318,6 +375,25 @@
       ]
     },
     "Advanced Packaging": {
+      "summary": "先进封装是 GPU/HBM 放量的同步约束，产能与工艺窗口决定整条链的兑现速度。",
+      "drivers": [
+        "Chiplet 和高算力平台渗透率上升",
+        "2.5D/3D 方案提高单位封装价值量",
+        "大客户拉货对产线优先级的虹吸效应"
+      ],
+      "bottlenecks": [
+        "CoWoS/类似产线排程",
+        "ABF/载板/中介层协同",
+        "测试与良率爬坡"
+      ],
+      "watch_points": [
+        "封装厂扩产计划",
+        "中介层和基板备料",
+        "高端封装价格和交期"
+      ],
+      "cycle_position": "capacity_constrained",
+      "market_signal_avg_change_pct": null,
+      "market_signal_quote_count": 0,
       "shortage_level": "High",
       "shortage_score": 85,
       "delivery_pressure_score": 95,
@@ -325,14 +401,8 @@
       "supply_tightness_score": 80,
       "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
       "leaders": {
-        "tier1": [
-          "TSMC",
-          "Samsung"
-        ],
-        "tier2": [
-          "Intel",
-          "ASE"
-        ],
+        "tier1": [],
+        "tier2": [],
         "tier3": [
           "Regional ecosystem suppliers"
         ]
@@ -349,6 +419,25 @@
       ]
     },
     "ABF Substrate": {
+      "summary": "ABF 基板处于高端载板供给的咽喉位置，AI 芯片叠层复杂度持续抬升单位面积需求。",
+      "drivers": [
+        "高 I/O 高层数封装需求上升",
+        "服务器平台升级推高材料规格",
+        "低损耗/高层数产品占比提升"
+      ],
+      "bottlenecks": [
+        "高层数良率",
+        "玻纤/树脂/铜箔材料协同",
+        "扩产爬坡周期长"
+      ],
+      "watch_points": [
+        "主力厂扩线公告",
+        "客户认证与试产节奏",
+        "高端载板报价变化"
+      ],
+      "cycle_position": "selectively_tight",
+      "market_signal_avg_change_pct": null,
+      "market_signal_quote_count": 0,
       "shortage_level": "Medium",
       "shortage_score": 60,
       "delivery_pressure_score": 70,
@@ -356,14 +445,8 @@
       "supply_tightness_score": 55,
       "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
       "leaders": {
-        "tier1": [
-          "Ibiden",
-          "Shinko"
-        ],
-        "tier2": [
-          "Unimicron",
-          "Nan Ya PCB"
-        ],
+        "tier1": [],
+        "tier2": [],
         "tier3": [
           "Regional ecosystem suppliers"
         ]
@@ -380,6 +463,25 @@
       ]
     },
     "AI PCB": {
+      "summary": "AI PCB 是服务器整机交付的关键承接层，低损耗、高层数与高速信号完整性共同决定供给弹性。",
+      "drivers": [
+        "AI 服务器平台刷新带动高层板需求",
+        "更高功耗/更高速率提升材料要求",
+        "板级设计复杂度继续上升"
+      ],
+      "bottlenecks": [
+        "高层数板制程",
+        "低损耗材料供应",
+        "认证周期与良率爬坡"
+      ],
+      "watch_points": [
+        "主力厂接单节奏",
+        "高层板/HDI 交付周期",
+        "客户是否要求双供"
+      ],
+      "cycle_position": "design_complexity_up",
+      "market_signal_avg_change_pct": null,
+      "market_signal_quote_count": 0,
       "shortage_level": "Medium",
       "shortage_score": 60,
       "delivery_pressure_score": 70,
@@ -413,6 +515,25 @@
       ]
     },
     "High-speed Connectors": {
+      "summary": "高速连接器的价值在于信号完整性和装配可靠性，平台升级会放大头部供应商的认证壁垒。",
+      "drivers": [
+        "GPU/交换机/机柜链路速率提升",
+        "更高功耗推动高可靠连接方案",
+        "模块化平台加大接口数量"
+      ],
+      "bottlenecks": [
+        "材料与接触电阻控制",
+        "高速认证周期",
+        "结构件和装配公差"
+      ],
+      "watch_points": [
+        "平台接口规格变化",
+        "头部厂商出货节奏",
+        "服务器 OEM 新料号导入"
+      ],
+      "cycle_position": "spec_upgrade",
+      "market_signal_avg_change_pct": null,
+      "market_signal_quote_count": 0,
       "shortage_level": "Medium",
       "shortage_score": 60,
       "delivery_pressure_score": 70,
@@ -420,14 +541,8 @@
       "supply_tightness_score": 55,
       "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
       "leaders": {
-        "tier1": [
-          "Amphenol",
-          "TE"
-        ],
-        "tier2": [
-          "Molex",
-          "JAE"
-        ],
+        "tier1": [],
+        "tier2": [],
         "tier3": [
           "Regional ecosystem suppliers"
         ]
@@ -444,6 +559,25 @@
       ]
     },
     "MLCC": {
+      "summary": "MLCC 在 AI 服务器链中更偏稳定消耗件，但高容高压与高频料号仍会出现局部紧张。",
+      "drivers": [
+        "电源管理与去耦需求提升",
+        "服务器功耗上行带来更高规格料号占比",
+        "车规/工控与 AI 共享产能"
+      ],
+      "bottlenecks": [
+        "高端小型化料号产能",
+        "关键客户配额",
+        "高频高容规格切换"
+      ],
+      "watch_points": [
+        "头部厂稼动率",
+        "高端料号交期",
+        "客户库存回补节奏"
+      ],
+      "cycle_position": "mostly_stable",
+      "market_signal_avg_change_pct": null,
+      "market_signal_quote_count": 0,
       "shortage_level": "Low-Medium",
       "shortage_score": 35,
       "delivery_pressure_score": 45,
@@ -451,14 +585,8 @@
       "supply_tightness_score": 30,
       "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
       "leaders": {
-        "tier1": [
-          "Murata",
-          "TDK"
-        ],
-        "tier2": [
-          "Taiyo Yuden",
-          "SEMCO"
-        ],
+        "tier1": [],
+        "tier2": [],
         "tier3": [
           "Regional ecosystem suppliers"
         ]

@@ -442,6 +442,18 @@
         <h2 id="focusTitle">专题卡</h2>
         <div class="pcb-grid">
           <article class="pcb-card">
+            <h3 id="focusDriversTitle">需求驱动</h3>
+            <div id="focusDriversBody"></div>
+          </article>
+          <article class="pcb-card">
+            <h3 id="focusBottleneckTitle">关键瓶颈</h3>
+            <div id="focusBottleneckBody"></div>
+          </article>
+          <article class="pcb-card">
+            <h3 id="focusWatchTitle">监测信号</h3>
+            <div id="focusWatchBody"></div>
+          </article>
+          <article class="pcb-card">
             <h3 id="focusLeaderTitle">龙头分层</h3>
             <div id="focusLeaderBody"></div>
           </article>
@@ -456,6 +468,10 @@
           <article class="pcb-card">
             <h3 id="focusTrendTitle">趋势判断</h3>
             <div id="focusTrendBody"></div>
+          </article>
+          <article class="pcb-card">
+            <h3 id="focusWeeklyTitle">本周变化摘要</h3>
+            <div id="focusWeeklyBody"></div>
           </article>
         </div>
       </section>
@@ -488,10 +504,24 @@
         trendDimensionLayer: "按层看趋势",
         exportPng: "导出 PNG",
         aiPcbTitle: "AI PCB 专题卡",
+        focusDriversTitle: "需求驱动",
+        focusBottleneckTitle: "关键瓶颈",
+        focusWatchTitle: "监测信号",
         aiPcbLeaderTitle: "龙头分层",
         aiPcbHeatTitle: "供需热度与指标",
         aiPcbActionTitle: "采购建议",
         aiPcbTrendTitle: "趋势判断",
+        weeklySummaryTitle: "本周变化摘要",
+        weeklySummaryInsufficient: "历史数据不足（至少需要 14 天）",
+        weeklySummaryRecent7: "最近7天",
+        weeklySummaryPrev7: "前7天",
+        weeklySummaryShortageRisk: "紧缺风险均值",
+        weeklySummaryDeliveryPressure: "交付压力均值",
+        weeklySummaryMarketSignal: "市场信号均值",
+        weeklySummaryJudgement: "周度判断",
+        weeklySummaryWorsening: "风险上行（偏紧）",
+        weeklySummaryImproving: "风险回落（缓和）",
+        weeklySummaryStable: "基本持平",
         aiPcbNoData: "暂无 AI PCB 专项数据",
         aiPcbTier1: "第一梯队",
         aiPcbTier2: "第二梯队",
@@ -545,10 +575,24 @@
         trendDimensionLayer: "By layer",
         exportPng: "Export PNG",
         aiPcbTitle: "AI PCB Focus Card",
+        focusDriversTitle: "Demand Drivers",
+        focusBottleneckTitle: "Key Bottlenecks",
+        focusWatchTitle: "Watch Signals",
         aiPcbLeaderTitle: "Leader Tiers",
         aiPcbHeatTitle: "Supply-Demand Heat & Metrics",
         aiPcbActionTitle: "Procurement Actions",
         aiPcbTrendTitle: "Trend Outlook",
+        weeklySummaryTitle: "Weekly Change Summary",
+        weeklySummaryInsufficient: "Not enough history (at least 14 days required)",
+        weeklySummaryRecent7: "Recent 7D",
+        weeklySummaryPrev7: "Previous 7D",
+        weeklySummaryShortageRisk: "Avg shortage risk",
+        weeklySummaryDeliveryPressure: "Avg delivery pressure",
+        weeklySummaryMarketSignal: "Avg market signal",
+        weeklySummaryJudgement: "Weekly readout",
+        weeklySummaryWorsening: "Risk rising (tighter)",
+        weeklySummaryImproving: "Risk easing",
+        weeklySummaryStable: "Mostly stable",
         aiPcbNoData: "No AI PCB metrics available",
         aiPcbTier1: "Tier 1",
         aiPcbTier2: "Tier 2",
@@ -651,8 +695,9 @@
         ["trendTitle", "trendTitle"], ["tableTitle", "tableTitle"], ["thLayer", "thLayer"], ["thCompanies", "thCompanies"],
         ["thBom", "thBom"], ["thShortage", "thShortage"], ["thLock", "thLock"], ["thDual", "thDual"],
         ["thBuffer", "thBuffer"], ["thPlan", "thPlan"], ["legendText", "legendText"], ["focusTitle", "focusTitle"],
+        ["focusDriversTitle", "focusDriversTitle"], ["focusBottleneckTitle", "focusBottleneckTitle"], ["focusWatchTitle", "focusWatchTitle"],
         ["focusLeaderTitle", "aiPcbLeaderTitle"], ["focusHeatTitle", "aiPcbHeatTitle"], ["focusActionTitle", "aiPcbActionTitle"],
-        ["focusTrendTitle", "aiPcbTrendTitle"],
+        ["focusTrendTitle", "aiPcbTrendTitle"], ["focusWeeklyTitle", "weeklySummaryTitle"],
       ].forEach(([id, key]) => setText(id, key));
 
       document.documentElement.lang = currentLang === "zh" ? "zh-CN" : "en";
@@ -910,10 +955,14 @@
     }
 
     function renderFocusCard() {
+      const driversBody = document.getElementById("focusDriversBody");
+      const bottleneckBody = document.getElementById("focusBottleneckBody");
+      const watchBody = document.getElementById("focusWatchBody");
       const leaderBody = document.getElementById("focusLeaderBody");
       const heatBody = document.getElementById("focusHeatBody");
       const actionBody = document.getElementById("focusActionBody");
       const trendBody = document.getElementById("focusTrendBody");
+      const weeklyBody = document.getElementById("focusWeeklyBody");
       const title = document.getElementById("focusTitle");
       title.textContent = `${currentFocusLayer} - ${t("focusTitle")}`;
 
@@ -922,22 +971,116 @@
 
       if (!metrics) {
         const noData = `<p>${t("aiPcbNoData")}</p>`;
+        driversBody.innerHTML = noData;
+        bottleneckBody.innerHTML = noData;
+        watchBody.innerHTML = noData;
         leaderBody.innerHTML = noData;
         heatBody.innerHTML = noData;
         actionBody.innerHTML = noData;
         trendBody.innerHTML = noData;
+        weeklyBody.innerHTML = noData;
         return;
       }
 
+      const list = (items) => items && items.length ? `<ul>${items.map((x) => `<li>${x}</li>`).join("")}</ul>` : "<p>-</p>";
       const leaders = metrics.leaders || {};
       const actions = Array.isArray(metrics.procurement_focus) ? metrics.procurement_focus : [];
       const outlook = Array.isArray(metrics.outlook_points) ? metrics.outlook_points : [];
-      const list = (items) => items && items.length ? `<ul>${items.map((x) => `<li>${x}</li>`).join("")}</ul>` : "<p>-</p>";
+      const drivers = Array.isArray(metrics.drivers) ? metrics.drivers : [];
+      const bottlenecks = Array.isArray(metrics.bottlenecks) ? metrics.bottlenecks : [];
+      const watchPoints = Array.isArray(metrics.watch_points) ? metrics.watch_points : [];
+      const marketSignal = Number.isFinite(Number(metrics.market_signal_avg_change_pct)) ? Number(metrics.market_signal_avg_change_pct) : null;
+      const quoteCount = Number.isFinite(Number(metrics.market_signal_quote_count)) ? Number(metrics.market_signal_quote_count) : null;
 
+      driversBody.innerHTML = `<p><strong>${currentFocusLayer}:</strong> ${metrics.summary || "-"}</p><p><strong>${t("weeklySummaryJudgement")}:</strong> ${metrics.cycle_position || "-"}</p>${list(drivers)}`;
+      bottleneckBody.innerHTML = list(bottlenecks);
+      watchBody.innerHTML = `${list(watchPoints)}<p><strong>${t("weeklySummaryMarketSignal")}:</strong> ${metrics.market_signal_avg_change_pct !== null && metrics.market_signal_avg_change_pct !== undefined ? Number(metrics.market_signal_avg_change_pct).toFixed(2) : "-"}</p>`;
       leaderBody.innerHTML = `<p><strong>${t("aiPcbTier1")}:</strong> ${(leaders.tier1 || []).join(", ") || "-"}</p><p><strong>${t("aiPcbTier2")}:</strong> ${(leaders.tier2 || []).join(", ") || "-"}</p><p><strong>${t("aiPcbTier3")}:</strong> ${(leaders.tier3 || []).join(", ") || "-"}</p>`;
-      heatBody.innerHTML = `<p><strong>${t("aiPcbShortageLevel")}:</strong> ${displayShortage(metrics.shortage_level || "Medium")}</p><p><strong>${t("aiPcbShortageScore")}:</strong> ${metrics.shortage_score ?? "-"}</p><p><strong>${t("aiPcbDeliveryPressure")}:</strong> ${metrics.delivery_pressure_score ?? "-"}</p><p><strong>${t("aiPcbDemandHeat")}:</strong> ${metrics.demand_heat_score ?? "-"}</p><p><strong>${t("aiPcbSupplyTightness")}:</strong> ${metrics.supply_tightness_score ?? "-"}</p>`;
+      heatBody.innerHTML = `<p><strong>${t("aiPcbShortageLevel")}:</strong> ${displayShortage(metrics.shortage_level || "Medium")}</p><p><strong>${t("aiPcbShortageScore")}:</strong> ${metrics.shortage_score ?? "-"}</p><p><strong>${t("aiPcbDeliveryPressure")}:</strong> ${metrics.delivery_pressure_score ?? "-"}</p><p><strong>${t("aiPcbDemandHeat")}:</strong> ${metrics.demand_heat_score ?? "-"}</p><p><strong>${t("aiPcbSupplyTightness")}:</strong> ${metrics.supply_tightness_score ?? "-"}</p><p><strong>${t("weeklySummaryMarketSignal")}:</strong> ${marketSignal !== null ? marketSignal.toFixed(2) : "-"}${quoteCount !== null ? ` | ${quoteCount}` : ""}</p>`;
       actionBody.innerHTML = list(actions);
       trendBody.innerHTML = `<p><strong>${t("aiPcbTurningSignal")}:</strong> ${metrics.turning_point_signal || "-"}</p>${list(outlook)}`;
+      weeklyBody.innerHTML = buildWeeklySummaryHtml(currentFocusLayer);
+    }
+
+    function average(values) {
+      if (!values.length) return null;
+      return values.reduce((sum, value) => sum + value, 0) / values.length;
+    }
+
+    function getLayerFromPayload(payload, layerName) {
+      const layers = normalizeLayersFromPayload(payload);
+      return layers.find((item) => item.layer === layerName) || null;
+    }
+
+    function getDeliveryPressureFromPayload(payload, layerName) {
+      const cards = payload && payload.layer_focus_cards ? payload.layer_focus_cards : null;
+      const metrics = cards ? cards[layerName] : null;
+      if (!metrics) return null;
+      const value = Number(metrics.delivery_pressure_score);
+      return Number.isFinite(value) ? value : null;
+    }
+
+    function summarizePeriod(dateKeys, layerName) {
+      const shortageValues = [];
+      const pressureValues = [];
+      const marketValues = [];
+
+      dateKeys.forEach((dateKey) => {
+        const payload = historyPayloadByDate.get(dateKey);
+        if (!payload) return;
+
+        const layer = getLayerFromPayload(payload, layerName);
+        if (layer) shortageValues.push(shortageScore(layer.shortage));
+
+        const pressure = getDeliveryPressureFromPayload(payload, layerName);
+        if (pressure !== null) pressureValues.push(pressure);
+
+        const marketSignal = layer && layer.marketSignal && typeof layer.marketSignal.avg_change_pct === "number" ? layer.marketSignal.avg_change_pct : null;
+        if (marketSignal !== null) marketValues.push(marketSignal);
+      });
+
+      return {
+        shortageAvg: average(shortageValues),
+        pressureAvg: average(pressureValues),
+        marketAvg: average(marketValues),
+      };
+    }
+
+    function formatDelta(delta, digits) {
+      if (!Number.isFinite(delta)) return "-";
+      const sign = delta > 0 ? "+" : "";
+      return `${sign}${delta.toFixed(digits)}`;
+    }
+
+    function buildWeeklySummaryHtml(layerName) {
+      const sorted = [...availableHistoryDates].sort();
+      const recent7 = sorted.slice(-7);
+      const prev7 = sorted.slice(-14, -7);
+
+      if (recent7.length < 7 || prev7.length < 7) {
+        return `<p>${t("weeklySummaryInsufficient")}</p>`;
+      }
+
+      const recent = summarizePeriod(recent7, layerName);
+      const previous = summarizePeriod(prev7, layerName);
+
+      const shortageRecent = recent.shortageAvg;
+      const shortagePrev = previous.shortageAvg;
+      const shortageDelta = (shortageRecent !== null && shortagePrev !== null) ? shortageRecent - shortagePrev : NaN;
+
+      const pressureRecent = recent.pressureAvg;
+      const pressurePrev = previous.pressureAvg;
+      const pressureDelta = (pressureRecent !== null && pressurePrev !== null) ? pressureRecent - pressurePrev : NaN;
+
+      const marketRecent = recent.marketAvg;
+      const marketPrev = previous.marketAvg;
+      const marketDelta = (marketRecent !== null && marketPrev !== null) ? marketRecent - marketPrev : NaN;
+
+      let judgement = t("weeklySummaryStable");
+      if (Number.isFinite(shortageDelta) && shortageDelta >= 0.2) judgement = t("weeklySummaryWorsening");
+      else if (Number.isFinite(shortageDelta) && shortageDelta <= -0.2) judgement = t("weeklySummaryImproving");
+
+      return `<p><strong>${t("weeklySummaryShortageRisk")}:</strong> ${t("weeklySummaryRecent7")} ${(shortageRecent ?? 0).toFixed(2)} vs ${t("weeklySummaryPrev7")} ${(shortagePrev ?? 0).toFixed(2)} (${formatDelta(shortageDelta, 2)})</p><p><strong>${t("weeklySummaryDeliveryPressure")}:</strong> ${t("weeklySummaryRecent7")} ${pressureRecent !== null ? pressureRecent.toFixed(1) : "-"} vs ${t("weeklySummaryPrev7")} ${pressurePrev !== null ? pressurePrev.toFixed(1) : "-"} (${formatDelta(pressureDelta, 1)})</p><p><strong>${t("weeklySummaryMarketSignal")}:</strong> ${t("weeklySummaryRecent7")} ${marketRecent !== null ? marketRecent.toFixed(2) : "-"} vs ${t("weeklySummaryPrev7")} ${marketPrev !== null ? marketPrev.toFixed(2) : "-"} (${formatDelta(marketDelta, 2)})</p><p><strong>${t("weeklySummaryJudgement")}:</strong> ${judgement}</p>`;
     }
 
     function render() {
