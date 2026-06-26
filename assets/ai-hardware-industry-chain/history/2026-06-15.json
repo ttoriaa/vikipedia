@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-15T08:55:40+00:00",
+  "generated_at": "2026-06-15T09:07:27+00:00",
   "date": "2026-06-15",
   "perspective": "buyer",
   "horizon": "12-24m",
@@ -228,7 +228,7 @@
     "delivery_pressure_score": 70,
     "demand_heat_score": 65,
     "supply_tightness_score": 55,
-    "turning_point_signal": "Watch for relief when delivery pressure < 55 and supply tightness < 50 for 2+ weeks",
+    "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
     "leaders": {
       "tier1": [
         "Compeq",
@@ -245,14 +245,234 @@
       ]
     },
     "procurement_focus": [
-      "Lock 1-2 quarter framework capacity for AI server PCB",
-      "Qualify dual-source stack-up alternatives for key designs",
-      "Reserve expedited NPI slots for sudden demand spikes"
+      "Lock framework capacity and keep alternate source path warm",
+      "Set dual-source readiness checkpoints for each new generation",
+      "Prioritize critical SKUs in constrained periods"
     ],
     "outlook_points": [
-      "Structural demand remains supported by AI server refresh cycles",
-      "High-layer and low-loss materials remain bottleneck pockets",
-      "Risk likely to normalize gradually if capacity expansion stays on track"
+      "Demand remains structurally supported by AI infrastructure upgrades",
+      "Supply bottlenecks are likely to ease gradually but remain uneven",
+      "Turning-point confidence improves with 14-30 day trend consistency"
     ]
+  },
+  "layer_focus_cards": {
+    "GPU / AI Accelerator": {
+      "shortage_level": "High",
+      "shortage_score": 85,
+      "delivery_pressure_score": 95,
+      "demand_heat_score": 90,
+      "supply_tightness_score": 80,
+      "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
+      "leaders": {
+        "tier1": [
+          "NVIDIA",
+          "AMD"
+        ],
+        "tier2": [
+          "Intel",
+          "Huawei Ascend"
+        ],
+        "tier3": [
+          "Cambricon"
+        ]
+      },
+      "procurement_focus": [
+        "Lock framework capacity and keep alternate source path warm",
+        "Set dual-source readiness checkpoints for each new generation",
+        "Prioritize critical SKUs in constrained periods"
+      ],
+      "outlook_points": [
+        "Demand remains structurally supported by AI infrastructure upgrades",
+        "Supply bottlenecks are likely to ease gradually but remain uneven",
+        "Turning-point confidence improves with 14-30 day trend consistency"
+      ]
+    },
+    "HBM": {
+      "shortage_level": "High",
+      "shortage_score": 85,
+      "delivery_pressure_score": 95,
+      "demand_heat_score": 90,
+      "supply_tightness_score": 80,
+      "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
+      "leaders": {
+        "tier1": [
+          "SK hynix",
+          "Samsung"
+        ],
+        "tier2": [
+          "Micron"
+        ],
+        "tier3": [
+          "Regional memory ecosystem suppliers"
+        ]
+      },
+      "procurement_focus": [
+        "Lock framework capacity and keep alternate source path warm",
+        "Set dual-source readiness checkpoints for each new generation",
+        "Prioritize critical SKUs in constrained periods"
+      ],
+      "outlook_points": [
+        "Demand remains structurally supported by AI infrastructure upgrades",
+        "Supply bottlenecks are likely to ease gradually but remain uneven",
+        "Turning-point confidence improves with 14-30 day trend consistency"
+      ]
+    },
+    "Advanced Packaging": {
+      "shortage_level": "High",
+      "shortage_score": 85,
+      "delivery_pressure_score": 95,
+      "demand_heat_score": 90,
+      "supply_tightness_score": 80,
+      "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
+      "leaders": {
+        "tier1": [
+          "TSMC",
+          "Samsung"
+        ],
+        "tier2": [
+          "Intel",
+          "ASE"
+        ],
+        "tier3": [
+          "Regional ecosystem suppliers"
+        ]
+      },
+      "procurement_focus": [
+        "Lock framework capacity and keep alternate source path warm",
+        "Set dual-source readiness checkpoints for each new generation",
+        "Prioritize critical SKUs in constrained periods"
+      ],
+      "outlook_points": [
+        "Demand remains structurally supported by AI infrastructure upgrades",
+        "Supply bottlenecks are likely to ease gradually but remain uneven",
+        "Turning-point confidence improves with 14-30 day trend consistency"
+      ]
+    },
+    "ABF Substrate": {
+      "shortage_level": "Medium",
+      "shortage_score": 60,
+      "delivery_pressure_score": 70,
+      "demand_heat_score": 65,
+      "supply_tightness_score": 55,
+      "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
+      "leaders": {
+        "tier1": [
+          "Ibiden",
+          "Shinko"
+        ],
+        "tier2": [
+          "Unimicron",
+          "Nan Ya PCB"
+        ],
+        "tier3": [
+          "Regional ecosystem suppliers"
+        ]
+      },
+      "procurement_focus": [
+        "Lock framework capacity and keep alternate source path warm",
+        "Set dual-source readiness checkpoints for each new generation",
+        "Prioritize critical SKUs in constrained periods"
+      ],
+      "outlook_points": [
+        "Demand remains structurally supported by AI infrastructure upgrades",
+        "Supply bottlenecks are likely to ease gradually but remain uneven",
+        "Turning-point confidence improves with 14-30 day trend consistency"
+      ]
+    },
+    "AI PCB": {
+      "shortage_level": "Medium",
+      "shortage_score": 60,
+      "delivery_pressure_score": 70,
+      "demand_heat_score": 65,
+      "supply_tightness_score": 55,
+      "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
+      "leaders": {
+        "tier1": [
+          "Compeq",
+          "TTM",
+          "Shennan"
+        ],
+        "tier2": [
+          "WUS",
+          "Gold Circuit",
+          "Unitech PCB"
+        ],
+        "tier3": [
+          "Regional backup EMS/PCB partners"
+        ]
+      },
+      "procurement_focus": [
+        "Lock framework capacity and keep alternate source path warm",
+        "Set dual-source readiness checkpoints for each new generation",
+        "Prioritize critical SKUs in constrained periods"
+      ],
+      "outlook_points": [
+        "Demand remains structurally supported by AI infrastructure upgrades",
+        "Supply bottlenecks are likely to ease gradually but remain uneven",
+        "Turning-point confidence improves with 14-30 day trend consistency"
+      ]
+    },
+    "High-speed Connectors": {
+      "shortage_level": "Medium",
+      "shortage_score": 60,
+      "delivery_pressure_score": 70,
+      "demand_heat_score": 65,
+      "supply_tightness_score": 55,
+      "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
+      "leaders": {
+        "tier1": [
+          "Amphenol",
+          "TE"
+        ],
+        "tier2": [
+          "Molex",
+          "JAE"
+        ],
+        "tier3": [
+          "Regional ecosystem suppliers"
+        ]
+      },
+      "procurement_focus": [
+        "Lock framework capacity and keep alternate source path warm",
+        "Set dual-source readiness checkpoints for each new generation",
+        "Prioritize critical SKUs in constrained periods"
+      ],
+      "outlook_points": [
+        "Demand remains structurally supported by AI infrastructure upgrades",
+        "Supply bottlenecks are likely to ease gradually but remain uneven",
+        "Turning-point confidence improves with 14-30 day trend consistency"
+      ]
+    },
+    "MLCC": {
+      "shortage_level": "Low-Medium",
+      "shortage_score": 35,
+      "delivery_pressure_score": 45,
+      "demand_heat_score": 40,
+      "supply_tightness_score": 30,
+      "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
+      "leaders": {
+        "tier1": [
+          "Murata",
+          "TDK"
+        ],
+        "tier2": [
+          "Taiyo Yuden",
+          "SEMCO"
+        ],
+        "tier3": [
+          "Regional ecosystem suppliers"
+        ]
+      },
+      "procurement_focus": [
+        "Lock framework capacity and keep alternate source path warm",
+        "Set dual-source readiness checkpoints for each new generation",
+        "Prioritize critical SKUs in constrained periods"
+      ],
+      "outlook_points": [
+        "Demand remains structurally supported by AI infrastructure upgrades",
+        "Supply bottlenecks are likely to ease gradually but remain uneven",
+        "Turning-point confidence improves with 14-30 day trend consistency"
+      ]
+    }
   }
 }

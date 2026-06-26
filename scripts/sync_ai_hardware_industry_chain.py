@@ -65,6 +65,24 @@ DEFAULT_LAYERS: list[dict[str, Any]] = [
     },
 ]
 
+LAYER_LEADER_TIERS: dict[str, dict[str, list[str]]] = {
+    "GPU / AI Accelerator": {
+        "tier1": ["NVIDIA", "AMD"],
+        "tier2": ["Intel", "Huawei Ascend"],
+        "tier3": ["Cambricon"],
+    },
+    "HBM": {
+        "tier1": ["SK hynix", "Samsung"],
+        "tier2": ["Micron"],
+        "tier3": ["Regional memory ecosystem suppliers"],
+    },
+    "AI PCB": {
+        "tier1": ["Compeq", "TTM", "Shennan"],
+        "tier2": ["WUS", "Gold Circuit", "Unitech PCB"],
+        "tier3": ["Regional backup EMS/PCB partners"],
+    },
+}
+
 
 def fetch_quotes(symbols: list[str], timeout: int) -> dict[str, dict[str, Any]]:
     if not symbols:
@@ -156,6 +174,46 @@ def build_ai_pcb_metrics(layers: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def build_layer_focus_cards(layers: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    shortage_score_map = {"High": 85, "Medium": 60, "Low-Medium": 35}
+    cards: dict[str, dict[str, Any]] = {}
+
+    for layer in layers:
+        layer_name = str(layer.get("layer") or "")
+        shortage = str(layer.get("shortage") or "Medium")
+        shortage_score = shortage_score_map.get(shortage, 60)
+        leaders = LAYER_LEADER_TIERS.get(
+            layer_name,
+            {
+                "tier1": (layer.get("companies") or [])[:2],
+                "tier2": (layer.get("companies") or [])[2:4],
+                "tier3": ["Regional ecosystem suppliers"],
+            },
+        )
+
+        cards[layer_name] = {
+            "shortage_level": shortage,
+            "shortage_score": shortage_score,
+            "delivery_pressure_score": min(100, max(20, shortage_score + 10)),
+            "demand_heat_score": min(100, max(20, shortage_score + 5)),
+            "supply_tightness_score": min(100, max(20, shortage_score - 5)),
+            "turning_point_signal": "Watch for 2+ weeks of simultaneous shortage-score decline and stable lead-time execution",
+            "leaders": leaders,
+            "procurement_focus": [
+                "Lock framework capacity and keep alternate source path warm",
+                "Set dual-source readiness checkpoints for each new generation",
+                "Prioritize critical SKUs in constrained periods",
+            ],
+            "outlook_points": [
+                "Demand remains structurally supported by AI infrastructure upgrades",
+                "Supply bottlenecks are likely to ease gradually but remain uneven",
+                "Turning-point confidence improves with 14-30 day trend consistency",
+            ],
+        }
+
+    return cards
+
+
 def enrich_layers(layers: list[dict[str, Any]], timeout: int) -> list[dict[str, Any]]:
     symbols: list[str] = []
     for layer in layers:
@@ -197,6 +255,7 @@ def enrich_layers(layers: list[dict[str, Any]], timeout: int) -> list[dict[str, 
 def build_payload(layers: list[dict[str, Any]], timeout: int, as_of: datetime | None = None) -> dict[str, Any]:
     now = as_of or datetime.now(timezone.utc)
     enriched_layers = enrich_layers(layers, timeout=timeout)
+    layer_focus_cards = build_layer_focus_cards(enriched_layers)
     return {
         "generated_at": now.isoformat(),
         "date": now.date().isoformat(),
@@ -207,7 +266,8 @@ def build_payload(layers: list[dict[str, Any]], timeout: int, as_of: datetime | 
             "description": "Daily refreshed baseline + market quote signals",
         },
         "layers": enriched_layers,
-        "ai_pcb_metrics": build_ai_pcb_metrics(enriched_layers),
+        "ai_pcb_metrics": layer_focus_cards.get("AI PCB") or build_ai_pcb_metrics(enriched_layers),
+        "layer_focus_cards": layer_focus_cards,
     }
 
 

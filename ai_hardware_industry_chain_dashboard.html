@@ -368,7 +368,9 @@
 
       <div class="tabs" role="tablist" aria-label="Dashboard tabs">
         <button id="tabBtnHome" class="tab-btn active" type="button" data-tab="home">总览看板</button>
-        <button id="tabBtnAiPcb" class="tab-btn" type="button" data-tab="ai-pcb">AI PCB 专题</button>
+        <button id="tabBtnGpu" class="tab-btn" type="button" data-tab="focus" data-layer="GPU / AI Accelerator">GPU/AI 专题</button>
+        <button id="tabBtnHbm" class="tab-btn" type="button" data-tab="focus" data-layer="HBM">HBM 专题</button>
+        <button id="tabBtnAiPcb" class="tab-btn" type="button" data-tab="focus" data-layer="AI PCB">AI PCB 专题</button>
       </div>
     </section>
 
@@ -431,25 +433,25 @@
       </div>
     </div>
 
-    <div id="tab-ai-pcb" class="tab-content">
+    <div id="tab-focus" class="tab-content">
       <section class="panel">
-        <h2 id="aiPcbTitle">AI PCB 专题卡</h2>
+        <h2 id="focusTitle">专题卡</h2>
         <div class="pcb-grid">
           <article class="pcb-card">
-            <h3 id="aiPcbLeaderTitle">龙头分层</h3>
-            <div id="aiPcbLeaderBody"></div>
+            <h3 id="focusLeaderTitle">龙头分层</h3>
+            <div id="focusLeaderBody"></div>
           </article>
           <article class="pcb-card">
-            <h3 id="aiPcbHeatTitle">供需热度与指标</h3>
-            <div id="aiPcbHeatBody"></div>
+            <h3 id="focusHeatTitle">供需热度与指标</h3>
+            <div id="focusHeatBody"></div>
           </article>
           <article class="pcb-card">
-            <h3 id="aiPcbActionTitle">采购建议</h3>
-            <div id="aiPcbActionBody"></div>
+            <h3 id="focusActionTitle">采购建议</h3>
+            <div id="focusActionBody"></div>
           </article>
           <article class="pcb-card">
-            <h3 id="aiPcbTrendTitle">趋势判断</h3>
-            <div id="aiPcbTrendBody"></div>
+            <h3 id="focusTrendTitle">趋势判断</h3>
+            <div id="focusTrendBody"></div>
           </article>
         </div>
       </section>
@@ -468,7 +470,10 @@
         labelTrendDimension: "趋势维度",
         labelTrendWindow: "趋势窗口",
         tabHome: "总览看板",
+        tabGpu: "GPU/AI 专题",
+        tabHbm: "HBM 专题",
         tabAiPcb: "AI PCB 专题",
+        focusTitle: "专题卡",
         flowTitle: "产业链关系图（Buyer默认）",
         trendTitle: "趋势模式：Shortage 高/中/低-中（最近30天）",
         trendDimensionRisk: "按风险级别看趋势",
@@ -518,7 +523,10 @@
         labelTrendDimension: "Trend Dimension",
         labelTrendWindow: "Trend Window",
         tabHome: "Overview",
+        tabGpu: "GPU/AI Focus",
+        tabHbm: "HBM Focus",
         tabAiPcb: "AI PCB Focus",
+        focusTitle: "Focus Card",
         flowTitle: "Supply Chain Flow (Buyer Default)",
         trendTitle: "Trend Mode: Shortage High/Medium/Low-Medium (Last 30 Days)",
         trendDimensionRisk: "By risk level",
@@ -575,6 +583,7 @@
     let currentDataSource = "fallback";
     let currentGeneratedAt = null;
     let currentLang = "zh";
+    let currentFocusLayer = "AI PCB";
     const historyPayloadByDate = new Map();
     let availableHistoryDates = [];
 
@@ -629,29 +638,39 @@
         ["labelTrendDimension", "labelTrendDimension"], ["labelTrendWindow", "labelTrendWindow"], ["flowTitle", "flowTitle"],
         ["trendTitle", "trendTitle"], ["tableTitle", "tableTitle"], ["thLayer", "thLayer"], ["thCompanies", "thCompanies"],
         ["thBom", "thBom"], ["thShortage", "thShortage"], ["thLock", "thLock"], ["thDual", "thDual"],
-        ["thBuffer", "thBuffer"], ["thPlan", "thPlan"], ["legendText", "legendText"], ["aiPcbTitle", "aiPcbTitle"],
-        ["aiPcbLeaderTitle", "aiPcbLeaderTitle"], ["aiPcbHeatTitle", "aiPcbHeatTitle"], ["aiPcbActionTitle", "aiPcbActionTitle"],
-        ["aiPcbTrendTitle", "aiPcbTrendTitle"],
+        ["thBuffer", "thBuffer"], ["thPlan", "thPlan"], ["legendText", "legendText"], ["focusTitle", "focusTitle"],
+        ["focusLeaderTitle", "aiPcbLeaderTitle"], ["focusHeatTitle", "aiPcbHeatTitle"], ["focusActionTitle", "aiPcbActionTitle"],
+        ["focusTrendTitle", "aiPcbTrendTitle"],
       ].forEach(([id, key]) => setText(id, key));
 
       document.documentElement.lang = currentLang === "zh" ? "zh-CN" : "en";
       document.getElementById("langToggle").textContent = currentLang === "zh" ? "EN" : "中";
       document.getElementById("tabBtnHome").textContent = t("tabHome");
+      document.getElementById("tabBtnGpu").textContent = t("tabGpu");
+      document.getElementById("tabBtnHbm").textContent = t("tabHbm");
       document.getElementById("tabBtnAiPcb").textContent = t("tabAiPcb");
       document.getElementById("exportPng").textContent = t("exportPng");
       document.querySelector('#snapshotDate option[value="latest"]').textContent = t("latestOption");
       document.querySelector('#trendDimension option[value="risk"]').textContent = t("trendDimensionRisk");
       document.querySelector('#trendDimension option[value="layer"]').textContent = t("trendDimensionLayer");
       refreshStatusText();
-      renderAiPcbCard();
+      renderFocusCard();
     }
 
     function switchTab(tabName) {
       const onHome = tabName === "home";
       document.getElementById("tab-home").classList.toggle("active", onHome);
-      document.getElementById("tab-ai-pcb").classList.toggle("active", !onHome);
+      document.getElementById("tab-focus").classList.toggle("active", !onHome);
       document.getElementById("tabBtnHome").classList.toggle("active", onHome);
-      document.getElementById("tabBtnAiPcb").classList.toggle("active", !onHome);
+      document.getElementById("tabBtnGpu").classList.toggle("active", !onHome && currentFocusLayer === "GPU / AI Accelerator");
+      document.getElementById("tabBtnHbm").classList.toggle("active", !onHome && currentFocusLayer === "HBM");
+      document.getElementById("tabBtnAiPcb").classList.toggle("active", !onHome && currentFocusLayer === "AI PCB");
+    }
+
+    function openFocusTab(layerName) {
+      currentFocusLayer = layerName;
+      switchTab("focus");
+      renderFocusCard();
     }
 
     function toDateKey(date) {
@@ -873,13 +892,18 @@
       img.src = url;
     }
 
-    function renderAiPcbCard() {
-      const leaderBody = document.getElementById("aiPcbLeaderBody");
-      const heatBody = document.getElementById("aiPcbHeatBody");
-      const actionBody = document.getElementById("aiPcbActionBody");
-      const trendBody = document.getElementById("aiPcbTrendBody");
+    function renderFocusCard() {
+      const leaderBody = document.getElementById("focusLeaderBody");
+      const heatBody = document.getElementById("focusHeatBody");
+      const actionBody = document.getElementById("focusActionBody");
+      const trendBody = document.getElementById("focusTrendBody");
+      const title = document.getElementById("focusTitle");
+      title.textContent = `${currentFocusLayer} - ${t("focusTitle")}`;
 
-      if (!currentPayload || !currentPayload.ai_pcb_metrics) {
+      const cards = currentPayload && currentPayload.layer_focus_cards ? currentPayload.layer_focus_cards : null;
+      const metrics = cards ? cards[currentFocusLayer] : null;
+
+      if (!metrics) {
         const noData = `<p>${t("aiPcbNoData")}</p>`;
         leaderBody.innerHTML = noData;
         heatBody.innerHTML = noData;
@@ -888,16 +912,15 @@
         return;
       }
 
-      const m = currentPayload.ai_pcb_metrics;
-      const leaders = m.leaders || {};
-      const actions = Array.isArray(m.procurement_focus) ? m.procurement_focus : [];
-      const outlook = Array.isArray(m.outlook_points) ? m.outlook_points : [];
+      const leaders = metrics.leaders || {};
+      const actions = Array.isArray(metrics.procurement_focus) ? metrics.procurement_focus : [];
+      const outlook = Array.isArray(metrics.outlook_points) ? metrics.outlook_points : [];
       const list = (items) => items && items.length ? `<ul>${items.map((x) => `<li>${x}</li>`).join("")}</ul>` : "<p>-</p>";
 
       leaderBody.innerHTML = `<p><strong>${t("aiPcbTier1")}:</strong> ${(leaders.tier1 || []).join(", ") || "-"}</p><p><strong>${t("aiPcbTier2")}:</strong> ${(leaders.tier2 || []).join(", ") || "-"}</p><p><strong>${t("aiPcbTier3")}:</strong> ${(leaders.tier3 || []).join(", ") || "-"}</p>`;
-      heatBody.innerHTML = `<p><strong>${t("aiPcbShortageLevel")}:</strong> ${displayShortage(m.shortage_level || "Medium")}</p><p><strong>${t("aiPcbShortageScore")}:</strong> ${m.shortage_score ?? "-"}</p><p><strong>${t("aiPcbDeliveryPressure")}:</strong> ${m.delivery_pressure_score ?? "-"}</p><p><strong>${t("aiPcbDemandHeat")}:</strong> ${m.demand_heat_score ?? "-"}</p><p><strong>${t("aiPcbSupplyTightness")}:</strong> ${m.supply_tightness_score ?? "-"}</p>`;
+      heatBody.innerHTML = `<p><strong>${t("aiPcbShortageLevel")}:</strong> ${displayShortage(metrics.shortage_level || "Medium")}</p><p><strong>${t("aiPcbShortageScore")}:</strong> ${metrics.shortage_score ?? "-"}</p><p><strong>${t("aiPcbDeliveryPressure")}:</strong> ${metrics.delivery_pressure_score ?? "-"}</p><p><strong>${t("aiPcbDemandHeat")}:</strong> ${metrics.demand_heat_score ?? "-"}</p><p><strong>${t("aiPcbSupplyTightness")}:</strong> ${metrics.supply_tightness_score ?? "-"}</p>`;
       actionBody.innerHTML = list(actions);
-      trendBody.innerHTML = `<p><strong>${t("aiPcbTurningSignal")}:</strong> ${m.turning_point_signal || "-"}</p>${list(outlook)}`;
+      trendBody.innerHTML = `<p><strong>${t("aiPcbTurningSignal")}:</strong> ${metrics.turning_point_signal || "-"}</p>${list(outlook)}`;
     }
 
     function render() {
@@ -930,7 +953,7 @@
       });
 
       renderTrendChart();
-      renderAiPcbCard();
+      renderFocusCard();
     }
 
     ["perspective", "horizon", "mode"].forEach((id) => {
@@ -954,7 +977,9 @@
     });
 
     document.getElementById("tabBtnHome").addEventListener("click", () => switchTab("home"));
-    document.getElementById("tabBtnAiPcb").addEventListener("click", () => switchTab("ai-pcb"));
+    document.getElementById("tabBtnGpu").addEventListener("click", () => openFocusTab("GPU / AI Accelerator"));
+    document.getElementById("tabBtnHbm").addEventListener("click", () => openFocusTab("HBM"));
+    document.getElementById("tabBtnAiPcb").addEventListener("click", () => openFocusTab("AI PCB"));
 
     (async () => {
       await initRecentHistoryOptions();
