@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI硬件产业链看板</title>
+  <style>
+    :root {
+      --bg-1: #0f172a;
+      --bg-2: #111827;
+      --panel: #0b1220cc;
+      --line: #334155;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #22d3ee;
+      --good: #34d399;
+      --mid: #f59e0b;
+      --high: #f97316;
+      --critical: #ef4444;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif;
+      background:
+        radial-gradient(1200px 700px at 10% -20%, #164e63 0%, transparent 55%),
+        radial-gradient(1000px 600px at 90% -10%, #4c1d95 0%, transparent 55%),
+        linear-gradient(135deg, var(--bg-1), var(--bg-2));
+      min-height: 100vh;
+    }
+
+    .wrap {
+      width: min(1200px, 94vw);
+      margin: 28px auto 40px;
+    }
+
+    .hero {
+      border: 1px solid #2b364b;
+      background: linear-gradient(145deg, #0b1220e6, #0f172acc);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: clamp(24px, 4vw, 36px);
+      letter-spacing: 0.3px;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .status {
+      margin-top: 10px;
+      color: #cbd5e1;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .controls {
+      margin-top: 14px;
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .control {
+      background: #0b1220;
+      border: 1px solid #2a3448;
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+
+    .control label {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .control select {
+      width: 100%;
+      border: 1px solid #3a465f;
+      border-radius: 8px;
+      background: #111827;
+      color: var(--text);
+      padding: 8px;
+    }
+
+    .grid {
+      margin-top: 16px;
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 1fr;
+    }
+
+    .panel {
+      border: 1px solid #2b364b;
+      border-radius: 16px;
+      background: var(--panel);
+      overflow: hidden;
+    }
+
+    .panel h2 {
+      margin: 0;
+      padding: 14px 16px;
+      border-bottom: 1px solid #2b364b;
+      font-size: 18px;
+    }
+
+    .diagram {
+      padding: 18px 16px 6px;
+      overflow-x: auto;
+    }
+
+    .flow {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+      min-width: 1040px;
+      padding-bottom: 12px;
+    }
+
+    .node {
+      min-width: 145px;
+      border: 1px solid #31415d;
+      border-radius: 12px;
+      background: linear-gradient(180deg, #111827, #0b1220);
+      padding: 10px;
+      position: relative;
+    }
+
+    .node .name {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .node .meta {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .arrow {
+      width: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .risk-high { border-color: #7f1d1d; }
+    .risk-medium { border-color: #78350f; }
+    .risk-low-medium { border-color: #14532d; }
+
+    .table-wrap {
+      overflow: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 980px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 1px solid #273248;
+      vertical-align: top;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    th {
+      background: #0e1525;
+      color: #cbd5e1;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .chip {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      border: 1px solid transparent;
+    }
+
+    .chip-high { color: #fecaca; border-color: #7f1d1d; background: #450a0a66; }
+    .chip-medium { color: #fde68a; border-color: #78350f; background: #451a0366; }
+    .chip-low-medium { color: #bbf7d0; border-color: #14532d; background: #052e1666; }
+
+    .legend {
+      padding: 10px 16px 16px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 780px) {
+      .hero { padding: 16px; }
+      .panel h2 { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>AI硬件产业链看板</h1>
+      <p>展示 GPU / HBM / 先进封装 / ABF / PCB / MLCC / 连接器 的层级关系、BOM 占比、紧缺概率与自动采购动作建议。</p>
+      <div id="dataStatus" class="status">数据源：加载中...</div>
+
+      <div class="controls">
+        <div class="control">
+          <label for="perspective">视角</label>
+          <select id="perspective">
+            <option value="buyer" selected>buyer</option>
+            <option value="supplier">supplier</option>
+            <option value="investor">investor</option>
+          </select>
+        </div>
+        <div class="control">
+          <label for="horizon">周期</label>
+          <select id="horizon">
+            <option value="12-24m" selected>12-24m</option>
+            <option value="24-36m">24-36m</option>
+          </select>
+        </div>
+        <div class="control">
+          <label for="mode">risk_to_action_mode</label>
+          <select id="mode">
+            <option value="standard" selected>standard</option>
+            <option value="conservative">conservative</option>
+            <option value="aggressive">aggressive</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid">
+      <section class="panel">
+        <h2>产业链关系图（Buyer默认）</h2>
+        <div class="diagram">
+          <div id="flow" class="flow"></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>分层表：厂商、BOM、紧缺概率、采购动作</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Layer</th>
+                <th>Representative Companies</th>
+                <th>BOM</th>
+                <th>Shortage</th>
+                <th>Lock Volume</th>
+                <th>Dual Source</th>
+                <th>Buffer</th>
+                <th>Delivery Plan</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+        <div class="legend">提示：这个页面是“展示层”，默认用 skill 中的规则；若要每天自动更新，需要再加一个定时抓取脚本 + GitHub Actions 或本地计划任务。</div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const fallbackLayers = [
+      {
+        layer: "GPU / AI Accelerator",
+        companies: "NVIDIA, AMD, Intel, Huawei Ascend, Cambricon",
+        bom: "45%-60%",
+        shortage: "High"
+      },
+      {
+        layer: "HBM",
+        companies: "SK hynix, Samsung, Micron",
+        bom: "12%-22%",
+        shortage: "High"
+      },
+      {
+        layer: "Advanced Packaging",
+        companies: "TSMC, Samsung, Intel, ASE, Amkor, JCET",
+        bom: "5%-10%",
+        shortage: "High"
+      },
+      {
+        layer: "ABF Substrate",
+        companies: "Ibiden, Shinko, Unimicron, Nan Ya PCB, Kinsus, AT&S",
+        bom: "2%-4%",
+        shortage: "Medium"
+      },
+      {
+        layer: "AI PCB",
+        companies: "Compeq, Unitech PCB, TTM, Shennan, WUS, Gold Circuit",
+        bom: "3%-6%",
+        shortage: "Medium"
+      },
+      {
+        layer: "High-speed Connectors",
+        companies: "Amphenol, TE, Molex, JAE, Luxshare, FIT",
+        bom: "2%-5%",
+        shortage: "Medium"
+      },
+      {
+        layer: "MLCC",
+        companies: "Murata, TDK, Taiyo Yuden, SEMCO, Yageo, Walsin",
+        bom: "1%-3%",
+        shortage: "Low-Medium"
+      }
+    ];
+
+    function riskClass(shortage) {
+      if (shortage === "High") return "high";
+      if (shortage === "Medium") return "medium";
+      return "low-medium";
+    }
+
+    function actionsFor(shortage, mode) {
+      const map = {
+        "High": {
+          lock: "2-4 季度滚动锁量",
+          dual: "主供+备供并行认证；保留替代料号路径",
+          buffer: "8-12 周",
+          plan: "按封装/存储可得性倒排整机交付"
+        },
+        "Medium": {
+          lock: "1-2 季度框架锁量",
+          dual: "新项目导入双供，量产维持主供+备供验证",
+          buffer: "4-8 周",
+          plan: "季度滚动复盘交期偏差并修正节拍"
+        },
+        "Low-Medium": {
+          lock: "常规预测 + 月度补货",
+          dual: "以成本质量最优为主，保持可切换能力",
+          buffer: "2-4 周",
+          plan: "设置需求突增阈值，避免过量备货"
+        }
+      };
+
+      const base = { ...map[shortage] };
+      if (mode === "conservative") {
+        base.buffer = adjustBuffer(base.buffer, +2);
+        base.lock = escalateLock(base.lock, +1);
+      }
+      if (mode === "aggressive") {
+        base.buffer = adjustBuffer(base.buffer, -2);
+      }
+      return base;
+    }
+
+    function adjustBuffer(text, delta) {
+      const m = text.match(/(\d+)-(\d+)\s*周/);
+      if (!m) return text;
+      const a = Math.max(1, Number(m[1]) + delta);
+      const b = Math.max(a + 1, Number(m[2]) + delta);
+      return `${a}-${b} 周`;
+    }
+
+    function escalateLock(text, upQuarter) {
+      if (upQuarter <= 0) return text;
+      if (text.includes("2-4")) return "3-5 季度滚动锁量";
+      if (text.includes("1-2")) return "2-3 季度框架锁量";
+      return text;
+    }
+
+    let currentLayers = [...fallbackLayers];
+
+    function normalizeLayersFromPayload(payload) {
+      if (!payload || !Array.isArray(payload.layers) || payload.layers.length === 0) {
+        return [...fallbackLayers];
+      }
+      return payload.layers.map((item) => {
+        const companies = Array.isArray(item.companies) ? item.companies.join(", ") : (item.companies || "");
+        return {
+          layer: item.layer || "Unknown Layer",
+          companies,
+          bom: item.bom || "N/A",
+          shortage: item.shortage || "Medium",
+          marketSignal: item.market_signal || null,
+        };
+      });
+    }
+
+    function updateStatus(text) {
+      const el = document.getElementById("dataStatus");
+      el.textContent = text;
+    }
+
+    async function loadLatestData() {
+      const url = `assets/ai-hardware-industry-chain/latest.json?t=${Date.now()}`;
+      try {
+        const resp = await fetch(url, { cache: "no-store" });
+        if (!resp.ok) {
+          throw new Error(`HTTP ${resp.status}`);
+        }
+        const payload = await resp.json();
+        currentLayers = normalizeLayersFromPayload(payload);
+        const generatedAt = payload.generated_at ? new Date(payload.generated_at).toLocaleString() : "unknown";
+        updateStatus(`数据源：latest.json | generated_at: ${generatedAt}`);
+      } catch (err) {
+        currentLayers = [...fallbackLayers];
+        updateStatus(`数据源：内置兜底数据（latest.json 读取失败：${err.message}）`);
+      }
+    }
+
+    function render() {
+      const mode = document.getElementById("mode").value;
+      const tbody = document.getElementById("tbody");
+      const flow = document.getElementById("flow");
+      tbody.innerHTML = "";
+      flow.innerHTML = "";
+
+      currentLayers.forEach((item, idx) => {
+        const risk = riskClass(item.shortage);
+        const actions = actionsFor(item.shortage, mode);
+        const signal = item.marketSignal && typeof item.marketSignal.avg_change_pct === "number"
+          ? ` | avg ${item.marketSignal.avg_change_pct}%`
+          : "";
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${item.layer}</td>
+          <td>${item.companies}</td>
+          <td>${item.bom}</td>
+          <td><span class="chip chip-${risk}">${item.shortage}</span></td>
+          <td>${actions.lock}</td>
+          <td>${actions.dual}</td>
+          <td>${actions.buffer}</td>
+          <td>${actions.plan}${signal}</td>
+        `;
+        tbody.appendChild(tr);
+
+        const node = document.createElement("div");
+        node.className = `node risk-${risk}`;
+        node.innerHTML = `
+          <div class="name">${item.layer}</div>
+          <div class="meta">BOM: ${item.bom}<br/>Shortage: ${item.shortage}</div>
+        `;
+        flow.appendChild(node);
+
+        if (idx !== currentLayers.length - 1) {
+          const arrow = document.createElement("div");
+          arrow.className = "arrow";
+          arrow.textContent = "→";
+          flow.appendChild(arrow);
+        }
+      });
+    }
+
+    ["perspective", "horizon", "mode"].forEach((id) => {
+      document.getElementById(id).addEventListener("change", render);
+    });
+
+    (async () => {
+      await loadLatestData();
+      render();
+    })();
+  </script>
+</body>
+</html>
