@@ -118,6 +118,44 @@ def build_action_template(shortage: str) -> dict[str, str]:
     }
 
 
+def build_ai_pcb_metrics(layers: list[dict[str, Any]]) -> dict[str, Any]:
+    ai_pcb = next((layer for layer in layers if layer.get("layer") == "AI PCB"), None)
+    if not ai_pcb:
+        return {}
+
+    shortage = str(ai_pcb.get("shortage") or "Medium")
+    shortage_score_map = {"High": 85, "Medium": 60, "Low-Medium": 35}
+    shortage_score = shortage_score_map.get(shortage, 60)
+
+    delivery_pressure = min(100, max(20, shortage_score + 10))
+    demand_heat = min(100, max(20, shortage_score + 5))
+    supply_tightness = min(100, max(20, shortage_score - 5))
+
+    return {
+        "shortage_level": shortage,
+        "shortage_score": shortage_score,
+        "delivery_pressure_score": delivery_pressure,
+        "demand_heat_score": demand_heat,
+        "supply_tightness_score": supply_tightness,
+        "turning_point_signal": "Watch for relief when delivery pressure < 55 and supply tightness < 50 for 2+ weeks",
+        "leaders": {
+            "tier1": ["Compeq", "TTM", "Shennan"],
+            "tier2": ["WUS", "Gold Circuit", "Unitech PCB"],
+            "tier3": ["Regional backup EMS/PCB partners"],
+        },
+        "procurement_focus": [
+            "Lock 1-2 quarter framework capacity for AI server PCB",
+            "Qualify dual-source stack-up alternatives for key designs",
+            "Reserve expedited NPI slots for sudden demand spikes",
+        ],
+        "outlook_points": [
+            "Structural demand remains supported by AI server refresh cycles",
+            "High-layer and low-loss materials remain bottleneck pockets",
+            "Risk likely to normalize gradually if capacity expansion stays on track",
+        ],
+    }
+
+
 def enrich_layers(layers: list[dict[str, Any]], timeout: int) -> list[dict[str, Any]]:
     symbols: list[str] = []
     for layer in layers:
@@ -156,8 +194,9 @@ def enrich_layers(layers: list[dict[str, Any]], timeout: int) -> list[dict[str, 
     return enriched
 
 
-def build_payload(layers: list[dict[str, Any]], timeout: int) -> dict[str, Any]:
-    now = datetime.now(timezone.utc)
+def build_payload(layers: list[dict[str, Any]], timeout: int, as_of: datetime | None = None) -> dict[str, Any]:
+    now = as_of or datetime.now(timezone.utc)
+    enriched_layers = enrich_layers(layers, timeout=timeout)
     return {
         "generated_at": now.isoformat(),
         "date": now.date().isoformat(),
@@ -167,7 +206,8 @@ def build_payload(layers: list[dict[str, Any]], timeout: int) -> dict[str, Any]:
             "quote_api": YAHOO_QUOTE_ENDPOINT,
             "description": "Daily refreshed baseline + market quote signals",
         },
-        "layers": enrich_layers(layers, timeout=timeout),
+        "layers": enriched_layers,
+        "ai_pcb_metrics": build_ai_pcb_metrics(enriched_layers),
     }
 
 
@@ -182,6 +222,7 @@ def main() -> int:
     parser.add_argument("--history-dir", default="assets/ai-hardware-industry-chain/history")
     parser.add_argument("--timeout", type=int, default=15)
     parser.add_argument("--skip-history", action="store_true")
+    parser.add_argument("--backfill-days", type=int, default=0)
     args = parser.parse_args()
 
     payload = build_payload(DEFAULT_LAYERS, timeout=args.timeout)
@@ -192,6 +233,16 @@ def main() -> int:
         date = payload.get("date") or datetime.now(timezone.utc).date().isoformat()
         history_path = Path(args.history_dir) / f"{date}.json"
         write_json(history_path, payload)
+
+    if args.backfill_days > 0:
+        now = datetime.now(timezone.utc)
+        for offset in range(1, args.backfill_days + 1):
+            as_of = now.replace(hour=now.hour, minute=now.minute, second=now.second, microsecond=0)
+            as_of = as_of.fromtimestamp(as_of.timestamp() - 86400 * offset, tz=timezone.utc)
+            backfill_payload = build_payload(DEFAULT_LAYERS, timeout=args.timeout, as_of=as_of)
+            backfill_history = Path(args.history_dir) / f"{backfill_payload['date']}.json"
+            if not backfill_history.exists():
+                write_json(backfill_history, backfill_payload)
 
     print(f"WROTE={output_path}")
     if not args.skip_history:

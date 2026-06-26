@@ -28,7 +28,7 @@ jobs:
 
       - name: Refresh AI hardware JSON
         run: |
-          python scripts/sync_ai_hardware_industry_chain.py --output assets/ai-hardware-industry-chain/latest.json --history-dir assets/ai-hardware-industry-chain/history --timeout "${{ inputs.timeout || '15' }}"
+          python scripts/sync_ai_hardware_industry_chain.py --output assets/ai-hardware-industry-chain/latest.json --history-dir assets/ai-hardware-industry-chain/history --timeout "${{ inputs.timeout || '15' }}" --backfill-days 30
 
       - name: Commit changes
         run: |

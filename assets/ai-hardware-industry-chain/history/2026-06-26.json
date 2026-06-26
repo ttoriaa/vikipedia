@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-26T07:04:35.547991+00:00",
+  "generated_at": "2026-06-26T09:01:18.641947+00:00",
   "date": "2026-06-26",
   "perspective": "buyer",
   "horizon": "12-24m",
@@ -221,5 +221,38 @@
         "delivery_plan": "Demand spike trigger threshold to avoid overstock"
       }
     }
-  ]
+  ],
+  "ai_pcb_metrics": {
+    "shortage_level": "Medium",
+    "shortage_score": 60,
+    "delivery_pressure_score": 70,
+    "demand_heat_score": 65,
+    "supply_tightness_score": 55,
+    "turning_point_signal": "Watch for relief when delivery pressure < 55 and supply tightness < 50 for 2+ weeks",
+    "leaders": {
+      "tier1": [
+        "Compeq",
+        "TTM",
+        "Shennan"
+      ],
+      "tier2": [
+        "WUS",
+        "Gold Circuit",
+        "Unitech PCB"
+      ],
+      "tier3": [
+        "Regional backup EMS/PCB partners"
+      ]
+    },
+    "procurement_focus": [
+      "Lock 1-2 quarter framework capacity for AI server PCB",
+      "Qualify dual-source stack-up alternatives for key designs",
+      "Reserve expedited NPI slots for sudden demand spikes"
+    ],
+    "outlook_points": [
+      "Structural demand remains supported by AI server refresh cycles",
+      "High-layer and low-loss materials remain bottleneck pockets",
+      "Risk likely to normalize gradually if capacity expansion stays on track"
+    ]
+  }
 }
