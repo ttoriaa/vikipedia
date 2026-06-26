@@ -1,6 +1,16 @@
 name: Dongchedi Pages
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - reports/**
+      - site/**
+      - scripts/run_dongchedi_daily.py
+      - scripts/build_charging_visualizations.py
+      - scripts/build_dongchedi_pages_site.py
+      - .github/workflows/dongchedi-pages.yml
   schedule:
     - cron: "0 1 * * *"
   workflow_dispatch:
