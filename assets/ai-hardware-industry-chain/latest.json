@@ -1,0 +1,225 @@
+{
+  "generated_at": "2026-06-26T07:04:35.547991+00:00",
+  "date": "2026-06-26",
+  "perspective": "buyer",
+  "horizon": "12-24m",
+  "source": {
+    "quote_api": "https://query1.finance.yahoo.com/v7/finance/quote",
+    "description": "Daily refreshed baseline + market quote signals"
+  },
+  "layers": [
+    {
+      "layer": "GPU / AI Accelerator",
+      "companies": [
+        "NVIDIA",
+        "AMD",
+        "Intel",
+        "Huawei Ascend",
+        "Cambricon"
+      ],
+      "bom": "45%-60%",
+      "shortage": "High",
+      "tickers": [
+        "NVDA",
+        "AMD",
+        "INTC",
+        "688256.SS"
+      ],
+      "market_signal": {
+        "quote_count": 0,
+        "avg_change_pct": null,
+        "quotes": [],
+        "fetch_error": "<urlopen error timed out>"
+      },
+      "procurement_action_template": {
+        "lock_volume": "2-4 quarters rolling lock",
+        "dual_source": "Parallel primary and backup qualification where feasible",
+        "buffer": "8-12 weeks",
+        "delivery_plan": "Back-schedule rack delivery from memory and packaging availability"
+      }
+    },
+    {
+      "layer": "HBM",
+      "companies": [
+        "SK hynix",
+        "Samsung",
+        "Micron"
+      ],
+      "bom": "12%-22%",
+      "shortage": "High",
+      "tickers": [
+        "000660.KS",
+        "005930.KS",
+        "MU"
+      ],
+      "market_signal": {
+        "quote_count": 0,
+        "avg_change_pct": null,
+        "quotes": [],
+        "fetch_error": "<urlopen error timed out>"
+      },
+      "procurement_action_template": {
+        "lock_volume": "2-4 quarters rolling lock",
+        "dual_source": "Parallel primary and backup qualification where feasible",
+        "buffer": "8-12 weeks",
+        "delivery_plan": "Back-schedule rack delivery from memory and packaging availability"
+      }
+    },
+    {
+      "layer": "Advanced Packaging",
+      "companies": [
+        "TSMC",
+        "Samsung",
+        "Intel",
+        "ASE",
+        "Amkor",
+        "JCET"
+      ],
+      "bom": "5%-10%",
+      "shortage": "High",
+      "tickers": [
+        "TSM",
+        "INTC",
+        "ASX",
+        "AMKR",
+        "600584.SS"
+      ],
+      "market_signal": {
+        "quote_count": 0,
+        "avg_change_pct": null,
+        "quotes": [],
+        "fetch_error": "<urlopen error timed out>"
+      },
+      "procurement_action_template": {
+        "lock_volume": "2-4 quarters rolling lock",
+        "dual_source": "Parallel primary and backup qualification where feasible",
+        "buffer": "8-12 weeks",
+        "delivery_plan": "Back-schedule rack delivery from memory and packaging availability"
+      }
+    },
+    {
+      "layer": "ABF Substrate",
+      "companies": [
+        "Ibiden",
+        "Shinko",
+        "Unimicron",
+        "Nan Ya PCB",
+        "Kinsus",
+        "AT&S"
+      ],
+      "bom": "2%-4%",
+      "shortage": "Medium",
+      "tickers": [
+        "4062.TW",
+        "3189.TW",
+        "8046.TW"
+      ],
+      "market_signal": {
+        "quote_count": 0,
+        "avg_change_pct": null,
+        "quotes": [],
+        "fetch_error": "<urlopen error timed out>"
+      },
+      "procurement_action_template": {
+        "lock_volume": "1-2 quarters framework lock",
+        "dual_source": "Dual source for new programs and backup validation for mass production",
+        "buffer": "4-8 weeks",
+        "delivery_plan": "Quarterly cadence review and lead-time correction"
+      }
+    },
+    {
+      "layer": "AI PCB",
+      "companies": [
+        "Compeq",
+        "Unitech PCB",
+        "TTM",
+        "Shennan",
+        "WUS",
+        "Gold Circuit"
+      ],
+      "bom": "3%-6%",
+      "shortage": "Medium",
+      "tickers": [
+        "2313.TW",
+        "TTMI",
+        "002916.SZ",
+        "002463.SZ"
+      ],
+      "market_signal": {
+        "quote_count": 0,
+        "avg_change_pct": null,
+        "quotes": [],
+        "fetch_error": "<urlopen error timed out>"
+      },
+      "procurement_action_template": {
+        "lock_volume": "1-2 quarters framework lock",
+        "dual_source": "Dual source for new programs and backup validation for mass production",
+        "buffer": "4-8 weeks",
+        "delivery_plan": "Quarterly cadence review and lead-time correction"
+      }
+    },
+    {
+      "layer": "High-speed Connectors",
+      "companies": [
+        "Amphenol",
+        "TE",
+        "Molex",
+        "JAE",
+        "Luxshare",
+        "FIT"
+      ],
+      "bom": "2%-5%",
+      "shortage": "Medium",
+      "tickers": [
+        "APH",
+        "TEL",
+        "002475.SZ",
+        "6088.HK"
+      ],
+      "market_signal": {
+        "quote_count": 0,
+        "avg_change_pct": null,
+        "quotes": [],
+        "fetch_error": "<urlopen error timed out>"
+      },
+      "procurement_action_template": {
+        "lock_volume": "1-2 quarters framework lock",
+        "dual_source": "Dual source for new programs and backup validation for mass production",
+        "buffer": "4-8 weeks",
+        "delivery_plan": "Quarterly cadence review and lead-time correction"
+      }
+    },
+    {
+      "layer": "MLCC",
+      "companies": [
+        "Murata",
+        "TDK",
+        "Taiyo Yuden",
+        "SEMCO",
+        "Yageo",
+        "Walsin"
+      ],
+      "bom": "1%-3%",
+      "shortage": "Low-Medium",
+      "tickers": [
+        "6981.T",
+        "6762.T",
+        "2379.TW",
+        "2492.TW",
+        "009150.KS"
+      ],
+      "market_signal": {
+        "quote_count": 0,
+        "avg_change_pct": null,
+        "quotes": [],
+        "fetch_error": "<urlopen error timed out>"
+      },
+      "procurement_action_template": {
+        "lock_volume": "Monthly replenishment with forecast guardrails",
+        "dual_source": "Keep switchable approved vendor list",
+        "buffer": "2-4 weeks",
+        "delivery_plan": "Demand spike trigger threshold to avoid overstock"
+      }
+    }
+  ]
+}

@@ -10,6 +10,9 @@ pd30/
 *.docx
 *.txt
 
+!assets/ai-hardware-industry-chain/*.json
+!assets/ai-hardware-industry-chain/history/*.json
+
 !assets/landing-previews/*.png
 !.vscode/
 .vscode/*
