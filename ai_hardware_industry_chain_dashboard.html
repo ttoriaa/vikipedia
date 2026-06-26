@@ -316,6 +316,17 @@
       gap: 6px;
     }
 
+    .weekly-section + .weekly-section {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #24324a;
+    }
+
+    .weekly-section-title {
+      margin-bottom: 6px;
+      color: #a5b4fc;
+    }
+
     @media (max-width: 780px) {
       .hero { padding: 16px; }
       .panel h2 { font-size: 16px; }
@@ -522,6 +533,9 @@
         weeklySummaryWorsening: "风险上行（偏紧）",
         weeklySummaryImproving: "风险回落（缓和）",
         weeklySummaryStable: "基本持平",
+        weeklyThisWeek: "本周变化",
+        weeklyNextWeek: "下周观察",
+        weeklyRiskTip: "风险提示",
         aiPcbNoData: "暂无 AI PCB 专项数据",
         aiPcbTier1: "第一梯队",
         aiPcbTier2: "第二梯队",
@@ -593,6 +607,9 @@
         weeklySummaryWorsening: "Risk rising (tighter)",
         weeklySummaryImproving: "Risk easing",
         weeklySummaryStable: "Mostly stable",
+        weeklyThisWeek: "This Week",
+        weeklyNextWeek: "Next Week",
+        weeklyRiskTip: "Risk Flag",
         aiPcbNoData: "No AI PCB metrics available",
         aiPcbTier1: "Tier 1",
         aiPcbTier2: "Tier 2",
@@ -983,18 +1000,22 @@
       }
 
       const list = (items) => items && items.length ? `<ul>${items.map((x) => `<li>${x}</li>`).join("")}</ul>` : "<p>-</p>";
+      const section = (title, items) => `<div class="weekly-section"><p class="weekly-section-title"><strong>${title}</strong></p>${list(items)}</div>`;
       const leaders = metrics.leaders || {};
       const actions = Array.isArray(metrics.procurement_focus) ? metrics.procurement_focus : [];
       const outlook = Array.isArray(metrics.outlook_points) ? metrics.outlook_points : [];
       const drivers = Array.isArray(metrics.drivers) ? metrics.drivers : [];
       const bottlenecks = Array.isArray(metrics.bottlenecks) ? metrics.bottlenecks : [];
-      const watchPoints = Array.isArray(metrics.watch_points) ? metrics.watch_points : [];
+      const weeklyReport = metrics.weekly_report || {};
+      const thisWeek = Array.isArray(weeklyReport.this_week) ? weeklyReport.this_week : [];
+      const nextWeek = Array.isArray(weeklyReport.next_week) ? weeklyReport.next_week : [];
+      const riskFlags = Array.isArray(weeklyReport.risk_flags) ? weeklyReport.risk_flags : [];
       const marketSignal = Number.isFinite(Number(metrics.market_signal_avg_change_pct)) ? Number(metrics.market_signal_avg_change_pct) : null;
       const quoteCount = Number.isFinite(Number(metrics.market_signal_quote_count)) ? Number(metrics.market_signal_quote_count) : null;
 
       driversBody.innerHTML = `<p><strong>${currentFocusLayer}:</strong> ${metrics.summary || "-"}</p><p><strong>${t("weeklySummaryJudgement")}:</strong> ${metrics.cycle_position || "-"}</p>${list(drivers)}`;
       bottleneckBody.innerHTML = list(bottlenecks);
-      watchBody.innerHTML = `${list(watchPoints)}<p><strong>${t("weeklySummaryMarketSignal")}:</strong> ${metrics.market_signal_avg_change_pct !== null && metrics.market_signal_avg_change_pct !== undefined ? Number(metrics.market_signal_avg_change_pct).toFixed(2) : "-"}</p>`;
+      watchBody.innerHTML = `${section(t("weeklyThisWeek"), thisWeek)}${section(t("weeklyNextWeek"), nextWeek)}${section(t("weeklyRiskTip"), riskFlags)}<p><strong>${t("weeklySummaryMarketSignal")}:</strong> ${metrics.market_signal_avg_change_pct !== null && metrics.market_signal_avg_change_pct !== undefined ? Number(metrics.market_signal_avg_change_pct).toFixed(2) : "-"}</p>`;
       leaderBody.innerHTML = `<p><strong>${t("aiPcbTier1")}:</strong> ${(leaders.tier1 || []).join(", ") || "-"}</p><p><strong>${t("aiPcbTier2")}:</strong> ${(leaders.tier2 || []).join(", ") || "-"}</p><p><strong>${t("aiPcbTier3")}:</strong> ${(leaders.tier3 || []).join(", ") || "-"}</p>`;
       heatBody.innerHTML = `<p><strong>${t("aiPcbShortageLevel")}:</strong> ${displayShortage(metrics.shortage_level || "Medium")}</p><p><strong>${t("aiPcbShortageScore")}:</strong> ${metrics.shortage_score ?? "-"}</p><p><strong>${t("aiPcbDeliveryPressure")}:</strong> ${metrics.delivery_pressure_score ?? "-"}</p><p><strong>${t("aiPcbDemandHeat")}:</strong> ${metrics.demand_heat_score ?? "-"}</p><p><strong>${t("aiPcbSupplyTightness")}:</strong> ${metrics.supply_tightness_score ?? "-"}</p><p><strong>${t("weeklySummaryMarketSignal")}:</strong> ${marketSignal !== null ? marketSignal.toFixed(2) : "-"}${quoteCount !== null ? ` | ${quoteCount}` : ""}</p>`;
       actionBody.innerHTML = list(actions);
