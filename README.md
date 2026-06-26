@@ -36,6 +36,23 @@
 - `reports/dongchedi_daily/<date>/`
 - 典型产物: `filtered.csv`, `filtered.json`, `summary.md`, `confluence_section.html`
 
+### 4) Resume Tailor Studio (HTML + JD)
+
+用途:
+- 输入现有简历 HTML 链接（本地 `file:///` 或线上 `https://`）。
+- 输入 JD 文本，或上传 JD 图片（OCR）。
+- 生成保留原页面结构的新适配简历 HTML。
+
+启动:
+- `./.venv/Scripts/python.exe ./scripts/resume_tailor_web.py --port 8787`
+- 浏览器打开: `http://127.0.0.1:8787`
+
+说明:
+- 默认输出目录: `reports/resume_tailoring/<date>_web/`
+- 默认改写版本: `aggressive`
+- 支持版本: `conservative|balanced|aggressive`
+- 若仅上传 JD 图片，需要配置 `OPENAI_API_KEY`（可选 `OPENAI_BASE_URL`）
+
 ### 2) dongchedi-site-sync-after-daily
 
 用途:
@@ -79,3 +96,31 @@
 模板文件:
 - `.github/skills/vikipedia-github-landing-sync/templates/vikipedia/scripts/sync_github_projects.py`
 - `.github/skills/vikipedia-github-landing-sync/templates/vikipedia/.github/workflows/sync-github-projects.yml`
+
+## Personal Knowledge Base
+
+用途:
+- 把对话产出、网站搭建过程、技能训练过程和任务日志汇总为可复用知识库快照。
+
+命令:
+- `./.venv/Scripts/python.exe ./scripts/build_personal_knowledge_base.py`
+- 可选参数: `--date YYYY-MM-DD --top-skills 12 --recent-limit 15`
+
+输出:
+- `reports/knowledge_base/<date>/personal_kb.md`
+- `reports/knowledge_base/<date>/personal_kb.json`
+- `reports/knowledge_base/latest.md`
+- `reports/knowledge_base/index.html`
+- `reports/knowledge_base/latest.html`
+
+定时更新:
+- `./scripts/register_personal_kb_daily_task.ps1`
+- 运行器: `./scripts/run_personal_kb_task_runner.ps1 -Mode run`
+
+结构化决策日志:
+- `./.venv/Scripts/python.exe ./scripts/add_decision_log_entry.py --title "title" --decision "decision"`
+- 模板: `reports/knowledge_base/templates/decision_note_template.md`
+- 输出: `reports/knowledge_base/notes/YYYY-MM-DD_decisions.md`
+
+说明文档:
+- `docs/personal_knowledge_base.md`

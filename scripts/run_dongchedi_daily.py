@@ -27,6 +27,10 @@ OUTPUT_COLUMNS = [
     "品牌",
     "动力形式",
     "价格(万元)",
+    "亮点标签",
+    "6C快充标签",
+    "换电支持",
+    "ADAS配置",
     "纯电续航里程(km)工信部",
     "纯电续航里程(km)CLTC",
     "电池能量密度(Wh/kg)",
@@ -39,11 +43,14 @@ OUTPUT_COLUMNS = [
     "电池容量(kWh)",
     "电芯品牌",
     "电池类型",
+    "电动机",
+    "电控系统",
+    "发电机马力(Ps)",
     "缺失状态",
     "数据状态",
 ]
 
-KEY_FIELDS_FOR_MISSING = ["高压快充平台", "充电时间", "充电电量", "电池容量(kWh)", "电芯品牌", "电池类型"]
+KEY_FIELDS_FOR_MISSING = ["高压快充平台", "充电时间", "充电电量", "电池容量(kWh)", "电芯品牌", "电池类型", "换电支持", "ADAS配置"]
 
 
 def _clean(value: Any) -> str:
@@ -161,6 +168,75 @@ def _parse_platform_voltage(platform_text: str) -> float | None:
     if m:
         return float(m.group(1))
     return None
+
+
+def _infer_powertrain_scope(power_text: str, mode: str) -> bool:
+    power = _clean(power_text)
+    if mode == "all":
+        return True
+    if mode == "nev":
+        return any(token in power for token in ["纯电", "增程", "插电", "混动", "油电"])
+    return "纯电" in power
+
+
+def _infer_6c_tag(platform_text: str, charge_time_text: str, model_name: str) -> str:
+    combined = " ".join([_clean(platform_text), _clean(charge_time_text), _clean(model_name)]).lower()
+    if "6c" in combined:
+        return "6C"
+    fast_minutes = _parse_fast_charge_minutes(charge_time_text)
+    if fast_minutes is not None and fast_minutes <= 10:
+        return "疑似6C级快充"
+    return "未明确显示"
+
+
+def _infer_swap_support(row: dict[str, str], model_name: str) -> str:
+    source_value = _clean(row.get("换电支持")) or _clean(row.get("换电"))
+    if source_value:
+        return source_value
+    combined = f"{_clean(model_name)} {_clean(row.get('品牌'))}"
+    if any(token in combined for token in ["乐道", "蔚来", "firefly", "萤火虫"]):
+        return "支持换电"
+    return "未明确显示"
+
+
+def _infer_adas(row: dict[str, str], model_name: str) -> str:
+    source_value = _clean(row.get("ADAS配置")) or _clean(row.get("辅助驾驶")) or _clean(row.get("智能辅助驾驶"))
+    if source_value:
+        return source_value
+    combined = " ".join([model_name, _clean(row.get("车型")), _clean(row.get("动力形式"))])
+    tags = []
+    if any(token in combined for token in ["激光雷达", "城区辅助驾驶", "智驾", "乾崑", "辅助驾驶"]):
+        tags.append("高阶辅助驾驶线索")
+    if any(token in combined for token in ["Max", "Ultra", "旗舰"]):
+        tags.append("高配智驾版本线索")
+    return " / ".join(tags) if tags else "未明确显示"
+
+
+def _infer_highlight_tags(row: dict[str, str], model_name: str, platform_text: str, charge_time_text: str) -> str:
+    tags: list[str] = []
+    voltage = _parse_platform_voltage(platform_text)
+    fast_minutes = _parse_fast_charge_minutes(charge_time_text)
+    range_cltc = _extract_first_number(_clean(row.get("纯电续航里程(km)CLTC")) or _clean(row.get("纯电续航里程(km)工信部")))
+    tag_6c = _infer_6c_tag(platform_text, charge_time_text, model_name)
+    swap_support = _infer_swap_support(row, model_name)
+    adas = _infer_adas(row, model_name)
+    if voltage is not None and voltage >= 800:
+        tags.append("800V+")
+    if tag_6c != "未明确显示":
+        tags.append(tag_6c)
+    if fast_minutes is not None and fast_minutes <= 12:
+        tags.append("超充<=12分钟")
+    if range_cltc is not None and range_cltc >= 700:
+        tags.append("长续航700+")
+    if swap_support != "未明确显示":
+        tags.append("换电")
+    if adas != "未明确显示":
+        tags.append("ADAS")
+    if "增程" in _clean(row.get("动力形式")):
+        tags.append("增程")
+    if "插电" in _clean(row.get("动力形式")) or "混动" in _clean(row.get("动力形式")):
+        tags.append("混动")
+    return "、".join(dict.fromkeys(tags)) if tags else "未明确显示"
 
 
 def _load_csv_rows(path: Path) -> list[dict[str, str]]:
@@ -285,6 +361,10 @@ def _to_output_row(row: dict[str, str], run_date: str, price_wan: float, data_st
     charge_time_text = _clean(row.get("充电时间")) or "未明确显示"
     charge_window_text = _clean(row.get("充电电量")) or _clean(row.get("快充电量(%)")) or "未明确显示"
     platform_text = _clean(row.get("高压快充平台")) or "未明确显示"
+    adas_text = _infer_adas(row, model_name)
+    swap_support = _infer_swap_support(row, model_name)
+    six_c_tag = _infer_6c_tag(platform_text, charge_time_text, model_name)
+    highlight_tags = _infer_highlight_tags(row, model_name, platform_text, charge_time_text)
 
     fast_minutes = _parse_fast_charge_minutes(charge_time_text)
     charge_window_span = _parse_charge_window_span(charge_window_text)
@@ -297,6 +377,10 @@ def _to_output_row(row: dict[str, str], run_date: str, price_wan: float, data_st
         "品牌": _brand_name(model_name),
         "动力形式": _clean(row.get("动力形式")) or "纯电动",
         "价格(万元)": f"{price_wan:.2f}",
+        "亮点标签": highlight_tags,
+        "6C快充标签": six_c_tag,
+        "换电支持": swap_support,
+        "ADAS配置": adas_text,
         "纯电续航里程(km)工信部": _clean(row.get("纯电续航里程(km)工信部")) or "未明确显示",
         "纯电续航里程(km)CLTC": _clean(row.get("纯电续航里程(km)CLTC")) or "未明确显示",
         "电池能量密度(Wh/kg)": _clean(row.get("电池能量密度(Wh/kg)")) or "未明确显示",
@@ -309,6 +393,9 @@ def _to_output_row(row: dict[str, str], run_date: str, price_wan: float, data_st
         "电池容量(kWh)": _clean(row.get("电池容量(kWh)")) or "未明确显示",
         "电芯品牌": _clean(row.get("电芯品牌")) or "未明确显示",
         "电池类型": _clean(row.get("电池类型")) or "未明确显示",
+        "电动机": _clean(row.get("电动机")) or "未明确显示",
+        "电控系统": _clean(row.get("电控系统")) or _clean(row.get("电控")) or "未明确显示",
+        "发电机马力(Ps)": _clean(row.get("发电机马力(Ps)")) or _clean(row.get("发电机马力")) or "未明确显示",
         "缺失状态": "",
         "数据状态": data_status,
     }
@@ -351,6 +438,10 @@ def _rows_to_markdown(rows: list[dict[str, str]]) -> str:
         "品牌",
         "车型",
         "价格(万元)",
+        "亮点标签",
+        "6C快充标签",
+        "换电支持",
+        "ADAS配置",
         "纯电续航里程(km)工信部",
         "纯电续航里程(km)CLTC",
         "电池能量密度(Wh/kg)",
@@ -363,6 +454,9 @@ def _rows_to_markdown(rows: list[dict[str, str]]) -> str:
         "电池容量(kWh)",
         "电芯品牌",
         "电池类型",
+        "电动机",
+        "电控系统",
+        "发电机马力(Ps)",
         "缺失状态",
         "数据状态",
     ]
@@ -386,6 +480,10 @@ def _rows_to_html_table(rows: list[dict[str, str]]) -> str:
         "品牌",
         "车型",
         "价格(万元)",
+        "亮点标签",
+        "6C快充标签",
+        "换电支持",
+        "ADAS配置",
         "纯电续航里程(km)工信部",
         "纯电续航里程(km)CLTC",
         "电池能量密度(Wh/kg)",
@@ -398,6 +496,9 @@ def _rows_to_html_table(rows: list[dict[str, str]]) -> str:
         "电池容量(kWh)",
         "电芯品牌",
         "电池类型",
+        "电动机",
+        "电控系统",
+        "发电机马力(Ps)",
         "缺失状态",
         "数据状态",
     ]
@@ -527,6 +628,8 @@ def _build_summary_blocks(rows: list[dict[str, str]]) -> str:
     text.append(f"- 在售样本车型: {count_all}")
     text.append(f"- 800V及以上平台车型: {with_800v} ({with_800v / count_all * 100:.1f}%)")
     text.append(f"- 平均快充时间(分钟): {sum(avg_fast) / len(avg_fast):.1f}" if avg_fast else "- 平均快充时间(分钟): 未明确显示")
+    text.append(f"- 带换电标签车型: {sum(1 for r in rows if not _is_missing(r.get('换电支持', '')) and '未明确' not in _clean(r.get('换电支持', '')))}")
+    text.append(f"- 带ADAS标签车型: {sum(1 for r in rows if not _is_missing(r.get('ADAS配置', '')) and '未明确' not in _clean(r.get('ADAS配置', '')))}")
     text.append("")
 
     text.append("## 品牌分组")
@@ -598,6 +701,8 @@ def _build_summary_blocks_html(rows: list[dict[str, str]]) -> str:
         blocks.append(f"<li>平均快充时间(分钟): {sum(avg_fast) / len(avg_fast):.1f}</li>")
     else:
         blocks.append("<li>平均快充时间(分钟): 未明确显示</li>")
+    blocks.append(f"<li>带换电标签车型: {sum(1 for r in rows if not _is_missing(r.get('换电支持', '')) and '未明确' not in _clean(r.get('换电支持', '')))}</li>")
+    blocks.append(f"<li>带ADAS标签车型: {sum(1 for r in rows if not _is_missing(r.get('ADAS配置', '')) and '未明确' not in _clean(r.get('ADAS配置', '')))}</li>")
     blocks.append("</ul>")
 
     blocks.append("<h3>品牌分组</h3>")
@@ -663,7 +768,8 @@ def _sort_rows_for_report(rows: list[dict[str, str]]) -> list[dict[str, str]]:
 
 
 def _load_dotenv_once() -> None:
-    load_dotenv(ROOT / ".env")
+    # Use utf-8-sig so .env files saved with BOM still parse the first key correctly.
+    load_dotenv(ROOT / ".env", encoding="utf-8-sig")
 
 
 def _confluence_request_once(
@@ -908,7 +1014,7 @@ def run(args: argparse.Namespace) -> int:
             continue
 
         power = _clean(row.get("动力形式"))
-        if "纯电" not in power:
+        if not _infer_powertrain_scope(power, args.powertrain_mode):
             continue
 
         price_wan = _resolve_price(row, pair_price_map, series_price_map, source_price_cols)
@@ -963,7 +1069,7 @@ def run(args: argparse.Namespace) -> int:
         f"# 懂车帝充电日报 {run_date}",
         "",
         f"- 数据源: {source_file.name}",
-        f"- 筛选规则: 价格>{args.price_threshold_wan}万 且 纯电车型",
+        f"- 筛选规则: 价格>{args.price_threshold_wan}万 且 动力范围={args.powertrain_mode}",
         f"- 当日总车型: {len(final_rows)}",
         f"- 昨日沿用车型: {sum(1 for r in final_rows if r.get('数据状态') != '当日采集')}",
         f"- 新增车型: {diff['added_count']}",
@@ -1044,6 +1150,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--source", default="", help="Source CSV path. Defaults to latest dongchedi_full_configs_*.csv")
     parser.add_argument("--price-map", default=str(PRICE_MAP_DEFAULT), help="Price mapping CSV path.")
     parser.add_argument("--price-threshold-wan", type=float, default=20.0, help="Price threshold in 万元.")
+    parser.add_argument(
+        "--powertrain-mode",
+        choices=["pure_ev", "nev", "all"],
+        default="pure_ev",
+        help="Filter scope for 动力形式. Defaults to pure_ev to preserve existing behavior.",
+    )
     parser.add_argument(
         "--no-backfill-missing",
         action="store_true",

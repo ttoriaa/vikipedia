@@ -26,6 +26,54 @@
         "false"
       ],
       "default": "false"
+    },
+    {
+      "id": "kbDecisionDate",
+      "type": "promptString",
+      "description": "Decision date (YYYY-MM-DD, leave empty for today)",
+      "default": ""
+    },
+    {
+      "id": "kbDecisionTitle",
+      "type": "promptString",
+      "description": "Decision title"
+    },
+    {
+      "id": "kbDecisionContext",
+      "type": "promptString",
+      "description": "Decision context"
+    },
+    {
+      "id": "kbDecisionDecision",
+      "type": "promptString",
+      "description": "Decision made"
+    },
+    {
+      "id": "kbDecisionRationale",
+      "type": "promptString",
+      "description": "Decision rationale"
+    },
+    {
+      "id": "kbDecisionImpact",
+      "type": "promptString",
+      "description": "Expected impact"
+    },
+    {
+      "id": "kbDecisionNext",
+      "type": "promptString",
+      "description": "Next action"
+    },
+    {
+      "id": "kbDecisionOwner",
+      "type": "promptString",
+      "description": "Decision owner",
+      "default": "Vickie"
+    },
+    {
+      "id": "kbDecisionTags",
+      "type": "promptString",
+      "description": "Tags (comma-separated)",
+      "default": "knowledge-base,decision"
     }
   ],
   "tasks": [
@@ -114,6 +162,171 @@
         "${input:dongchediSiteSyncDeploy}",
         "-DispatchWorkflow",
         "${input:dongchediSiteSyncDispatch}"
+      ],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Market Watch: Intraday Dry Run",
+      "type": "shell",
+      "command": ".\\.venv\\Scripts\\python.exe",
+      "args": [
+        ".\\scripts\\update_market_watch_data.py",
+        "--snapshot-type",
+        "intraday",
+        "--skip-news",
+        "--request-timeout",
+        "6",
+        "--dry-run"
+      ],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Market Watch: Intraday",
+      "type": "shell",
+      "command": ".\\.venv\\Scripts\\python.exe",
+      "args": [
+        ".\\scripts\\update_market_watch_data.py",
+        "--snapshot-type",
+        "intraday"
+      ],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Market Watch: Post Close",
+      "type": "shell",
+      "command": ".\\.venv\\Scripts\\python.exe",
+      "args": [
+        ".\\scripts\\update_market_watch_data.py",
+        "--snapshot-type",
+        "post_close"
+      ],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Market Watch: Notify Dry Run",
+      "type": "shell",
+      "command": ".\\.venv\\Scripts\\python.exe",
+      "args": [
+        ".\\scripts\\update_market_watch_data.py",
+        "--snapshot-type",
+        "intraday",
+        "--skip-news",
+        "--request-timeout",
+        "6",
+        "--notify-dry-run"
+      ],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Market Watch: Post Close Dry Run",
+      "type": "shell",
+      "command": ".\\.venv\\Scripts\\python.exe",
+      "args": [
+        ".\\scripts\\update_market_watch_data.py",
+        "--snapshot-type",
+        "post_close",
+        "--skip-news",
+        "--request-timeout",
+        "6",
+        "--dry-run"
+      ],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Daily Market News: Dry Run",
+      "type": "shell",
+      "command": ".\\.venv\\Scripts\\python.exe",
+      "args": [
+        ".\\scripts\\run_daily_market_news.py",
+        "--dry-run",
+        "true",
+        "--mode",
+        "mixed",
+        "--markets",
+        "us,cn,kr,hk"
+      ],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Daily Market News: Run",
+      "type": "shell",
+      "command": ".\\.venv\\Scripts\\python.exe",
+      "args": [
+        ".\\scripts\\run_daily_market_news.py",
+        "--dry-run",
+        "false",
+        "--mode",
+        "mixed",
+        "--markets",
+        "us,cn,kr,hk"
+      ],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Unified Daily Brief: Dry Run",
+      "type": "shell",
+      "command": ".\\.venv\\Scripts\\python.exe",
+      "args": [
+        ".\\scripts\\build_unified_daily_brief.py",
+        "--dry-run"
+      ],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Unified Daily Brief: Run",
+      "type": "shell",
+      "command": ".\\.venv\\Scripts\\python.exe",
+      "args": [
+        ".\\scripts\\build_unified_daily_brief.py"
+      ],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Personal KB: Refresh",
+      "type": "shell",
+      "command": ".\\.venv\\Scripts\\python.exe",
+      "args": [
+        ".\\scripts\\build_personal_knowledge_base.py"
+      ],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Personal KB: Add Decision Note",
+      "type": "shell",
+      "command": ".\\.venv\\Scripts\\python.exe",
+      "args": [
+        ".\\scripts\\add_decision_log_entry.py",
+        "--date",
+        "${input:kbDecisionDate}",
+        "--title",
+        "${input:kbDecisionTitle}",
+        "--context",
+        "${input:kbDecisionContext}",
+        "--decision",
+        "${input:kbDecisionDecision}",
+        "--rationale",
+        "${input:kbDecisionRationale}",
+        "--impact",
+        "${input:kbDecisionImpact}",
+        "--next",
+        "${input:kbDecisionNext}",
+        "--owner",
+        "${input:kbDecisionOwner}",
+        "--source",
+        "chat",
+        "--tags",
+        "${input:kbDecisionTags}"
       ],
       "group": "build",
       "problemMatcher": []

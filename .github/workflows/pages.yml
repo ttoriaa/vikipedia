@@ -39,6 +39,12 @@ jobs:
             cp -R market_watch out/market_watch
           fi
           cp index.html out/index.html
+          if [ -f ai_hardware_industry_chain_dashboard.html ]; then
+            cp ai_hardware_industry_chain_dashboard.html out/ai_hardware_industry_chain_dashboard.html
+          fi
+          if [ -f c7_regulation_tabs.html ]; then
+            cp c7_regulation_tabs.html out/c7_regulation_tabs.html
+          fi
           if [ -d assets/landing-previews ]; then
             cp assets/landing-previews/*.png out/assets/landing-previews/
           fi
@@ -54,6 +60,10 @@ jobs:
           if [ -d assets/token ]; then
             mkdir -p out/assets
             cp -R assets/token out/assets/token
+          fi
+          if [ -d assets/ai-hardware-industry-chain ]; then
+            mkdir -p out/assets
+            cp -R assets/ai-hardware-industry-chain out/assets/ai-hardware-industry-chain
           fi
 
       - name: Setup Pages

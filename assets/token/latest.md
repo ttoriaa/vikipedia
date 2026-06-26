@@ -1,6 +1,6 @@
 # Personal Knowledge Base Snapshot
 
-- Generated at: 2026-06-24 13:11:38
+- Generated at: 2026-06-25 22:10:07
 - Workspace: vikipedia-agents
 
 ## 1) What This Captures
@@ -28,27 +28,28 @@
 
 ## 3) Website Build Snapshot
 
-- Root html pages: 11
-- Site html pages: 26
-- index.html (updated: 2026-06-24 12:05:41)
-- reports/knowledge_base/latest.html (updated: 2026-06-24 11:57:54)
-- reports/knowledge_base/latest.zh.html (updated: 2026-06-24 11:57:54)
-- reports/knowledge_base/index.zh.html (updated: 2026-06-24 11:57:54)
-- reports/knowledge_base/index.html (updated: 2026-06-24 11:57:54)
-- reports/knowledge_base/2026-06-24/personal_kb.html (updated: 2026-06-24 11:57:54)
-- reports/knowledge_base/2026-06-24/personal_kb.zh.html (updated: 2026-06-24 11:57:54)
-- site/insights.html (updated: 2026-06-24 11:17:32)
-- site/dashboard.html (updated: 2026-06-24 11:17:32)
-- site/data.html (updated: 2026-06-24 11:17:32)
-- site/latest/index.html (updated: 2026-06-24 11:17:32)
-- site/reports/2026-06-24/summary.html (updated: 2026-06-24 11:17:32)
-- site/reports/2026-06-23/summary.html (updated: 2026-06-24 11:17:32)
-- site/reports/2026-06-22/summary.html (updated: 2026-06-24 11:17:32)
-- site/reports/2026-06-17/summary.html (updated: 2026-06-24 11:17:32)
+- Root html pages: 12
+- Site html pages: 29
+- assets/token/latest.zh.html (updated: 2026-06-25 21:40:09)
+- assets/token/latest.html (updated: 2026-06-25 21:40:09)
+- assets/token/index.zh.html (updated: 2026-06-25 21:40:09)
+- assets/token/index.html (updated: 2026-06-25 21:40:09)
+- reports/knowledge_base/latest.zh.html (updated: 2026-06-25 21:40:09)
+- reports/knowledge_base/latest.html (updated: 2026-06-25 21:40:09)
+- reports/knowledge_base/index.zh.html (updated: 2026-06-25 21:40:09)
+- reports/knowledge_base/index.html (updated: 2026-06-25 21:40:09)
+- reports/knowledge_base/2026-06-25/personal_kb.zh.html (updated: 2026-06-25 21:40:09)
+- reports/knowledge_base/2026-06-25/personal_kb.html (updated: 2026-06-25 21:40:09)
+- reports/dongchedi_daily/2026-06-25/confluence_section.html (updated: 2026-06-25 17:29:20)
+- ze51_scope.html (updated: 2026-06-25 17:25:02)
+- vickie_resume_profile_en.html (updated: 2026-06-25 17:25:02)
+- vickie_resume_profile.html (updated: 2026-06-25 17:25:01)
+- vickie_jd_match_ai_strategy.html (updated: 2026-06-25 17:25:01)
 
 ## 4) Pipeline and Reports Snapshot
 
 ### Recent Dongchedi Daily Summaries
+- reports/dongchedi_daily/2026-06-25/summary.md (updated: 2026-06-25 17:29:20)
 - reports/dongchedi_daily/2026-06-24/summary.md (updated: 2026-06-24 10:34:58)
 - reports/dongchedi_daily/2026-06-23/summary.md (updated: 2026-06-23 14:17:05)
 - reports/dongchedi_daily/2026-06-22/summary.md (updated: 2026-06-22 10:03:26)
@@ -63,7 +64,6 @@
 - reports/dongchedi_daily/2026-06-13/summary.md (updated: 2026-06-13 20:44:06)
 - reports/dongchedi_daily/2026-06-12/summary.md (updated: 2026-06-12 10:11:06)
 - reports/dongchedi_daily/2026-06-07/summary.md (updated: 2026-06-12 10:11:05)
-- reports/dongchedi_daily/2026-06-06/summary.md (updated: 2026-06-12 10:11:05)
 
 ### Recent Daily Brief / Daily News
 - reports/daily_brief/2026-06-23/daily_brief_2026-06-23.md (updated: 2026-06-23 14:34:48)
@@ -71,31 +71,31 @@
 - reports/daily_market_news/2026-06-22/daily_market_news_2026-06-22.md (updated: 2026-06-22 18:33:07)
 
 ### GitHub Projects Feed
-- Project count: 6
-- Feed generated at: 2026-06-24T03:49:33.200056+00:00
-- vikipedia: https://ttoriaa.github.io/vikipedia/ (pushed: 2026-06-24T03:21:54Z)
-- shimai-podcast-site: https://ttoriaa.github.io/shimai-podcast-site/ (pushed: 2026-06-24T01:24:53Z)
+- Project count: 7
+- Feed generated at: 2026-06-25T14:10:07.155136+00:00
+- shimai-podcast-site: https://ttoriaa.github.io/shimai-podcast-site/ (pushed: 2026-06-25T13:35:19Z)
+- vikipedia: https://ttoriaa.github.io/vikipedia/ (pushed: 2026-06-25T09:21:53Z)
+- C7-OTA-Hub: https://ttoriaa.github.io/C7-OTA-Hub/ (pushed: 2026-06-25T06:29:03Z)
 - market-research: https://ttoriaa.github.io/market-research/ (pushed: 2026-06-22T05:53:35Z)
 - automotive-benchmarking: https://ttoriaa.github.io/automotive-benchmarking/ (pushed: 2026-06-17T09:11:11Z)
-- gaming-vikipedia: https://ttoriaa.github.io/gaming-vikipedia/ (pushed: 2026-06-16T08:35:25Z)
 
 ## 5) Task Execution Evidence
 
+- reports/task_logs/token_github_daily_task_2026-06-25_221004.log (updated: 2026-06-25 22:10:04) | ﻿[2026-06-25T22:10:04] START token github daily task mode=run username=ttoriaa limit=12 top_skills=12 recent_limit=15
+- reports/task_logs/token_github_daily_task_2026-06-25_214004.log (updated: 2026-06-25 21:40:09) | ﻿[2026-06-25T21:40:04] START token github daily task mode=run username=ttoriaa limit=12 top_skills=12 recent_limit=15
+- reports/task_logs/charging_healthcheck_2026-06-25_110009.log (updated: 2026-06-25 11:00:09) | ﻿[2026-06-25T11:00:09] START charging healthcheck
+- reports/task_logs/charging_healthcheck_2026-06-25_100004.log (updated: 2026-06-25 10:00:04) | ﻿[2026-06-25T10:00:04] START charging healthcheck
+- reports/task_logs/charging_task_2026-06-25_093004.log (updated: 2026-06-25 09:30:09) | ﻿[2026-06-25T09:30:04] START charging task
+- reports/task_logs/motor_task_2026-06-25_093003.log (updated: 2026-06-25 09:30:03) | ﻿[2026-06-25T09:30:03] SKIP motor task because another instance is running
+- reports/task_logs/charging_task_2026-06-25_091005.log (updated: 2026-06-25 09:10:12) | ﻿[2026-06-25T09:10:05] START charging task
+- reports/task_logs/motor_task_2026-06-25_091005.log (updated: 2026-06-25 09:10:05) | ﻿[2026-06-25T09:10:05] SKIP motor task because another instance is running
+- reports/task_logs/charging_task_2026-06-25_090005.log (updated: 2026-06-25 09:00:12) | ﻿[2026-06-25T09:00:05] START charging task
+- reports/task_logs/motor_task_2026-06-25_090005.log (updated: 2026-06-25 09:00:05) | ﻿[2026-06-25T09:00:05] SKIP motor task because another instance is running
+- reports/task_logs/token_github_daily_task_2026-06-24_221003.log (updated: 2026-06-24 22:10:07) | ﻿[2026-06-24T22:10:03] START token github daily task mode=run username=ttoriaa limit=12 top_skills=12 recent_limit=15
+- reports/task_logs/token_github_daily_task_2026-06-24_214003.log (updated: 2026-06-24 21:40:23) | ﻿[2026-06-24T21:40:03] START token github daily task mode=run username=ttoriaa limit=12 top_skills=12 recent_limit=15
 - reports/task_logs/token_github_daily_task_2026-06-24_114931.log (updated: 2026-06-24 11:49:33) | ﻿[2026-06-24T11:49:31] START token github daily task mode=dry-run username=ttoriaa limit=12 top_skills=12 recent_limit=15
 - reports/task_logs/token_github_daily_task_2026-06-24_114920.log (updated: 2026-06-24 11:49:23) | ﻿[2026-06-24T11:49:20] START token github daily task mode=dry-run username=ttoriaa limit=12 top_skills=12 recent_limit=15
 - reports/task_logs/charging_healthcheck_2026-06-24_110005.log (updated: 2026-06-24 11:00:05) | ﻿[2026-06-24T11:00:05] START charging healthcheck
-- reports/task_logs/charging_healthcheck_2026-06-24_100010.log (updated: 2026-06-24 10:00:10) | ﻿[2026-06-24T10:00:10] START charging healthcheck
-- reports/task_logs/charging_healthcheck_2026-06-23_110005.log (updated: 2026-06-23 11:00:05) | ﻿[2026-06-23T11:00:05] START charging healthcheck
-- reports/task_logs/charging_healthcheck_2026-06-23_100324.log (updated: 2026-06-23 10:03:24) | ﻿[2026-06-23T10:03:24] START charging healthcheck
-- reports/task_logs/charging_task_2026-06-23_093606.log (updated: 2026-06-23 09:36:20) | ﻿[2026-06-23T09:36:06] START charging task
-- reports/task_logs/motor_task_2026-06-23_093606.log (updated: 2026-06-23 09:36:06) | ﻿[2026-06-23T09:36:06] SKIP motor task because another instance is running
-- reports/task_logs/charging_task_2026-06-23_093038.log (updated: 2026-06-23 09:30:59) | ﻿[2026-06-23T09:30:38] START charging task
-- reports/task_logs/motor_task_2026-06-23_093038.log (updated: 2026-06-23 09:30:38) | ﻿[2026-06-23T09:30:38] SKIP motor task because another instance is running
-- reports/task_logs/charging_healthcheck_2026-06-22_110004.log (updated: 2026-06-22 11:00:04) | ﻿[2026-06-22T11:00:04] START charging healthcheck
-- reports/task_logs/charging_healthcheck_2026-06-22_100015.log (updated: 2026-06-22 10:00:15) | ﻿[2026-06-22T10:00:15] START charging healthcheck
-- reports/task_logs/charging_task_2026-06-22_094643.log (updated: 2026-06-22 09:47:38) | ﻿[2026-06-22T09:46:43] START charging task
-- reports/task_logs/charging_healthcheck_2026-06-22_094643.log (updated: 2026-06-22 09:46:43) | ﻿[2026-06-22T09:46:43] START charging healthcheck
-- reports/task_logs/motor_task_2026-06-22_094643.log (updated: 2026-06-22 09:46:43) | ﻿[2026-06-22T09:46:43] SKIP motor task because another instance is running
 
 ## 6) Suggested Knowledge Workflow
 
@@ -107,14 +107,14 @@
 ## 7) Auto Summary and Lessons
 
 ### Overview
-- Snapshot covers 22 tracked skills, 11 root HTML pages, and 26 site HTML pages.
+- Snapshot covers 22 tracked skills, 12 root HTML pages, and 29 site HTML pages.
 - Evidence pool includes 15 Dongchedi summaries, 3 daily brief/news files, and 15 recent task logs.
-- GitHub landing feed currently tracks 6 projects for Token/landing updates.
+- GitHub landing feed currently tracks 7 projects for Token/landing updates.
 - Decision memory currently contains 1 recent structured entries.
 
 ### Patterns Observed
 - Website updates are concentrated in reports/knowledge_base (6 files in recent snapshot).
-- Reporting activity clusters around reports/dongchedi_daily/2026-06-24 (1 files in recent snapshot).
+- Reporting activity clusters around reports/dongchedi_daily/2026-06-25 (1 files in recent snapshot).
 - Task execution cadence is stable: logs show repeated automated runs rather than sporadic manual-only updates.
 
 ### Experience and Lessons
