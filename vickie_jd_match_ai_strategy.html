@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JD Match Report | AI Strategy Role</title>
+  <style>
+    :root {
+      --bg-1: #f2efe8;
+      --bg-2: #dfe9e6;
+      --ink: #1f2b35;
+      --muted: #5e6d77;
+      --card: rgba(255, 255, 255, 0.86);
+      --line: rgba(31, 43, 53, 0.14);
+      --green: #18684f;
+      --amber: #9f6a16;
+      --blue: #234c8e;
+      --shadow: 0 14px 34px rgba(24, 35, 46, 0.14);
+      --radius-lg: 24px;
+      --radius-md: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Avenir Next", "Segoe UI", "Trebuchet MS", sans-serif;
+      background:
+        radial-gradient(circle at 7% 8%, rgba(24, 104, 79, 0.16), transparent 40%),
+        radial-gradient(circle at 92% 11%, rgba(35, 76, 142, 0.16), transparent 36%),
+        linear-gradient(136deg, var(--bg-1), var(--bg-2));
+      min-height: 100vh;
+      padding: 20px 12px 34px;
+    }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: grid;
+      gap: 14px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: 30px;
+      background: linear-gradient(132deg, #173f60 0%, #154f4b 52%, #24324f 100%);
+      color: #f2f8fb;
+      padding: 28px;
+      box-shadow: 0 18px 46px rgba(16, 30, 48, 0.3);
+      animation: rise 560ms ease-out;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -70px;
+      top: -94px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.26), transparent 68%);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: end;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4.4vw, 50px);
+      letter-spacing: 0.5px;
+      line-height: 1.1;
+    }
+
+    .subtitle {
+      margin: 8px 0 0;
+      font-size: clamp(15px, 2.1vw, 21px);
+      color: rgba(242, 248, 251, 0.95);
+    }
+
+    .hero-badges {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .hero-badges span {
+      border: 1px solid rgba(242, 248, 251, 0.34);
+      border-radius: 999px;
+      padding: 6px 11px;
+      font-size: 13px;
+      color: rgba(242, 248, 251, 0.97);
+    }
+
+    .fit-chip {
+      align-self: start;
+      border-radius: 14px;
+      padding: 12px 14px;
+      min-width: 170px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.26);
+      text-align: center;
+      backdrop-filter: blur(3px);
+    }
+
+    .fit-chip strong {
+      display: block;
+      font-size: 34px;
+      line-height: 1.05;
+    }
+
+    .fit-chip small {
+      font-size: 12px;
+      color: rgba(242, 248, 251, 0.86);
+      letter-spacing: 0.6px;
+    }
+
+    .section {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      animation: rise 720ms ease-out;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 23px;
+      letter-spacing: 0.2px;
+    }
+
+    .meta-note {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .metric {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 14px;
+    }
+
+    .metric h3 {
+      margin: 0;
+      font-size: 15px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .metric p {
+      margin: 8px 0 0;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 940px;
+    }
+
+    th,
+    td {
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid rgba(31, 43, 53, 0.1);
+      padding: 11px;
+      font-size: 14px;
+      line-height: 1.54;
+    }
+
+    th {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.45px;
+      color: #2f4c72;
+      background: #f7fafc;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .badge {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+    }
+
+    .strong {
+      background: rgba(24, 104, 79, 0.14);
+      color: var(--green);
+      border: 1px solid rgba(24, 104, 79, 0.28);
+    }
+
+    .medium {
+      background: rgba(159, 106, 22, 0.14);
+      color: var(--amber);
+      border: 1px solid rgba(159, 106, 22, 0.3);
+    }
+
+    .light {
+      background: rgba(35, 76, 142, 0.14);
+      color: var(--blue);
+      border: 1px solid rgba(35, 76, 142, 0.3);
+    }
+
+    .panel-list {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 8px;
+      line-height: 1.56;
+    }
+
+    .footer {
+      text-align: right;
+      color: var(--muted);
+      font-size: 12px;
+      padding-right: 4px;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 920px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .fit-chip {
+        min-width: 0;
+        max-width: 220px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .hero {
+        padding: 22px 18px;
+      }
+
+      .section {
+        padding: 16px;
+      }
+
+      body {
+        padding: 12px 10px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="hero">
+      <div class="hero-grid">
+        <div>
+          <h1>AI Strategy Role Match</h1>
+          <p class="subtitle">Candidate: Wentao Vickie Li | Evidence-based fit against provided JD</p>
+          <div class="hero-badges">
+            <span>Automotive Data Domain</span>
+            <span>Cross-Functional Delivery</span>
+            <span>RAG / AI Agent Practice</span>
+            <span>Bilingual Communication</span>
+          </div>
+        </div>
+        <div class="fit-chip">
+          <small>Overall Match</small>
+          <strong>91%</strong>
+          <small>Very strong with targeted proof upgrades</small>
+        </div>
+      </div>
+    </header>
+
+    <section class="section grid-2">
+      <article class="metric">
+        <h3>Major Responsibilities Match</h3>
+        <p>4.6 / 5</p>
+      </article>
+      <article class="metric">
+        <h3>Qualifications Match</h3>
+        <p>4.5 / 5</p>
+      </article>
+    </section>
+
+    <section class="section">
+      <h2>Major Responsibilities Mapping</h2>
+      <p class="meta-note">The table links each JD responsibility to direct resume evidence and a confidence-based match rating.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>JD Responsibility</th>
+              <th>Resume Evidence</th>
+              <th>Match</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Drives AI-based innovation across vehicle development phases (product and process).</td>
+              <td>BMW role includes practical AI adoption (RAG, AI Agent) for industry research and knowledge management; leads powertrain end-to-end data framework supporting quality monitoring and remote diagnostics.</td>
+              <td><span class="badge strong">Strong</span></td>
+              <td>Clear process-side AI innovation; product-phase AI examples can be strengthened with one concrete vehicle feature case.</td>
+            </tr>
+            <tr>
+              <td>Provides insights on long-term technology developments.</td>
+              <td>Experience in technology risk consulting and architecture planning (EY), plus cross-market and cross-functional technology evaluation (Microsoft ATS internship).</td>
+              <td><span class="badge medium">Medium-Strong</span></td>
+              <td>Strategic insight is visible; add explicit long-range AI trend papers/slides for stronger proof.</td>
+            </tr>
+            <tr>
+              <td>Prepares and influences decision-making in AI R&amp;D and strategy departments.</td>
+              <td>Core coordinator for government-China-Germany stakeholders in BMW OTA data collaboration; practical use of AI-enabled knowledge workflows to improve decision efficiency.</td>
+              <td><span class="badge strong">Strong</span></td>
+              <td>Strong stakeholder influence signal in matrix organizations.</td>
+            </tr>
+            <tr>
+              <td>Creates new customer experiences and process optimization via meaningful proof-of-concept projects.</td>
+              <td>Built data platform and analytics capabilities for quality/diagnostics; Apple dashboard and forecasting work; Didi KPI and subsidy optimization with measurable outcome.</td>
+              <td><span class="badge strong">Strong</span></td>
+              <td>PoC mindset and measurable optimization are clear; add one customer-facing UX outcome if available.</td>
+            </tr>
+            <tr>
+              <td>Contributes to BMW worldwide AI strategy and roadmap.</td>
+              <td>Current BMW scope includes cross-region stakeholder collaboration and technical planning; additional background includes AI/LLM project delivery, active participation in AI communities and activities, and prior Microsoft Azure AI ecosystem strategy exposure.</td>
+              <td><span class="badge strong">Strong</span></td>
+              <td>This profile supports credible contribution to global AI roadmap discussions and strategy shaping.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Qualifications Mapping</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Qualification</th>
+              <th>Resume Evidence</th>
+              <th>Match</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Master degree / PhD in AI, ML, or Computer Science.</td>
+              <td>Master of Data Science, UC Berkeley; strong GPA and AI-related core coursework.</td>
+              <td><span class="badge strong">Strong</span></td>
+              <td>Meets master-level requirement directly.</td>
+            </tr>
+            <tr>
+              <td>Strong practical experience in AI, foundation models, deep learning.</td>
+              <td>Hands-on RAG and AI Agent adoption in business workflows; ML/deep learning coursework and analytics projects.</td>
+              <td><span class="badge medium">Medium-Strong</span></td>
+              <td>Strong practical signal with AI/LLM project background; still beneficial to add explicit model stack, tooling, and KPI outcomes.</td>
+            </tr>
+            <tr>
+              <td>Can identify AI technology gaps and close them through technical concepts and partnerships.</td>
+              <td>Led cross-team planning and alignment in BMW; consulting background in technology risk and architecture; partner-facing coordination experience.</td>
+              <td><span class="badge medium">Medium-Strong</span></td>
+              <td>Partnership signal is strong; add one concrete industry-academia or external partner case if possible.</td>
+            </tr>
+            <tr>
+              <td>Strong communication and presentation in Chinese and English.</td>
+              <td>Multinational stakeholder communication in BMW and EY, plus strategic client-facing internship roles.</td>
+              <td><span class="badge strong">Strong</span></td>
+              <td>Bilingual communication is strongly implied by role context.</td>
+            </tr>
+            <tr>
+              <td>Able to speak publicly to small and large stakeholder groups.</td>
+              <td>Repeated reporting experience in multiple HAL rounds, frequent briefings to senior management across different circles, and delivery of workshops with diverse stakeholder groups.</td>
+              <td><span class="badge strong">Strong</span></td>
+              <td>Evidence supports both executive-level communication and broad audience facilitation.</td>
+            </tr>
+            <tr>
+              <td>Ownership mindset with strong commitment to result delivery.</td>
+              <td>Led mission-critical cross-border coordination in BMW; delivered measurable optimization outcomes in internships.</td>
+              <td><span class="badge strong">Strong</span></td>
+              <td>High ownership is clear and repeatedly demonstrated.</td>
+            </tr>
+            <tr>
+              <td>Innovative thinking with front-runner mentality and company perspective.</td>
+              <td>Early AI adoption initiatives and technology strategy exposure in both enterprise consulting and automotive practice.</td>
+              <td><span class="badge strong">Strong</span></td>
+              <td>Innovation signal is strong; align examples more directly to BMW enterprise-level value narrative.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section grid-2">
+      <article class="metric">
+        <h3>Top Strengths to Highlight in Interview</h3>
+        <ul class="panel-list">
+          <li>Cross-border stakeholder orchestration in BMW data and compliance projects.</li>
+          <li>Execution-first AI application mindset with real workflow improvement use cases.</li>
+          <li>Balanced profile across strategy, data engineering, and delivery leadership.</li>
+        </ul>
+      </article>
+      <article class="metric">
+        <h3>Targeted Gaps and Fast Fixes</h3>
+        <ul class="panel-list">
+          <li>Add one project section detailing foundation model stack, architecture, and outcomes.</li>
+          <li>Add quantified speaking evidence (audience size, cadence, and decision outcomes) for stronger executive storytelling.</li>
+          <li>Add one explicit statement on contribution to global AI roadmap topics in BMW context.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="section">
+      <h2>Short Positioning Statement</h2>
+      <p class="meta-note">
+        The candidate is a strong fit for an AI strategy and innovation role in automotive, with demonstrated capability in cross-functional delivery,
+        data and AI operationalization, and stakeholder influence across China-global setups. With added evidence in AI/LLM practice, AI community participation,
+        and Microsoft Azure AI strategy exposure, the fit is very strong; adding quantified foundation-model outcomes would further maximize competitiveness.
+      </p>
+    </section>
+
+    <div class="footer">Generated from JD + resume content | Updated on 2026-06-01</div>
+  </main>
+</body>
+</html>

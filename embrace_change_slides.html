@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>拥抱变化 | Slides</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f6f2ea;
+      --ink: #0e2233;
+      --muted: #4b6170;
+      --primary: #1f6ed4;
+      --accent: #ee6c3f;
+      --line: #d9d0c2;
+      --card: rgba(255, 255, 255, 0.78);
+      --shadow: 0 20px 60px rgba(13, 36, 52, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 15% 18%, rgba(31, 110, 212, 0.18), transparent 38%),
+        radial-gradient(circle at 92% 8%, rgba(238, 108, 63, 0.15), transparent 42%),
+        linear-gradient(135deg, #fefcf7 0%, #f6f2ea 48%, #efe5d6 100%);
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.12;
+      background-image: radial-gradient(#000 0.55px, transparent 0.55px);
+      background-size: 3px 3px;
+      mix-blend-mode: multiply;
+    }
+
+    .deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 5vw;
+      opacity: 0;
+      transform: translateX(28px) scale(0.985);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+      pointer-events: none;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .panel {
+      width: min(1180px, 95vw);
+      background: var(--card);
+      border: 1px solid rgba(14, 34, 51, 0.1);
+      box-shadow: var(--shadow);
+      border-radius: 28px;
+      backdrop-filter: blur(7px);
+      padding: clamp(22px, 3.1vw, 44px);
+      animation: reveal 0.7s ease;
+    }
+
+    @keyframes reveal {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .eyebrow {
+      font-family: "Space Grotesk", sans-serif;
+      letter-spacing: 0.08em;
+      color: var(--primary);
+      text-transform: uppercase;
+      font-size: clamp(12px, 1.2vw, 16px);
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: clamp(36px, 5.2vw, 72px);
+      line-height: 1.08;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      font-size: clamp(28px, 3.8vw, 52px);
+      line-height: 1.14;
+      margin-bottom: 16px;
+    }
+
+    .lead {
+      max-width: 84ch;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: clamp(15px, 1.6vw, 21px);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: "Space Grotesk", sans-serif;
+      color: #ffffff;
+      background: linear-gradient(120deg, #1f6ed4, #0f4fa8);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: clamp(13px, 1.2vw, 16px);
+      margin-bottom: 18px;
+    }
+
+    .snapshot {
+      margin-top: 18px;
+      border-top: 2px dotted var(--line);
+      padding-top: 22px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .snapshot .cell {
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(14, 34, 51, 0.1);
+      border-radius: 18px;
+      padding: 18px;
+      min-height: 220px;
+    }
+
+    .stage {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      color: #ffffff;
+      background: var(--primary);
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      margin-right: 10px;
+    }
+
+    .cell h3 {
+      font-size: clamp(20px, 2.4vw, 28px);
+      margin: 8px 0 12px;
+    }
+
+    .cell p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: clamp(14px, 1.3vw, 18px);
+    }
+
+    .focus {
+      margin-top: 18px;
+      color: #1767ce;
+      font-weight: 800;
+      font-size: clamp(24px, 2.7vw, 34px);
+    }
+
+    .actions {
+      margin-top: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .action-item {
+      border-left: 5px solid var(--accent);
+      background: rgba(255, 255, 255, 0.72);
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: clamp(15px, 1.4vw, 20px);
+      line-height: 1.7;
+    }
+
+    .controls {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      z-index: 9;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      font-family: "Space Grotesk", sans-serif;
+      background: #ffffff;
+      color: #0b2a42;
+      padding: 10px 14px;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(14, 34, 51, 0.18);
+      transition: transform 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+    }
+
+    .counter {
+      font-family: "Space Grotesk", sans-serif;
+      background: #0b2a42;
+      color: #f7f8fa;
+      border-radius: 12px;
+      padding: 10px 12px;
+      min-width: 84px;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .snapshot {
+        grid-template-columns: 1fr;
+      }
+
+      .slide {
+        padding: 16px;
+      }
+
+      .panel {
+        border-radius: 18px;
+      }
+
+      .controls {
+        right: 12px;
+        bottom: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="grain"></div>
+  <main class="deck" id="deck">
+    <section class="slide active">
+      <article class="panel">
+        <div class="eyebrow">Change Mindset Deck</div>
+        <h1>拥抱变化<br />Embrace Change</h1>
+        <p class="lead">
+          变化不是“偶发事件”，而是组织与个人成长的常态。面对不确定性，关键不是回避变化，而是建立一种可迁移、可持续的适应力。
+        </p>
+        <p class="focus">1. 接受变化是常态 / Accept that change is constant</p>
+      </article>
+    </section>
+
+    <section class="slide">
+      <article class="panel">
+        <span class="tag">Stage 1-2</span>
+        <h2>Under-fulfilment 低于预期</h2>
+        <p class="lead">
+          Generally sticks to the status quo despite a need for transformation.<br />
+          尽管已经出现转型需求，仍倾向维持现状。
+        </p>
+        <div class="actions">
+          <div class="action-item">识别信号：把“问题重复出现”视为需要变革的证据，而非偶然噪音。</div>
+          <div class="action-item">起步动作：每周做一次小型试验，用低风险方式打破路径依赖。</div>
+        </div>
+      </article>
+    </section>
+
+    <section class="slide">
+      <article class="panel">
+        <span class="tag">Stage 3</span>
+        <h2>Fulfilment 达到预期</h2>
+        <p class="lead">
+          Sees the opportunities and positive aspects of transformation.<br />
+          能够看到变革的机会面与积极意义。
+        </p>
+        <div class="actions">
+          <div class="action-item">把变化与目标绑定：任何变更都回答同一个问题“它如何帮助我更接近目标？”</div>
+          <div class="action-item">建立复盘机制：沉淀“有效做法清单”，将一次适应变成长期能力。</div>
+        </div>
+      </article>
+    </section>
+
+    <section class="slide">
+      <article class="panel">
+        <span class="tag">Stage 4-5</span>
+        <h2>Over-fulfilment 超出预期</h2>
+        <p class="lead">
+          Accepts change as a constant, anticipates the effects of VUCA and faces new challenges with foresight.<br />
+          将变化视为常态，能前瞻 VUCA 影响并主动应对新挑战。
+        </p>
+        <div class="actions">
+          <div class="action-item">前瞻思维：提前构建 2-3 个场景预案，减少被动反应成本。</div>
+          <div class="action-item">组织带动：用清晰叙事和可见成果，帮助团队共同升级变化心智。</div>
+        </div>
+      </article>
+    </section>
+
+    <section class="slide">
+      <article class="panel">
+        <div class="eyebrow">Snapshot From Your Image</div>
+        <p class="focus">1. Accept that change is constant</p>
+        <div class="snapshot">
+          <div class="cell">
+            <div><span class="stage">1-2</span>Under-fulfilment</div>
+            <h3>起点</h3>
+            <p>Generally sticks to the status quo despite a need for transformation.</p>
+          </div>
+          <div class="cell">
+            <div><span class="stage">3</span>Fulfilment</div>
+            <h3>中段</h3>
+            <p>Sees the opportunities and positive aspects of transformation.</p>
+          </div>
+          <div class="cell">
+            <div><span class="stage">4-5</span>Over-fulfilment</div>
+            <h3>进阶</h3>
+            <p>Accepts change as a constant, anticipates the effects of VUCA and faces new challenges with foresight.</p>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <div class="controls">
+    <button id="prev">Prev</button>
+    <div class="counter" id="counter">1 / 5</div>
+    <button id="next">Next</button>
+  </div>
+
+  <script>
+    const slides = [...document.querySelectorAll(".slide")];
+    const counter = document.getElementById("counter");
+    const prevBtn = document.getElementById("prev");
+    const nextBtn = document.getElementById("next");
+    let index = 0;
+
+    function render() {
+      slides.forEach((slide, i) => {
+        slide.classList.toggle("active", i === index);
+      });
+      counter.textContent = `${index + 1} / ${slides.length}`;
+    }
+
+    function next() {
+      index = (index + 1) % slides.length;
+      render();
+    }
+
+    function prev() {
+      index = (index - 1 + slides.length) % slides.length;
+      render();
+    }
+
+    nextBtn.addEventListener("click", next);
+    prevBtn.addEventListener("click", prev);
+
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " ") {
+        next();
+      }
+      if (event.key === "ArrowLeft" || event.key === "PageUp") {
+        prev();
+      }
+    });
+  </script>
+</body>
+</html>

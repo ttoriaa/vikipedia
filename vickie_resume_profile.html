@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>李文韬 Vickie LI | 个人简介</title>
+  <style>
+    :root {
+      --sand: #f3eee4;
+      --paper: #fffdfa;
+      --ink: #1e2933;
+      --muted: #5f6d79;
+      --line: rgba(30, 41, 51, 0.16);
+      --teal: #0f6a63;
+      --rust: #b2522c;
+      --shadow: 0 12px 30px rgba(27, 36, 48, 0.12);
+      --radius-lg: 22px;
+      --radius-md: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(15, 106, 99, 0.2), transparent 42%),
+        radial-gradient(circle at 88% 14%, rgba(178, 82, 44, 0.18), transparent 36%),
+        linear-gradient(145deg, #f7f2e8, var(--sand));
+      padding: 24px 14px 40px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: grid;
+      gap: 14px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      background: linear-gradient(130deg, #0d5755 0%, #1f3148 58%, #2b3147 100%);
+      color: #edf4f7;
+      padding: 30px;
+      box-shadow: 0 18px 44px rgba(13, 32, 46, 0.25);
+      animation: enter-up 720ms ease-out;
+    }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: 1fr 170px;
+      gap: 20px;
+      align-items: start;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-main {
+      min-width: 0;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -60px;
+      top: -90px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.24), transparent 68%);
+      pointer-events: none;
+    }
+
+    .photo-wrap {
+      justify-self: end;
+      width: 156px;
+      height: 156px;
+      border-radius: 20px;
+      border: 1px solid rgba(237, 244, 247, 0.35);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 26px rgba(8, 23, 37, 0.35);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo-fallback {
+      color: rgba(237, 244, 247, 0.9);
+      font-size: 13px;
+      text-align: center;
+      line-height: 1.5;
+      padding: 10px;
+    }
+
+    .name {
+      margin: 0;
+      font-size: clamp(30px, 4.4vw, 52px);
+      letter-spacing: 0.4px;
+    }
+
+    .title {
+      margin: 8px 0 0;
+      font-size: clamp(18px, 2.2vw, 24px);
+      color: rgba(237, 244, 247, 0.92);
+      font-weight: 500;
+    }
+
+    .summary {
+      margin-top: 16px;
+      max-width: 820px;
+      line-height: 1.68;
+      color: rgba(237, 244, 247, 0.94);
+    }
+
+    .quick {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 14px;
+    }
+
+    .quick span {
+      border: 1px solid rgba(237, 244, 247, 0.34);
+      border-radius: 999px;
+      padding: 6px 12px;
+      color: rgba(237, 244, 247, 0.96);
+    }
+
+    .section {
+      background: rgba(255, 253, 250, 0.82);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(2px);
+      animation: enter-up 900ms ease-out;
+    }
+
+    .section h2 {
+      margin: 0 0 14px;
+      font-size: 22px;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1.08fr 1fr;
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 14px;
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 17px;
+    }
+
+    .meta {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .desc {
+      margin: 8px 0 0;
+      line-height: 1.62;
+      color: #2d3a45;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 12px;
+    }
+
+    .timeline .card {
+      border-left: 4px solid rgba(15, 106, 99, 0.36);
+    }
+
+    .timeline ul,
+    .list ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 7px;
+      line-height: 1.6;
+    }
+
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .skills span {
+      border-radius: 999px;
+      border: 1px solid rgba(15, 106, 99, 0.24);
+      background: rgba(15, 106, 99, 0.08);
+      color: #0f5f59;
+      padding: 6px 12px;
+      font-size: 13px;
+    }
+
+    .pub li,
+    .award li {
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .btn {
+      text-decoration: none;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      color: #f3f7f9;
+      padding: 8px 14px;
+      font-size: 14px;
+      transition: transform 150ms ease, background 150ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .footer {
+      text-align: right;
+      font-size: 12px;
+      color: var(--muted);
+      padding-right: 4px;
+    }
+
+    @keyframes enter-up {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 920px) {
+      .split {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .photo-wrap {
+        justify-self: start;
+        width: 122px;
+        height: 122px;
+        border-radius: 16px;
+        margin-top: 6px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .hero {
+        padding: 22px 18px;
+      }
+
+      .section {
+        padding: 16px;
+      }
+
+      body {
+        padding: 12px 10px 26px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header class="hero">
+      <div class="hero-layout">
+        <div class="hero-main">
+          <h1 class="name">李文韬 Vickie LI</h1>
+          <p class="title">Powertrain Data Management | Data & AI Strategy</p>
+          <p class="summary">
+            具备数据分析与技术咨询复合背景，现任宝马中国动力总成数据管理方向，数据项目经理。
+            擅长跨团队项目推进、数据治理与平台化建设，并持续推动 RAG / AI Agent 等大模型能力在业务中的落地应用。
+          </p>
+          <div class="quick">
+            <span>Phone: +(86) 18813041323</span>
+            <span>Email: vvickey.lee@gmail.com</span>
+            <span>Base: Beijing, China</span>
+          </div>
+        </div>
+        <div class="photo-wrap" aria-label="个人照片区域">
+          <img class="photo" src="assets/profile.jpg" alt="李文韬个人照片" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+          <div class="photo-fallback" style="display:none;">个人照片<br/>assets/profile.jpg</div>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="btn" href="Vickie%20Li%202026%20CN%20v2.pdf" target="_blank" rel="noopener noreferrer">查看原始简历 PDF</a>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2>教育经历</h2>
+      <div class="split">
+        <article class="card">
+          <h3>加州大学伯克利分校</h3>
+          <div class="meta">数据分析硕士 | 2022 - 2023 | GPA 4.00</div>
+          <p class="desc">核心课程：机器学习、深度学习、概率论、数据库 SQL。</p>
+        </article>
+        <article class="card">
+          <h3>北京邮电大学</h3>
+          <div class="meta">电子商务工程及法律 | 2018 - 2022 | GPA 3.85</div>
+          <p class="desc">核心课程：数据结构、Java、SQL、Python 数据挖掘。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section list">
+      <h2>工作经历</h2>
+      <div class="timeline">
+        <article class="card">
+          <h3>宝马（中国）服务有限公司 · 北京</h3>
+          <div class="meta">Powertrain Data Management (Graduate Trainee Program) | 2024/05 - 至今</div>
+          <ul>
+            <li>牵头OTA相关数据与技术服务合作项目，作为跨部门核心协调人，对接政府机构、中国团队与德国团队，搭建企业-政府数据传输与合规平台。负责多方利益相关者沟通与项目推进，包括研发、法规、数据合规、政府等，保证项目按计划交付；牵头跨车型、跨团队技术需求整合与开发规划，协调软硬件ECU及数据平台资源，推动复杂项目从需求定义到交付落地。 </li>
+            <li>主导动力总成端到端数据体系建设，覆盖车端数据采集、数据合规、数据平台建设与应用分析，支撑车辆质量监控、数据行为分析及远程故障诊断，如SOH预测，为后续技术服务商业化提供数据基础。 </li>
+            <li>推动 AI 在业务中的落地探索，应用 RAG / AI Agent、以及Vibe Coding 支撑产业调研与知识管理，提升内部决策效率。</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>安永（中国）企业咨询有限公司 · 上海</h3>
+          <div class="meta">Technology Risk Consultant | 2023/08 - 2024/01</div>
+          <ul>
+            <li>为大型企业客户提供数字化转型与技术风险咨询，梳理核心流程与数据指标体系，识别关键系统风险点。</li>
+            <li>参与企业级 IT 与数据治理规划（含云服务与网络安全），推动技术架构方案落地与合规建设。</li>
+            <li>承担客户沟通与需求梳理工作，协同多方资源推进项目交付。</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>实习经历</h2>
+      <div class="timeline">
+        <article class="card">
+          <h3>微软 · 上海</h3>
+          <div class="meta">客户技术战略 Account Technology Strategist | 2022/07 - 2022/10</div>
+          <ul>
+            <li>通过客户访谈搭建 Account Plan 与产品技术路线图，并在财年内推动执行。</li>
+            <li>分析 Azure、Dynamics 365 等生态产品能力，挖掘产品组合在行业场景中的应用机会。</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>苹果 · 北京</h3>
+          <div class="meta">数据分析 Data Analyst | 2022/03 - 2022/07</div>
+          <ul>
+            <li>完善线上业务核心指标体系（流量、转化率、GMV、毛利），并按经销商/门店/区域维度拆解分析。</li>
+            <li>构建可视化看板与预测模型，支持业务团队优化市场策略与落地执行。</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>滴滴出行 · 杭州</h3>
+          <div class="meta">商业数据分析 | 2022/01 - 2022/03</div>
+          <ul>
+            <li>搭建代驾业务指标体系并统一数据口径，支撑市场团队决策。</li>
+            <li>通过补贴率拆解与资源监控优化，期间补贴率由 0.8% 降至 0.6%。</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>腾讯 · 北京</h3>
+          <div class="meta">产品与用户提升 | 2020/08 - 2020/12</div>
+          <ul>
+            <li>细化体育用户标签体系并制定召回策略，完成 A/B Test 并提升召回率。</li>
+            <li>优化活动展示策略与首页分发机制，提升内容触达效率。</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section split">
+      <article class="card pub">
+        <h2>发表论文</h2>
+        <ul>
+          <li>Liu N, Liu RX, Li WT, et al. Identifying Design Feature Factors Critical to Acceptance of Smart Voice Assistant, HCII, 2021.</li>
+          <li>Wang Y, Zhang S, Xu Z, Li W, et al. Ultra-compact Waveguide-Integrated Demultiplexers based on Digital metamaterials, OECC, 2021.</li>
+        </ul>
+      </article>
+      <article class="card award">
+        <h2>奖励</h2>
+        <ul>
+          <li>全国大学生电子商务“创新、创意及创业”挑战赛：北京赛区二等奖（Top 1%）/ 校赛特等奖（Top 2%）</li>
+          <li>美国大学生建模大赛 M 奖（Meritorious Winner, Top 7% Worldwide）</li>
+          <li>校级三好学生（2019）</li>
+          <li>校级奖学金（2019, 2020, 2021）</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="section">
+      <h2>能力关键词</h2>
+      <div class="skills">
+        <span>Data Analysis</span>
+        <span>Machine Learning</span>
+        <span>SQL / Python</span>
+        <span>Data Governance</span>
+        <span>Cross-functional Collaboration</span>
+        <span>Technology Risk Consulting</span>
+        <span>RAG / AI Agent</span>
+        <span>Powertrain Data</span>
+      </div>
+    </section>
+
+    <div class="footer">Resume-based HTML Profile | Updated on 2026-05-28</div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>拥抱变化 | 单页版</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-top: #fff8ec;
+      --bg-bottom: #eaf3ff;
+      --ink: #102437;
+      --muted: #44596b;
+      --blue: #1f67c8;
+      --orange: #ef7b45;
+      --line: rgba(16, 36, 55, 0.16);
+      --card: rgba(255, 255, 255, 0.82);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(80% 60% at 100% 0%, rgba(31, 103, 200, 0.15), transparent 70%),
+        radial-gradient(50% 40% at 0% 100%, rgba(239, 123, 69, 0.18), transparent 70%),
+        linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+      min-height: 100vh;
+      padding: clamp(20px, 4vw, 56px);
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      gap: 24px;
+    }
+
+    .hero {
+      border: 1px solid var(--line);
+      background: var(--card);
+      border-radius: 28px;
+      padding: clamp(20px, 3vw, 40px);
+      box-shadow: 0 20px 55px rgba(16, 36, 55, 0.13);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      right: -70px;
+      top: -110px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 40%, rgba(31, 103, 200, 0.55), rgba(31, 103, 200, 0.05));
+    }
+
+    .kicker {
+      font-family: "Outfit", sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--blue);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: clamp(32px, 5vw, 62px);
+      line-height: 1.08;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      max-width: 80ch;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: clamp(15px, 1.45vw, 21px);
+    }
+
+    .highlight {
+      margin-top: 16px;
+      font-size: clamp(22px, 2.6vw, 34px);
+      font-weight: 900;
+      color: var(--blue);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      border-top: 2px dotted var(--line);
+      padding-top: 16px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 18px;
+      padding: 18px;
+      display: grid;
+      gap: 10px;
+      transform: translateY(14px);
+      opacity: 0;
+      animation: float-in 0.7s ease forwards;
+    }
+
+    .card:nth-child(2) {
+      animation-delay: 0.12s;
+    }
+
+    .card:nth-child(3) {
+      animation-delay: 0.24s;
+    }
+
+    @keyframes float-in {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .badge {
+      width: fit-content;
+      border-radius: 999px;
+      background: var(--blue);
+      color: #ffffff;
+      font-family: "Outfit", sans-serif;
+      font-weight: 700;
+      padding: 6px 12px;
+    }
+
+    .title {
+      font-size: clamp(22px, 2.2vw, 29px);
+      font-weight: 800;
+    }
+
+    .desc {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: clamp(14px, 1.2vw, 18px);
+    }
+
+    .notes {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.76);
+      padding: 20px;
+      line-height: 1.8;
+      color: #1a3550;
+      font-size: clamp(14px, 1.2vw, 18px);
+    }
+
+    @media (max-width: 960px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <p class="highlight">ZE-51 Gathering: Growth Mindset</p>
+      <h1>拥抱变化 Embrace the Change</h1>
+      <p class="subtitle">
+        在不确定时代，变化本身就是稳定项。真正的竞争力来自于持续适应、主动学习与前瞻行动。Sustainable competitiveness comes from turning constant change into a structured capability of adaptation, learning, and foresight.
+      </p>
+      <p class="highlight"> Accept that change is constant</p>
+    </section>
+
+    <section class="grid" aria-label="变化能力分级">
+      <article class="card">
+        <span class="badge">1-2</span>
+        <h2 class="title">Under-fulfilment</h2>
+        <p class="desc">Generally sticks to the status quo despite a need for transformation.</p>
+        <p class="desc">尽管已出现转型需求，仍主要停留在既有做法。</p>
+      </article>
+
+      <article class="card">
+        <span class="badge">3</span>
+        <h2 class="title">Fulfilment</h2>
+        <p class="desc">Sees the opportunities and positive aspects of transformation.</p>
+        <p class="desc">能够识别并拥抱变革中的机会与积极面。</p>
+      </article>
+
+      <article class="card">
+        <span class="badge">4-5</span>
+        <h2 class="title">Over-fulfilment</h2>
+        <p class="desc">Accepts change as a constant, anticipates the effects of VUCA and faces new challenges with foresight.</p>
+        <p class="desc">将变化视为常态，前瞻 VUCA 影响并主动应对新挑战。</p>
+      </article>
+    </section>
+
+    <section class="notes">
+      <strong></strong>
+        <p class="desc">从“低风险、小步快跑”的试验开始，把每次变化沉淀成经验模板。持续复盘可将一次适应升级为可复制的长期能力。</p>
+        <p class="desc">Begin with low-risk, rapid experimentation, codify each change into reusable playbooks, and use continuous reflection to transform isolated adaptations into sustainable organizational capability.</p>
+    </section>
+  </main>
+</body>
+</html>
