@@ -58,6 +58,22 @@ CONFLUENCE_API_TOKEN=<your-api-token>
 CONFLUENCE_AUTH_TYPE=auto
 ```
 
+## .env vs PowerShell $env
+
+- `run_dongchedi_daily.py` and `push_dongchedi_to_confluence.py` load `.env` internally via `python-dotenv`.
+- Therefore, checking `$env:CONFLUENCE_*` in PowerShell alone may show empty values even when `.env` is correct.
+- Use this precheck as source of truth:
+
+```powershell
+.\.venv\Scripts\python.exe .\scripts\precheck_confluence_env.py --mode pipeline
+```
+
+- Optional (only when you need `$env` visible in current shell for debugging):
+
+```powershell
+. .\scripts\load_env_into_session.ps1 -ShowKeys
+```
+
 ## Commands
 
 Dry run (local files only):

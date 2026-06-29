@@ -78,6 +78,18 @@
   ],
   "tasks": [
     {
+      "label": "Dongchedi Daily: Precheck .env (Pipeline)",
+      "type": "shell",
+      "command": ".\\.venv\\Scripts\\python.exe",
+      "args": [
+        ".\\scripts\\precheck_confluence_env.py",
+        "--mode",
+        "pipeline"
+      ],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
       "label": "Dongchedi Daily Report: Dry Run",
       "type": "shell",
       "command": ".\\.venv\\Scripts\\python.exe",
