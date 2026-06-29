@@ -90,3 +90,36 @@ disable-model-invocation: false
 - /dongchedi-site-sync-after-daily date=2026-06-17 deploy=false
 - /dongchedi-site-sync-after-daily date=2026-06-17 deploy=true dispatch_workflow=true
 - 帮我把今天懂车帝充电日报同步到网站，包括数据页、可视化和趋势总结。
+
+## 参数示例输入 -> 标准输出样例
+
+可直接复制的参数输入（本地预览，不发布）：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\.github\skills\dongchedi-site-sync-after-daily\scripts\sync_dongchedi_site_after_daily.ps1 -Date 2026-06-29 -Deploy false -DispatchWorkflow false
+```
+
+可直接复制的参数输入（发布但不触发 workflow_dispatch）：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\.github\skills\dongchedi-site-sync-after-daily\scripts\sync_dongchedi_site_after_daily.ps1 -Date 2026-06-29 -Deploy true -DispatchWorkflow false
+```
+
+标准输出样例（终端）：
+
+```text
+Resolved date: 2026-06-29
+Site files check: pass
+Deploy status: skipped
+Workflow dispatch status: skipped
+```
+
+标准输出样例（关键文件检查）：
+
+```text
+site/data.html
+site/dashboard.html
+site/insights.html
+site/reports/2026-06-29/charging_visualization_dashboard.html
+site/latest/charging_visualization_dashboard.html
+```

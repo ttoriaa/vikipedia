@@ -86,3 +86,31 @@ disable-model-invocation: false
 - /dongchedi-charging-performance-summary 对这 5 个懂车帝 URL 生成充电性能对比总结
 - /dongchedi-charging-performance-summary 批量提取并输出中英双语表格，标注未明确显示字段
 - /dongchedi-charging-performance-summary 生成可邮件发送版本（含主题、正文、CSV）
+
+## 参数示例输入 -> 标准输出样例
+
+可直接复制的参数输入：
+
+```bash
+/.venv/Scripts/python.exe ./.github/skills/dongchedi-charging-performance-summary/scripts/build_charging_performance_summary.py --date 2026-06-29
+```
+
+标准输出样例（终端）：
+
+```text
+Resolved date: 2026-06-29
+Output: reports/dongchedi_daily/2026-06-29/charging_performance_summary.md
+Rows: 106
+```
+
+标准输出样例（Markdown 头部）：
+
+```markdown
+# Dongchedi Charging Performance Summary (2026-06-29)
+
+## 中文结论
+共覆盖 106 个车型，按统一口径输出了续航、平台电压与快充信息，可直接用于日报或周报横向对比。
+
+## English Conclusion
+This summary covers 106 models with normalized EV range and fast-charging fields, ready for cross-model comparison in reports.
+```
