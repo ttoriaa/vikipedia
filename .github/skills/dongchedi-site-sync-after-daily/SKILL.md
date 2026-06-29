@@ -123,3 +123,49 @@ site/insights.html
 site/reports/2026-06-29/charging_visualization_dashboard.html
 site/latest/charging_visualization_dashboard.html
 ```
+
+## 团队 SOP 模板块（可复用）
+
+### 1) 前置检查
+- 环境：Python 可执行文件可用（.venv/Scripts/python.exe），PowerShell 可执行。
+- 输入：reports/dongchedi_daily/<date>/filtered.csv 与 summary.md 存在。
+- 权限：当前仓库可读写；若 deploy=true，需具备 push 权限；若 dispatch_workflow=true，需 gh 已登录。
+
+### 2) 执行
+- 解析参数：优先使用显式 date；未提供则回退最新日期目录。
+- 主命令：执行 skill-local 同步脚本，按 deploy/dispatch_workflow 控制发布与触发。
+- 命令模板：
+- powershell -NoProfile -ExecutionPolicy Bypass -File ./.github/skills/<skill-name>/scripts/<script>.ps1 -Date <YYYY-MM-DD> -Deploy <true|false> -DispatchWorkflow <true|false>
+
+### 3) 验证
+- 文件存在：data.html、dashboard.html、insights.html、site/reports/<date>/charging_visualization_dashboard.html、site/latest/charging_visualization_dashboard.html。
+- 终端状态：Site files check、Deploy status、Workflow dispatch status 均明确输出。
+- 变更范围：仅包含预期站点文件改动，无无关文件进入提交。
+
+### 4) 失败回滚
+- 构建失败：不推送代码，保留日志并停止在本地。
+- 发布失败：回滚该次提交（若已提交但未推送则 reset --soft 到提交前；若已推送则追加修复提交）。
+- 触发失败：保留 site 结果，转为手动在 Actions 页面触发并记录链接。
+
+可复制占位版：
+
+```text
+[前置检查]
+- 环境: <python/env/tool>
+- 输入: <input path>
+- 权限: <repo/api permission>
+
+[执行]
+- 参数: <date/flags>
+- 命令: <skill-local command>
+
+[验证]
+- 文件: <expected outputs>
+- 结构: <schema/contract checks>
+- 日志: <key lines>
+
+[失败回滚]
+- 回滚范围: <local/publish>
+- 保留证据: <logs/artifacts>
+- 下一步: <manual follow-up>
+```

@@ -114,3 +114,49 @@ Rows: 106
 ## English Conclusion
 This summary covers 106 models with normalized EV range and fast-charging fields, ready for cross-model comparison in reports.
 ```
+
+## 团队 SOP 模板块（可复用）
+
+### 1) 前置检查
+- 环境：Python 可执行文件可用（.venv/Scripts/python.exe）。
+- 输入：reports/dongchedi_daily/<date>/filtered.csv 存在。
+- 权限：当前仓库可读写，且具备推送权限（如需发布）。
+
+### 2) 执行
+- 解析参数：优先使用显式 date；未提供则回退最新日期目录。
+- 主命令：运行 skill-local 脚本生成标准输出文件。
+- 命令模板：
+- ./.venv/Scripts/python.exe ./.github/skills/<skill-name>/scripts/<script>.py --date <YYYY-MM-DD>
+
+### 3) 验证
+- 结果文件存在：输出文件路径存在且可读。
+- 结构检查：字段顺序、列名、缺失值标注符合 Output Contract。
+- 日志检查：终端输出包含 resolved date、output path、rows/count 等关键项。
+
+### 4) 失败回滚
+- 执行失败：不覆盖已有产物，保留旧文件并返回错误摘要。
+- 输出异常：删除本次异常产物，回退到上一次可用版本。
+- 发布失败：仅回滚发布动作，不回滚本地计算结果；给出下一步人工处理建议。
+
+可复制占位版：
+
+```text
+[前置检查]
+- 环境: <python/env/tool>
+- 输入: <input path>
+- 权限: <repo/api permission>
+
+[执行]
+- 参数: <date/flags>
+- 命令: <skill-local command>
+
+[验证]
+- 文件: <expected outputs>
+- 结构: <schema/contract checks>
+- 日志: <key lines>
+
+[失败回滚]
+- 回滚范围: <local/publish>
+- 保留证据: <logs/artifacts>
+- 下一步: <manual follow-up>
+```
