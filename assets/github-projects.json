@@ -1,7 +1,18 @@
 {
-  "generated_at": "2026-06-29T07:06:25.847386+00:00",
+  "generated_at": "2026-06-29T09:44:00.766799+00:00",
   "source": "https://github.com/ttoriaa",
   "projects": [
+    {
+      "name": "C7-OTA-Hub",
+      "description": "",
+      "url": "https://ttoriaa.github.io/C7-OTA-Hub/",
+      "url_type": "pages",
+      "target_label": "Live",
+      "repo_url": "https://github.com/ttoriaa/C7-OTA-Hub",
+      "language": "HTML",
+      "category": "Project",
+      "pushed_at": "2026-06-29T07:09:07Z"
+    },
     {
       "name": "vikipedia",
       "description": "",
@@ -11,7 +22,7 @@
       "repo_url": "https://github.com/ttoriaa/vikipedia",
       "language": "HTML",
       "category": "Project",
-      "pushed_at": "2026-06-29T06:13:23Z"
+      "pushed_at": "2026-06-29T07:06:26Z"
     },
     {
       "name": "automotive-benchmarking",
@@ -34,17 +45,6 @@
       "language": "JavaScript",
       "category": "Project",
       "pushed_at": "2026-06-28T20:11:52Z"
-    },
-    {
-      "name": "C7-OTA-Hub",
-      "description": "",
-      "url": "https://ttoriaa.github.io/C7-OTA-Hub/",
-      "url_type": "pages",
-      "target_label": "Live",
-      "repo_url": "https://github.com/ttoriaa/C7-OTA-Hub",
-      "language": "HTML",
-      "category": "Project",
-      "pushed_at": "2026-06-28T06:38:32Z"
     },
     {
       "name": "market-research",

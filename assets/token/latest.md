@@ -1,6 +1,6 @@
 # Personal Knowledge Base Snapshot
 
-- Generated at: 2026-06-29 09:27:33
+- Generated at: 2026-06-29 17:44:01
 - Workspace: vikipedia-agents
 
 ## 1) What This Captures
@@ -29,27 +29,27 @@
 ## 3) Website Build Snapshot
 
 - Root html pages: 13
-- Site html pages: 35
-- reports/dongchedi_daily/2026-06-29/confluence_section.html (updated: 2026-06-29 09:27:32)
-- assets/token/latest.zh.html (updated: 2026-06-28 15:39:05)
-- assets/token/latest.html (updated: 2026-06-28 15:39:05)
-- assets/token/index.zh.html (updated: 2026-06-28 15:39:05)
-- assets/token/index.html (updated: 2026-06-28 15:39:05)
-- site/latest/charging_visualization_dashboard.html (updated: 2026-06-28 15:38:57)
-- site/insights.html (updated: 2026-06-28 15:38:57)
-- site/index.html (updated: 2026-06-28 15:38:57)
-- site/data.html (updated: 2026-06-28 15:38:57)
-- site/dashboard.html (updated: 2026-06-28 15:38:57)
-- site/latest/index.html (updated: 2026-06-28 15:30:36)
-- site/reports/2026-06-28/summary.html (updated: 2026-06-28 15:30:36)
-- site/reports/2026-06-26/summary.html (updated: 2026-06-28 15:30:36)
-- site/reports/2026-06-25/summary.html (updated: 2026-06-28 15:30:36)
-- site/reports/2026-06-24/summary.html (updated: 2026-06-28 15:30:36)
+- Site html pages: 38
+- index.html (updated: 2026-06-29 13:37:13)
+- site/index.html (updated: 2026-06-29 13:37:04)
+- reports/dongchedi_daily/2026-06-29/confluence_section.html (updated: 2026-06-29 11:32:26)
+- reports/dongchedi_daily/2026-06-29/charging_visualization_dashboard.html (updated: 2026-06-29 09:58:03)
+- site/insights.html (updated: 2026-06-29 09:35:59)
+- site/dashboard.html (updated: 2026-06-29 09:35:59)
+- site/data.html (updated: 2026-06-29 09:35:59)
+- site/latest/index.html (updated: 2026-06-29 09:35:59)
+- site/reports/2026-06-29/summary.html (updated: 2026-06-29 09:35:59)
+- site/reports/2026-06-28/summary.html (updated: 2026-06-29 09:35:59)
+- site/reports/2026-06-26/summary.html (updated: 2026-06-29 09:35:59)
+- site/reports/2026-06-25/summary.html (updated: 2026-06-29 09:35:59)
+- site/reports/2026-06-24/summary.html (updated: 2026-06-29 09:35:59)
+- site/reports/2026-06-23/summary.html (updated: 2026-06-29 09:35:59)
+- site/reports/2026-06-22/summary.html (updated: 2026-06-29 09:35:59)
 
 ## 4) Pipeline and Reports Snapshot
 
 ### Recent Dongchedi Daily Summaries
-- reports/dongchedi_daily/2026-06-29/summary.md (updated: 2026-06-29 09:27:32)
+- reports/dongchedi_daily/2026-06-29/summary.md (updated: 2026-06-29 11:32:26)
 - reports/dongchedi_daily/2026-06-28/summary.md (updated: 2026-06-28 15:22:37)
 - reports/dongchedi_daily/2026-06-27/summary.md (updated: 2026-06-27 09:00:10)
 - reports/dongchedi_daily/2026-06-26/summary.md (updated: 2026-06-26 09:26:28)
@@ -72,18 +72,21 @@
 
 ### GitHub Projects Feed
 - Project count: 7
-- Feed generated at: 2026-06-29T01:27:32.939594+00:00
-- vikipedia: https://ttoriaa.github.io/vikipedia/ (pushed: 2026-06-29T01:25:41Z)
+- Feed generated at: 2026-06-29T09:44:00.766799+00:00
+- C7-OTA-Hub: https://ttoriaa.github.io/C7-OTA-Hub/ (pushed: 2026-06-29T07:09:07Z)
+- vikipedia: https://ttoriaa.github.io/vikipedia/ (pushed: 2026-06-29T07:06:26Z)
+- automotive-benchmarking: https://ttoriaa.github.io/automotive-benchmarking/ (pushed: 2026-06-29T05:19:10Z)
 - shimai-podcast-site: https://ttoriaa.github.io/shimai-podcast-site/ (pushed: 2026-06-28T20:11:52Z)
-- C7-OTA-Hub: https://ttoriaa.github.io/C7-OTA-Hub/ (pushed: 2026-06-28T06:38:32Z)
 - market-research: https://ttoriaa.github.io/market-research/ (pushed: 2026-06-22T05:53:35Z)
-- automotive-benchmarking: https://ttoriaa.github.io/automotive-benchmarking/ (pushed: 2026-06-17T09:11:11Z)
 
 ## 5) Task Execution Evidence
 
-- reports/task_logs/charging_task_2026-06-29_092728.log (updated: 2026-06-29 09:27:39) | ﻿[2026-06-29T09:27:28] START charging task
+- reports/task_logs/charging_healthcheck_2026-06-29_111232.log (updated: 2026-06-29 11:12:33) | ﻿[2026-06-29T11:12:32] START charging healthcheck
+- reports/task_logs/charging_task_2026-06-29_093007.log (updated: 2026-06-29 09:30:17) | ﻿[2026-06-29T09:30:07] START charging task
+- reports/task_logs/motor_task_2026-06-29_093007.log (updated: 2026-06-29 09:30:08) | ﻿[2026-06-29T09:30:08] SKIP motor task because another instance is running
+- reports/task_logs/token_github_daily_task_2026-06-29_092728.log (updated: 2026-06-29 09:27:41) | ﻿[2026-06-29T09:27:28] START token github daily task mode=run username=ttoriaa limit=12 top_skills=12 recent_limit=15
+- reports/task_logs/charging_task_2026-06-29_092728.log (updated: 2026-06-29 09:27:40) | ﻿[2026-06-29T09:27:28] START charging task
 - reports/task_logs/motor_task_2026-06-29_092728.log (updated: 2026-06-29 09:27:28) | ﻿[2026-06-29T09:27:28] SKIP motor task because another instance is running
-- reports/task_logs/token_github_daily_task_2026-06-29_092728.log (updated: 2026-06-29 09:27:28) | ﻿[2026-06-29T09:27:28] START token github daily task mode=run username=ttoriaa limit=12 top_skills=12 recent_limit=15
 - reports/task_logs/charging_task_2026-06-28_151226.log (updated: 2026-06-28 15:12:35) | ﻿[2026-06-28T15:12:26] START charging task
 - reports/task_logs/charging_healthcheck_2026-06-28_151226.log (updated: 2026-06-28 15:12:27) | ﻿[2026-06-28T15:12:26] START charging healthcheck
 - reports/task_logs/charging_task_2026-06-28_151227.log (updated: 2026-06-28 15:12:27) | ﻿[2026-06-28T15:12:27] SKIP charging task because another instance is running
@@ -93,9 +96,6 @@
 - reports/task_logs/charging_task_2026-06-27_093005.log (updated: 2026-06-27 09:30:20) | ﻿[2026-06-27T09:30:05] START charging task
 - reports/task_logs/motor_task_2026-06-27_093005.log (updated: 2026-06-27 09:30:05) | ﻿[2026-06-27T09:30:05] SKIP motor task because another instance is running
 - reports/task_logs/charging_task_2026-06-27_091005.log (updated: 2026-06-27 09:10:19) | ﻿[2026-06-27T09:10:05] START charging task
-- reports/task_logs/motor_task_2026-06-27_091005.log (updated: 2026-06-27 09:10:05) | ﻿[2026-06-27T09:10:05] SKIP motor task because another instance is running
-- reports/task_logs/charging_task_2026-06-27_090006.log (updated: 2026-06-27 09:00:20) | ﻿[2026-06-27T09:00:06] START charging task
-- reports/task_logs/motor_task_2026-06-27_090006.log (updated: 2026-06-27 09:00:06) | ﻿[2026-06-27T09:00:06] SKIP motor task because another instance is running
 
 ## 6) Suggested Knowledge Workflow
 
@@ -107,13 +107,13 @@
 ## 7) Auto Summary and Lessons
 
 ### Overview
-- Snapshot covers 22 tracked skills, 13 root HTML pages, and 35 site HTML pages.
+- Snapshot covers 22 tracked skills, 13 root HTML pages, and 38 site HTML pages.
 - Evidence pool includes 15 Dongchedi summaries, 3 daily brief/news files, and 15 recent task logs.
 - GitHub landing feed currently tracks 7 projects for Token/landing updates.
 - Decision memory currently contains 1 recent structured entries.
 
 ### Patterns Observed
-- Website updates are concentrated in assets/token (4 files in recent snapshot).
+- Website updates are concentrated in site/reports (7 files in recent snapshot).
 - Reporting activity clusters around reports/dongchedi_daily/2026-06-29 (1 files in recent snapshot).
 - Task execution cadence is stable: logs show repeated automated runs rather than sporadic manual-only updates.
 
