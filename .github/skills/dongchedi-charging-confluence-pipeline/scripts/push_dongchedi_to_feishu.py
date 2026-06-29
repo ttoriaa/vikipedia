@@ -142,42 +142,161 @@ def _load_text_preview(report_dir: Path) -> str:
 def _paragraph_block(text: str) -> dict[str, Any]:
     return {
         "block_type": 2,
-        "paragraph": {
-            "elements": [
-                {
-                    "text_run": {"content": text},
-                }
-            ]
-        },
-    }
-
-
-def _heading_block(text: str, level: int = 1) -> dict[str, Any]:
-    style_map = {
-        1: "heading1",
-        2: "heading2",
-        3: "heading3",
-    }
-    style = style_map.get(level, "heading2")
-    return {
-        "block_type": 2,
-        "paragraph": {
-            "style": style,
+        "text": {
             "elements": [
                 {
                     "text_run": {"content": text},
                 }
             ],
+            "style": {"align": 1},
         },
     }
+
+
+def _heading_block(text: str, level: int = 1) -> dict[str, Any]:
+    prefix = "#" * max(1, min(level, 3))
+    return _paragraph_block(f"{prefix} {text}")
+
+
+def _is_md_table_row(line: str) -> bool:
+    return line.startswith("|") and line.endswith("|") and line.count("|") >= 2
+
+
+def _split_md_table_row(line: str) -> list[str]:
+    cols = [c.strip() for c in line.strip("|").split("|")]
+    return cols
+
+
+def _is_md_table_separator(line: str) -> bool:
+    cols = _split_md_table_row(line)
+    if not cols:
+        return False
+    for c in cols:
+        token = c.replace(" ", "")
+        if not token:
+            return False
+        if set(token) - {"-", ":"}:
+            return False
+    return True
+
+
+def _is_numeric_like(value: str) -> bool:
+    v = value.strip().replace(",", "")
+    if not v:
+        return False
+    return bool(re.fullmatch(r"[-+]?\d+(?:\.\d+)?(?:%)?", v))
+
+
+def _pick_key_columns(rows: list[list[str]], max_cols: int = 5) -> list[int]:
+    if not rows:
+        return []
+    header = rows[0]
+    width = len(header)
+    if width <= max_cols:
+        return list(range(width))
+
+    keywords = [
+        "品牌", "车型", "车系", "快充", "续航", "电池", "平台", "price", "range", "charge", "battery",
+    ]
+
+    picked: list[int] = []
+    for i, name in enumerate(header):
+        name_l = name.lower()
+        if any(k in name_l for k in keywords):
+            picked.append(i)
+    if 0 not in picked:
+        picked.insert(0, 0)
+
+    unique: list[int] = []
+    for i in picked:
+        if i not in unique:
+            unique.append(i)
+
+    if len(unique) < max_cols:
+        for i in range(width):
+            if i not in unique:
+                unique.append(i)
+            if len(unique) >= max_cols:
+                break
+
+    return sorted(unique[:max_cols])
+
+
+def _render_table_rows(rows: list[list[str]], title: str | None = None) -> list[str]:
+    if not rows or not rows[0]:
+        return []
+
+    keep = _pick_key_columns(rows)
+    pruned = [[r[i] if i < len(r) else "" for i in keep] for r in rows]
+
+    width = max(len(r) for r in pruned)
+    normalized = [r + [""] * (width - len(r)) for r in pruned]
+    col_widths = [max(len(r[i]) for r in normalized) for i in range(width)]
+
+    numeric_cols: list[bool] = []
+    for i in range(width):
+        vals = [r[i] for r in normalized[1:] if r[i].strip()]
+        if not vals:
+            numeric_cols.append(False)
+            continue
+        numeric_cols.append(sum(1 for v in vals if _is_numeric_like(v)) >= max(1, int(len(vals) * 0.6)))
+
+    def fmt(row: list[str]) -> str:
+        padded: list[str] = []
+        for i in range(width):
+            cell = row[i]
+            if numeric_cols[i] and row is not normalized[0]:
+                padded.append(cell.rjust(col_widths[i]))
+            else:
+                padded.append(cell.ljust(col_widths[i]))
+        return "| " + " | ".join(padded) + " |"
+
+    lines: list[str] = []
+    if title:
+        lines.append(f"### {title}")
+    lines.append(fmt(normalized[0]))
+    sep = "| " + " | ".join("-" * w for w in col_widths) + " |"
+    lines.append(sep)
+    for row in normalized[1:]:
+        lines.append(fmt(row))
+    lines.append("")
+    return lines
 
 
 def _build_children(text: str, *, report_date: str) -> list[dict[str, Any]]:
     children: list[dict[str, Any]] = []
     children.append(_heading_block(f"Dongchedi Charging Daily {report_date}", level=1))
 
-    for raw_line in [line.strip() for line in text.splitlines() if line.strip()]:
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    i = 0
+    while i < len(lines):
+        raw_line = lines[i]
         normalized = " ".join(raw_line.split())
+        if _is_md_table_row(normalized):
+            prev = lines[i - 1] if i > 0 else ""
+            table_title = ""
+            if prev.startswith("## "):
+                table_title = prev[3:].strip()
+            elif prev.startswith("### "):
+                table_title = prev[4:].strip()
+            elif prev and not prev.startswith("|") and not prev.startswith("-"):
+                table_title = prev[:80]
+
+            table_rows: list[list[str]] = []
+            while i < len(lines) and _is_md_table_row(lines[i]):
+                candidate = " ".join(lines[i].split())
+                if _is_md_table_separator(candidate):
+                    i += 1
+                    continue
+                table_rows.append(_split_md_table_row(candidate))
+                i += 1
+
+            rendered = _render_table_rows(table_rows, title=table_title or None)
+            if rendered:
+                for row_line in rendered:
+                    children.append(_paragraph_block(row_line))
+            continue
+
         if normalized.startswith("# "):
             children.append(_heading_block(normalized[2:].strip(), level=1))
         elif normalized.startswith("## "):
@@ -186,6 +305,7 @@ def _build_children(text: str, *, report_date: str) -> list[dict[str, Any]]:
             children.append(_heading_block(normalized[4:].strip(), level=3))
         else:
             children.append(_paragraph_block(normalized))
+        i += 1
 
     children.append(_paragraph_block(f"Generated from report: reports/dongchedi_daily/{report_date}"))
     return children
@@ -255,19 +375,24 @@ def main() -> int:
         }, ensure_ascii=False, indent=2))
         return 0
 
-    payload = _request(
-        "POST",
-        f"/open-apis/docx/v1/documents/{document_id}/blocks/{parent_block_id}/children",
-        json_body={"children": children},
-    )
-    data = payload.get("data", {}) if isinstance(payload.get("data", {}), dict) else {}
-    children_data = data.get("children", []) if isinstance(data.get("children", []), list) else []
+    appended_total = 0
+    # Feishu docx API allows at most 50 child blocks per request.
+    for i in range(0, len(children), 50):
+        chunk = children[i:i + 50]
+        payload = _request(
+            "POST",
+            f"/open-apis/docx/v1/documents/{document_id}/blocks/{parent_block_id}/children",
+            json_body={"children": chunk},
+        )
+        data = payload.get("data", {}) if isinstance(payload.get("data", {}), dict) else {}
+        children_data = data.get("children", []) if isinstance(data.get("children", []), list) else []
+        appended_total += len(children_data) if children_data else len(chunk)
     print(json.dumps({
         "status": "ok",
         "report_dir": str(report_dir),
         "document_id": document_id,
         "parent_block_id": parent_block_id,
-        "appended_blocks": len(children_data) if children_data else len(children),
+        "appended_blocks": appended_total,
         "preview": text[:400],
     }, ensure_ascii=False, indent=2))
     return 0
