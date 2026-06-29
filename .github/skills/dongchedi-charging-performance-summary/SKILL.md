@@ -32,6 +32,12 @@ disable-model-invocation: false
 - 一个或多个懂车帝参数页 URL（通常包含 `/auto/params-carIds-x-<id>`）。
 - 可选：用户指定的目标车型名单、输出语言偏好、是否需要邮件体。
 
+## Self-contained Quick Start
+- Build summary for latest date:
+	- `.\\.venv\\Scripts\\python.exe .\\.github\\skills\\dongchedi-charging-performance-summary\\scripts\\build_charging_performance_summary.py`
+- Build summary for specific date:
+	- `.\\.venv\\Scripts\\python.exe .\\.github\\skills\\dongchedi-charging-performance-summary\\scripts\\build_charging_performance_summary.py --date <YYYY-MM-DD>`
+
 ## Procedure
 1. 收集 URL 与目标车型范围。
 2. 读取页面并识别车型列（model columns）与参数行（parameter rows）。

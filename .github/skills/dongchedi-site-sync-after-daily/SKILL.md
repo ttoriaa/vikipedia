@@ -26,6 +26,7 @@ disable-model-invocation: false
 
 ## Prerequisites
 - Python 可执行文件可用: ./.venv/Scripts/python.exe
+- Self-contained scripts exist under this skill folder: ./.github/skills/dongchedi-site-sync-after-daily/scripts/
 - 当日报告目录存在: reports/dongchedi_daily/<date>/
 - 最少文件存在:
 - filtered.csv
@@ -36,9 +37,9 @@ disable-model-invocation: false
 ## Procedure
 1. 确认目标日期与输入目录。
 2. 生成可视化 Dashboard 文件:
-- ./.venv/Scripts/python.exe ./scripts/build_charging_visualizations.py --date <date>
+- ./.venv/Scripts/python.exe ./.github/skills/dongchedi-site-sync-after-daily/scripts/build_charging_visualizations.py --date <date>
 3. 组装站点页面与归档:
-- ./.venv/Scripts/python.exe ./scripts/build_dongchedi_pages_site.py
+- ./.venv/Scripts/python.exe ./.github/skills/dongchedi-site-sync-after-daily/scripts/build_dongchedi_pages_site.py
 4. 同步 landing 为站点入口（与现有 CI 一致）:
 - Copy-Item ./index.html ./site/index.html -Force
 5. 验证关键输出:
@@ -51,6 +52,12 @@ disable-model-invocation: false
 7. 若 dispatch_workflow=true，尝试触发:
 - gh workflow run .github/workflows/dongchedi-pages.yml
 - 若 gh 不可用，返回手动触发指引。
+
+## Self-contained Quick Start
+- Local run (no deploy):
+- powershell -NoProfile -ExecutionPolicy Bypass -File .\\.github\\skills\\dongchedi-site-sync-after-daily\\scripts\\sync_dongchedi_site_after_daily.ps1 -Deploy false -DispatchWorkflow false
+- Run for specific date:
+- powershell -NoProfile -ExecutionPolicy Bypass -File .\\.github\\skills\\dongchedi-site-sync-after-daily\\scripts\\sync_dongchedi_site_after_daily.ps1 -Date <YYYY-MM-DD> -Deploy false -DispatchWorkflow false
 
 ## Failure Handling
 - Missing daily report directory:
