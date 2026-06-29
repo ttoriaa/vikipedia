@@ -25,6 +25,7 @@ disable-model-invocation: false
 
 ## Prerequisites
 - Python 虚拟环境存在: `.\\.venv\\Scripts\\python.exe`。
+- Self-contained scripts exist under this skill folder: `.\\.github\\skills\\dongchedi-charging-confluence-pipeline\\scripts\\`.
 - 可读取数据源文件: `dongchedi_full_configs_YYYY-MM-DD.csv`（或由现有流程可定位到最新文件）。
 - 价格映射文件可用: `dongchedi_price_map.csv`。
 - 若 `publish=true`，必须具备 Confluence 环境变量:
@@ -46,7 +47,7 @@ Confluence page id resolution for this skill:
 - `no_backfill=true`
 2. 构建生成命令并执行:
 - Base:
-  - `.\\.venv\\Scripts\\python.exe .\\scripts\\run_dongchedi_daily.py --no-backfill-missing`
+  - `.\\.venv\\Scripts\\python.exe .\\.github\\skills\\dongchedi-charging-confluence-pipeline\\scripts\\run_dongchedi_daily.py --no-backfill-missing`
 - If `date` provided:
   - append `--date <date>`
 - If `publish=false`:
@@ -61,8 +62,13 @@ Confluence page id resolution for this skill:
 - `summary.md`
 - `confluence_section.html`
 4. 若 `publish=true` 且生成成功，执行发布命令:
-- `.\\.venv\\Scripts\\python.exe .\\scripts\\push_dongchedi_to_confluence.py`
+- `.\\.venv\\Scripts\\python.exe .\\.github\\skills\\dongchedi-charging-confluence-pipeline\\scripts\\push_dongchedi_to_confluence.py`
 5. 汇总并返回结果（见 Output Contract）。
+
+### Self-contained Quick Start
+- Precheck: `.\\.venv\\Scripts\\python.exe .\\.github\\skills\\dongchedi-charging-confluence-pipeline\\scripts\\precheck_confluence_env.py --mode pipeline`
+- Full run: `.\\.venv\\Scripts\\python.exe .\\.github\\skills\\dongchedi-charging-confluence-pipeline\\scripts\\run_dongchedi_daily.py --no-backfill-missing`
+- Publish-only retry: `.\\.venv\\Scripts\\python.exe .\\.github\\skills\\dongchedi-charging-confluence-pipeline\\scripts\\push_dongchedi_to_confluence.py`
 
 ## Failure Handling
 - Missing source CSV:
