@@ -1,7 +1,18 @@
 {
-  "generated_at": "2026-06-29T05:26:21.358529+00:00",
+  "generated_at": "2026-06-29T05:27:57.875998+00:00",
   "source": "https://github.com/ttoriaa",
   "projects": [
+    {
+      "name": "vikipedia",
+      "description": "",
+      "url": "https://ttoriaa.github.io/vikipedia/",
+      "url_type": "pages",
+      "target_label": "Live",
+      "repo_url": "https://github.com/ttoriaa/vikipedia",
+      "language": "HTML",
+      "category": "Project",
+      "pushed_at": "2026-06-29T05:26:52Z"
+    },
     {
       "name": "automotive-benchmarking",
       "description": "",
@@ -12,17 +23,6 @@
       "language": "Python",
       "category": "Project",
       "pushed_at": "2026-06-29T05:19:10Z"
-    },
-    {
-      "name": "vikipedia",
-      "description": "",
-      "url": "https://ttoriaa.github.io/vikipedia/",
-      "url_type": "pages",
-      "target_label": "Live",
-      "repo_url": "https://github.com/ttoriaa/vikipedia",
-      "language": "HTML",
-      "category": "Project",
-      "pushed_at": "2026-06-29T05:18:05Z"
     },
     {
       "name": "shimai-podcast-site",
@@ -78,6 +78,17 @@
       "language": "HTML",
       "category": "Project",
       "pushed_at": "2026-06-12T05:25:53Z"
+    },
+    {
+      "name": "ttoriaa",
+      "description": "Config files for my GitHub profile.",
+      "url": "https://github.com/ttoriaa",
+      "url_type": "homepage",
+      "target_label": "Live",
+      "repo_url": "https://github.com/ttoriaa/ttoriaa",
+      "language": "",
+      "category": "Config",
+      "pushed_at": "2023-06-19T14:37:00Z"
     }
   ]
 }
