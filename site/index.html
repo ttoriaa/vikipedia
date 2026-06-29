@@ -2672,6 +2672,37 @@
     </main>
   </div>
   <script>
+    window.__VIKI_ASSISTANT_CONFIG__ = {
+      endpoint: 'https://resume-tailor-1x7i.onrender.com/api/assistant/query',
+      method: 'POST',
+      provider: 'glm',
+      model: 'glm-4.5',
+      protocol: 'assistant_query',
+      stream: false,
+      headers: {},
+      authHeader: 'Authorization',
+      authScheme: 'Bearer',
+      authToken: '',
+      context: 'Vikipedia landing page (site build)',
+      fields: {
+        query: 'query',
+        mode: 'mode',
+        style: 'style',
+        lang: 'lang',
+        provider: 'provider',
+        model: 'model',
+        context: 'page_context'
+      },
+      chatFields: {
+        model: 'model',
+        messages: 'messages',
+        stream: 'stream'
+      },
+      chatExtraBody: {}
+    };
+  </script>
+  <script src="../assistant-widget.js?v=20260629-glm-2"></script>
+  <script>
     (() => {
       const body = document.body;
       const progressBar = document.getElementById('scrollProgressBar');
