@@ -1,7 +1,18 @@
 {
-  "generated_at": "2026-06-29T01:27:32.939594+00:00",
+  "generated_at": "2026-06-29T05:26:21.358529+00:00",
   "source": "https://github.com/ttoriaa",
   "projects": [
+    {
+      "name": "automotive-benchmarking",
+      "description": "",
+      "url": "https://ttoriaa.github.io/automotive-benchmarking/",
+      "url_type": "pages",
+      "target_label": "Live",
+      "repo_url": "https://github.com/ttoriaa/automotive-benchmarking",
+      "language": "Python",
+      "category": "Project",
+      "pushed_at": "2026-06-29T05:19:10Z"
+    },
     {
       "name": "vikipedia",
       "description": "",
@@ -11,7 +22,7 @@
       "repo_url": "https://github.com/ttoriaa/vikipedia",
       "language": "HTML",
       "category": "Project",
-      "pushed_at": "2026-06-29T01:25:41Z"
+      "pushed_at": "2026-06-29T05:18:05Z"
     },
     {
       "name": "shimai-podcast-site",
@@ -45,17 +56,6 @@
       "language": "Python",
       "category": "Project",
       "pushed_at": "2026-06-22T05:53:35Z"
-    },
-    {
-      "name": "automotive-benchmarking",
-      "description": "",
-      "url": "https://ttoriaa.github.io/automotive-benchmarking/",
-      "url_type": "pages",
-      "target_label": "Live",
-      "repo_url": "https://github.com/ttoriaa/automotive-benchmarking",
-      "language": "Python",
-      "category": "Project",
-      "pushed_at": "2026-06-17T09:11:11Z"
     },
     {
       "name": "gaming-vikipedia",
