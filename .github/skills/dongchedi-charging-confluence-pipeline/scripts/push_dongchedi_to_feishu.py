@@ -3,8 +3,10 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 import requests
 from dotenv import load_dotenv
@@ -137,28 +139,90 @@ def _load_text_preview(report_dir: Path) -> str:
     return "\n".join(cleaned[:100])
 
 
-def _build_children(text: str) -> list[dict[str, Any]]:
+def _paragraph_block(text: str) -> dict[str, Any]:
+    return {
+        "block_type": 2,
+        "paragraph": {
+            "elements": [
+                {
+                    "text_run": {"content": text},
+                }
+            ]
+        },
+    }
+
+
+def _heading_block(text: str, level: int = 1) -> dict[str, Any]:
+    style_map = {
+        1: "heading1",
+        2: "heading2",
+        3: "heading3",
+    }
+    style = style_map.get(level, "heading2")
+    return {
+        "block_type": 2,
+        "paragraph": {
+            "style": style,
+            "elements": [
+                {
+                    "text_run": {"content": text},
+                }
+            ],
+        },
+    }
+
+
+def _build_children(text: str, *, report_date: str) -> list[dict[str, Any]]:
     children: list[dict[str, Any]] = []
+    children.append(_heading_block(f"Dongchedi Charging Daily {report_date}", level=1))
+
     for raw_line in [line.strip() for line in text.splitlines() if line.strip()]:
-        children.append(
-            {
-                "block_type": 2,
-                "paragraph": {
-                    "elements": [
-                        {
-                            "text_run": {"content": raw_line},
-                        }
-                    ]
-                },
-            }
-        )
+        normalized = " ".join(raw_line.split())
+        if normalized.startswith("# "):
+            children.append(_heading_block(normalized[2:].strip(), level=1))
+        elif normalized.startswith("## "):
+            children.append(_heading_block(normalized[3:].strip(), level=2))
+        elif normalized.startswith("### "):
+            children.append(_heading_block(normalized[4:].strip(), level=3))
+        else:
+            children.append(_paragraph_block(normalized))
+
+    children.append(_paragraph_block(f"Generated from report: reports/dongchedi_daily/{report_date}"))
     return children
+
+
+def _extract_doc_token(document_id_or_url: str) -> str:
+    raw = (document_id_or_url or "").strip()
+    if not raw:
+        return ""
+
+    # Token form already provided.
+    if "/" not in raw and raw.startswith(("doc", "wiki", "dox")):
+        return raw
+
+    try:
+        parsed = urlparse(raw)
+    except Exception:
+        parsed = None
+
+    if parsed and parsed.path:
+        path = parsed.path.rstrip("/")
+        # Typical Feishu wiki/docx URL forms:
+        # https://{tenant}.feishu.cn/wiki/{token}
+        # https://{tenant}.feishu.cn/docx/{token}
+        m = re.search(r"/(?:wiki|docx)/([A-Za-z0-9_-]+)$", path)
+        if m:
+            return m.group(1)
+
+    # Best-effort fallback for raw strings containing a terminal token-like segment.
+    m = re.search(r"([A-Za-z0-9_-]{10,})$", raw)
+    return m.group(1) if m else raw
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Append Dongchedi daily artifacts into a Feishu doc.")
     parser.add_argument("--date", default="", help="Target report date in YYYY-MM-DD. Defaults to latest report dir.")
-    parser.add_argument("--document-id", default=os.getenv("FEISHU_DEFAULT_DOC_TOKEN", "").strip(), help="Feishu doc token.")
+    parser.add_argument("--document-id", default=os.getenv("FEISHU_DEFAULT_DOC_TOKEN", "").strip(), help="Feishu doc token or full Feishu document URL.")
     parser.add_argument("--parent-block-id", default=os.getenv("FEISHU_DEFAULT_PARENT_BLOCK_ID", "").strip(), help="Optional Feishu parent block id; defaults to doc root.")
     parser.add_argument("--dry-run", action="store_true", help="Preview payload without calling Feishu API.")
     return parser.parse_args()
@@ -170,13 +234,13 @@ def main() -> int:
     if not report_dir.exists():
         raise FileNotFoundError(f"Report directory not found: {report_dir}")
 
-    document_id = args.document_id.strip()
+    document_id = _extract_doc_token(args.document_id)
     if not document_id:
         raise RuntimeError("Missing Feishu document id. Pass --document-id or set FEISHU_DEFAULT_DOC_TOKEN in .env")
     parent_block_id = args.parent_block_id.strip() or document_id
 
     text = _load_text_preview(report_dir)
-    children = _build_children(text)
+    children = _build_children(text, report_date=report_dir.name)
     if not children:
         raise RuntimeError(f"No publishable content found in {report_dir}")
 
