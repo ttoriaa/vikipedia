@@ -55,6 +55,9 @@ jobs:
           if [ -f assets/profile.jpg ]; then
             cp assets/profile.jpg out/assets/profile.jpg
           fi
+          if [ -f assistant-widget.js ]; then
+            cp assistant-widget.js out/assistant-widget.js
+          fi
           if [ -f assets/github-projects.json ]; then
             cp assets/github-projects.json out/assets/github-projects.json
           fi
