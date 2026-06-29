@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Market Watch | 半导体 / AI算力 / 能源 / 黄金</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Daily Multi-Asset Monitor</p>
+      <h1>Market Watch</h1>
+      <p id="dataMeta" class="meta">加载中...</p>
+    </div>
+    <div class="top-actions">
+      <label for="snapshotDateFilter">查看日期</label>
+      <select id="snapshotDateFilter"></select>
+      <label for="snapshotTypeFilter">快照类型</label>
+      <select id="snapshotTypeFilter">
+        <option value="all">全部</option>
+        <option value="intraday">盘中</option>
+        <option value="post_close">收盘后</option>
+      </select>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel" id="overviewPanel">
+      <h2>市场总览</h2>
+      <div id="overviewCards" class="cards"></div>
+    </section>
+
+    <section class="panel">
+      <h2>告警面板</h2>
+      <div id="alertsPanel" class="alerts"></div>
+    </section>
+
+    <section class="panel">
+      <h2>快讯摘要</h2>
+      <div id="digestPanel" class="digest"></div>
+    </section>
+
+    <section class="panel">
+      <h2>全部标的行情</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>板块</th>
+              <th>标的</th>
+              <th>价格</th>
+              <th>涨跌幅</th>
+              <th>成交量</th>
+              <th>来源</th>
+            </tr>
+          </thead>
+          <tbody id="quoteBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>

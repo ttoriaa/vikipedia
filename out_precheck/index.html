@@ -1,0 +1,3420 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vikipedia: Let's roll.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f6f3ec;
+      --ink: #101820;
+      --muted: #52606d;
+      --line: rgba(16, 24, 32, 0.12);
+      --card: rgba(255, 255, 255, 0.76);
+      --card-strong: rgba(255, 255, 255, 0.92);
+      --blue: #7c5cff;
+      --cyan: #b389ff;
+      --orange: #8b5cf6;
+      --sand: #d9c6ff;
+      --shadow: 0 18px 60px rgba(16, 24, 32, 0.12);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(139, 92, 246, 0.34), transparent 28%),
+        radial-gradient(circle at 88% 12%, rgba(139, 92, 246, 0.2), transparent 25%),
+        linear-gradient(135deg, #fff7ec 0%, #f4f5f8 45%, #edf8ff 100%);
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(16, 24, 32, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(16, 24, 32, 0.03) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(circle at center, black 50%, transparent 92%);
+      pointer-events: none;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .shell {
+      width: min(1240px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 64px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .story-timeline {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 60;
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 16px 38px rgba(16, 24, 32, 0.13);
+    }
+
+    .story-timeline::before {
+      content: "";
+      position: absolute;
+      left: 22px;
+      top: 16px;
+      bottom: 16px;
+      width: 2px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(15, 111, 255, 0.35), rgba(85, 214, 255, 0.25), rgba(139, 92, 246, 0.35));
+    }
+
+    .story-timeline a {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 34px;
+      padding: 6px 12px 6px 24px;
+      border-radius: 999px;
+      color: #60707d;
+      font-size: 12px;
+      font-weight: 700;
+      transition: color 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    .story-timeline a::before {
+      content: "";
+      position: absolute;
+      left: 8px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid rgba(15, 111, 255, 0.36);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(15, 111, 255, 0.06);
+      transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .story-timeline a.is-active {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.9);
+      transform: translateX(-2px);
+    }
+
+    .story-timeline a.is-active::before {
+      transform: scale(1.15);
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      box-shadow: 0 0 0 4px rgba(15, 111, 255, 0.14);
+    }
+
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: rgba(16, 24, 32, 0.08);
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .scroll-progress-bar {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--blue), var(--cyan), var(--orange));
+      box-shadow: 0 0 14px rgba(15, 111, 255, 0.45);
+      transition: width 0.12s linear;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 10px 24px rgba(16, 24, 32, 0.07);
+      margin-bottom: 20px;
+      animation: rise-in 0.7s ease both;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-mark::after {
+      content: "V";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .brand-copy {
+      min-width: 0;
+    }
+
+    .brand-copy strong,
+    .hero-copy h1,
+    .section-head h2,
+    .feature-card h3,
+    .site-card h3 {
+      font-family: "Space Grotesk", "Noto Sans SC", sans-serif;
+    }
+
+    .brand-copy strong {
+      display: block;
+      font-size: 16px;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-copy span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .top-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .top-tabs {
+      display: inline-flex;
+      gap: 8px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .top-tab {
+      min-height: 34px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: color 0.18s ease, border-color 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
+    }
+
+    .top-tab.is-active {
+      color: var(--ink);
+      border-color: rgba(15, 111, 255, 0.32);
+      background: rgba(255, 255, 255, 0.9);
+      transform: translateY(-1px);
+    }
+
+    .top-links a {
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      transition: transform 0.18s ease, border-color 0.18s ease, color 0.18s ease, background-color 0.18s ease;
+    }
+
+    .lang-toggle {
+      min-height: 40px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.82);
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+    }
+
+    .lang-toggle:hover {
+      transform: translateY(-1px);
+      border-color: rgba(15, 111, 255, 0.35);
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.is-active {
+      display: block;
+    }
+
+    .resume-shell {
+      min-height: 62vh;
+    }
+
+    .resume-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .resume-col {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .resume-card {
+      padding: 18px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: var(--card-strong);
+      box-shadow: 0 14px 30px rgba(16, 24, 32, 0.11);
+    }
+
+    .resume-card h3 {
+      margin: 0 0 12px;
+      font-family: "Space Grotesk", "Noto Sans SC", sans-serif;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+    }
+
+    .resume-card p,
+    .resume-list {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 14px;
+    }
+
+    .resume-list {
+      padding-left: 18px;
+    }
+
+    .resume-list li + li {
+      margin-top: 8px;
+    }
+
+    .resume-hero {
+      background: linear-gradient(140deg, rgba(123, 97, 255, 0.14), rgba(255, 255, 255, 0.92));
+    }
+
+    .resume-profile {
+      display: grid;
+      grid-template-columns: 132px 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .resume-photo-wrap {
+      width: 132px;
+      height: 132px;
+      border-radius: 20px;
+      border: 1px solid rgba(123, 97, 255, 0.36);
+      background: rgba(123, 97, 255, 0.12);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .resume-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .resume-photo-fallback {
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+      line-height: 1.5;
+      padding: 10px;
+    }
+
+    .resume-role {
+      margin: 6px 0 10px;
+      font-size: 14px;
+      color: #55657a;
+      font-weight: 700;
+    }
+
+    .resume-actions {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .resume-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(123, 97, 255, 0.36);
+      background: rgba(123, 97, 255, 0.12);
+      color: #33445a;
+      font-size: 13px;
+      font-weight: 800;
+      transition: transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
+    }
+
+    .resume-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(123, 97, 255, 0.62);
+      background: rgba(123, 97, 255, 0.2);
+    }
+
+    .resume-timeline {
+      margin-top: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .resume-intern-grid {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .resume-timeline .resume-card {
+      border-left: 4px solid rgba(123, 97, 255, 0.52);
+      padding-left: 16px;
+    }
+
+    .resume-meta {
+      margin: -4px 0 8px;
+      color: #667995;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    body[data-active-tab="resume"] .story-timeline,
+    body[data-active-tab="resume"] .scroll-progress,
+    body[data-active-tab="skills"] .story-timeline,
+    body[data-active-tab="skills"] .scroll-progress,
+    body[data-active-tab="token"] .story-timeline,
+    body[data-active-tab="token"] .scroll-progress {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .token-shell {
+      min-height: 62vh;
+    }
+
+    .token-lead {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .token-actions {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .token-frame {
+      margin-top: 14px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: var(--card-strong);
+      box-shadow: 0 16px 34px rgba(16, 24, 32, 0.12);
+      overflow: hidden;
+      min-height: 70vh;
+    }
+
+    .token-frame iframe {
+      width: 100%;
+      height: 70vh;
+      min-height: 620px;
+      border: 0;
+      background: #fff;
+    }
+
+    .token-summary-card {
+      margin-top: 14px;
+    }
+
+    .token-summary-group + .token-summary-group {
+      margin-top: 12px;
+    }
+
+    .token-summary-group h4 {
+      margin: 0 0 6px;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .token-summary-group ul {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .hero-copy,
+    .hero-panel,
+    .section,
+    .footer-note {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: var(--card);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-copy {
+      padding: clamp(12px, 2vw, 18px);
+      position: relative;
+      overflow: hidden;
+      animation: rise-in 0.8s ease both;
+    }
+
+    .hero-copy::after {
+      content: "";
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      right: -90px;
+      top: -120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(15, 111, 255, 0.36), rgba(15, 111, 255, 0.03) 72%);
+    }
+
+    .hero-copy::before {
+      content: "";
+      position: absolute;
+      inset: auto auto -90px -90px;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.22), rgba(139, 92, 246, 0.02) 72%);
+    }
+
+    .eyebrow {
+      width: fit-content;
+      margin: 0 0 28px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(16, 24, 32, 0.05);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .hero-copy h1 {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      max-width: 18ch;
+      font-size: clamp(36px, 5.6vw, 66px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-copy h1 .hero-title-line {
+      display: block;
+    }
+
+    .hero-copy p {
+      position: relative;
+      z-index: 1;
+      margin: 18px 0 0;
+      max-width: 62ch;
+      color: var(--muted);
+      font-size: clamp(15px, 1.5vw, 20px);
+      line-height: 1.8;
+    }
+
+    .hero-copy .eyebrow {
+      margin: 0 0 18px;
+    }
+
+    .hero-right-rail {
+      margin-top: 8px;
+      margin-left: auto;
+      width: min(56%, 620px);
+      display: grid;
+      gap: 56px;
+      justify-items: stretch;
+    }
+
+    .hero-story {
+      position: relative;
+      z-index: 1;
+      margin-top: 0;
+      padding-left: 0;
+      display: grid;
+      gap: 6px;
+    }
+
+    .hero-copy .hero-step {
+      margin: 0;
+      padding: 8px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(16, 24, 32, 0.08);
+      background: rgba(255, 255, 255, 0.68);
+      color: #60707d;
+      font-size: clamp(11px, 0.85vw, 13px);
+      line-height: 1.5;
+      transition: color 0.25s ease, border-color 0.25s ease, background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .hero-step.is-active {
+      color: var(--ink);
+      border-color: rgba(15, 111, 255, 0.36);
+      background: rgba(255, 255, 255, 0.92);
+      transform: translateX(4px);
+      box-shadow: 0 12px 22px rgba(16, 24, 32, 0.1);
+    }
+
+    .hero-actions {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 0;
+      width: auto;
+      justify-content: flex-end;
+    }
+
+    .hero-notes {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .hero-note {
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(16, 24, 32, 0.08);
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-note strong {
+      display: block;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .hero-note span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .cta,
+    .ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      font-weight: 800;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .cta {
+      background: linear-gradient(135deg, var(--blue), #4b8dff 60%, var(--cyan));
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 18px 28px rgba(15, 111, 255, 0.24);
+    }
+
+    .ghost {
+      background: rgba(255, 255, 255, 0.8);
+      color: var(--ink);
+    }
+
+    .cta:hover,
+    .ghost:hover,
+    .feature-card:hover,
+    .site-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .hero-panel {
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+      animation: rise-in 0.9s ease both;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .metric {
+      border-radius: var(--radius-md);
+      background: var(--card-strong);
+      border: 1px solid var(--line);
+      padding: 16px;
+    }
+
+    .metric strong {
+      display: block;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 30px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .metric span,
+    .hero-panel p,
+    .site-card p,
+    .feature-card p,
+    .footer-note p {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .hero-panel .highlight-box {
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      background: linear-gradient(140deg, rgba(139, 92, 246, 0.14), rgba(255, 255, 255, 0.86));
+      border: 1px solid rgba(139, 92, 246, 0.28);
+    }
+
+    .showcase-stack {
+      display: grid;
+      gap: 10px;
+      margin-top: 2px;
+    }
+
+    .showcase-card {
+      position: relative;
+      border-radius: 18px;
+      min-height: 110px;
+      overflow: hidden;
+      border: 1px solid rgba(16, 24, 32, 0.08);
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: 0 14px 34px rgba(16, 24, 32, 0.1);
+      animation: float-bob 8s ease-in-out infinite;
+    }
+
+    .showcase-card:nth-child(2) {
+      animation-delay: 1.2s;
+    }
+
+    .showcase-card:nth-child(3) {
+      animation-delay: 2.2s;
+    }
+
+    .showcase-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.22), transparent 46%, rgba(255,255,255,0.08));
+      pointer-events: none;
+    }
+
+    .showcase-card img {
+      width: 168%;
+      height: 235px;
+      object-fit: cover;
+      transform-origin: top left;
+      transform: scale(0.595);
+      filter: saturate(1.02) contrast(1.01);
+    }
+
+    .showcase-caption {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(16, 24, 32, 0.64);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      backdrop-filter: blur(10px);
+    }
+
+    .section {
+      padding: 22px;
+      margin-top: 18px;
+      animation: rise-in 0.9s ease both;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(26px, 3vw, 38px);
+      letter-spacing: -0.04em;
+    }
+
+    .section-head p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      max-width: 60ch;
+      line-height: 1.8;
+    }
+
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .impact-card {
+      position: relative;
+      overflow: hidden;
+      padding: 18px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(119, 146, 196, 0.42);
+      background: linear-gradient(145deg, rgba(11, 22, 40, 0.94), rgba(24, 44, 76, 0.9));
+      box-shadow: 0 14px 30px rgba(7, 14, 28, 0.28);
+    }
+
+    .impact-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 12px;
+      right: 12px;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(122, 91, 255, 0.2), rgba(124, 220, 255, 0.86), rgba(122, 91, 255, 0.2));
+    }
+
+    .impact-card strong {
+      display: block;
+      font-family: "Space Grotesk", "Noto Sans SC", sans-serif;
+      color: #f4f8ff;
+      font-size: clamp(31px, 3.5vw, 38px);
+      line-height: 1;
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.26);
+    }
+
+    .impact-card span {
+      color: #c0d2ef;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      line-height: 1.6;
+      display: block;
+    }
+
+    .feature-grid,
+    .sites-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .feature-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-items: stretch;
+    }
+
+    .feature-card,
+    .site-card {
+      display: grid;
+      gap: 14px;
+      padding: 18px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: var(--card-strong);
+      transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+    }
+
+    .feature-card {
+      min-height: 420px;
+      position: relative;
+      overflow: hidden;
+      animation: rise-in 0.85s ease both;
+      opacity: 0.62;
+      transform: translateY(16px) scale(0.98);
+    }
+
+    .feature-card:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .feature-card:nth-child(3) {
+      animation-delay: 0.18s;
+    }
+
+    .feature-card.is-focus {
+      opacity: 1;
+      transform: translateY(0) scale(1.02);
+      box-shadow: 0 28px 64px rgba(16, 24, 32, 0.2);
+      border-color: rgba(15, 111, 255, 0.3);
+    }
+
+    .feature-card.is-focus::after {
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.66), transparent 68%);
+    }
+
+    .feature-card::after {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      right: -70px;
+      bottom: -70px;
+      background: radial-gradient(circle, rgba(255,255,255,0.48), transparent 68%);
+    }
+
+    .feature-card:nth-child(1) {
+      background: linear-gradient(135deg, rgba(13, 23, 45, 0.96), rgba(38, 63, 109, 0.92));
+      color: #f6f8ff;
+    }
+
+    .feature-card:nth-child(1) p,
+    .feature-card:nth-child(1) .chip,
+    .feature-card:nth-child(1) .meta-line {
+      color: rgba(246, 248, 255, 0.82);
+    }
+
+    .feature-card:nth-child(2) {
+      background: linear-gradient(135deg, rgba(255, 245, 230, 0.96), rgba(255, 255, 255, 0.94));
+    }
+
+    .feature-card:nth-child(3) {
+      background: linear-gradient(135deg, rgba(234, 250, 255, 0.98), rgba(255, 255, 255, 0.94));
+    }
+
+    .feature-card:hover,
+    .site-card:hover {
+      box-shadow: 0 24px 56px rgba(16, 24, 32, 0.14);
+      border-color: rgba(15, 111, 255, 0.18);
+    }
+
+    .feature-card::before,
+    .site-card::before {
+      content: "";
+      position: absolute;
+      inset: -40% auto auto -20%;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent 72%);
+      transform: translate3d(0, 0, 0);
+      opacity: 0;
+      transition: opacity 0.24s ease;
+      pointer-events: none;
+    }
+
+    .feature-card:hover::before,
+    .site-card:hover::before {
+      opacity: 1;
+    }
+
+    .chip-row,
+    .card-actions,
+    .site-actions,
+    .site-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .chip,
+    .site-tag {
+      width: fit-content;
+      padding: 7px 11px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.64);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .feature-card:nth-child(1) .chip {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .feature-card h3,
+    .site-card h3 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .feature-copy {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+      position: relative;
+      z-index: 1;
+    }
+
+    .project-meta {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .project-meta div {
+      padding: 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(16, 24, 32, 0.08);
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .project-meta strong {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.7;
+      margin-bottom: 5px;
+    }
+
+    .project-meta span {
+      display: block;
+      font-size: 12px;
+      line-height: 1.45;
+      color: inherit;
+    }
+
+    .feature-card:nth-child(1) .project-meta div {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .preview-shell {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      align-content: start;
+      margin-top: auto;
+    }
+
+    .browser-mockup {
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 18px 40px rgba(16, 24, 32, 0.2);
+      transform-origin: center;
+      transition: transform 0.24s ease, box-shadow 0.24s ease;
+    }
+
+    .feature-card:hover .browser-mockup {
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 26px 60px rgba(16, 24, 32, 0.26);
+    }
+
+    .browser-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      background: rgba(248, 250, 252, 0.92);
+      border-bottom: 1px solid rgba(16, 24, 32, 0.08);
+    }
+
+    .browser-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #d4dbe3;
+    }
+
+    .browser-dot:nth-child(1) {
+      background: #ff6b6b;
+    }
+
+    .browser-dot:nth-child(2) {
+      background: #ffb347;
+    }
+
+    .browser-dot:nth-child(3) {
+      background: #6ad38b;
+    }
+
+    .browser-url {
+      margin-left: 6px;
+      flex: 1;
+      min-width: 0;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: #eef3f8;
+      color: #5e6a77;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .preview-screen {
+      min-height: 220px;
+      padding: 16px;
+      display: grid;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .live-preview {
+      position: relative;
+      min-height: 232px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(16, 24, 32, 0.08);
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);
+    }
+
+    .live-preview img {
+      width: 168%;
+      height: 390px;
+      object-fit: cover;
+      transform-origin: top left;
+      transform: scale(0.595);
+      background: #fff;
+    }
+
+    .preview-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0) 48%, rgba(255,255,255,0.14) 70%, rgba(12, 18, 28, 0.06) 100%);
+      pointer-events: none;
+    }
+
+    .preview-caption {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(16, 24, 32, 0.08);
+      backdrop-filter: blur(10px);
+      font-size: 11px;
+      color: #596675;
+      font-weight: 700;
+    }
+
+    .preview-screen--gaming {
+      background:
+        linear-gradient(160deg, rgba(8, 13, 28, 0.98), rgba(28, 40, 67, 0.94)),
+        linear-gradient(135deg, #0a0f1e, #22314f);
+      color: #eef4ff;
+    }
+
+    .preview-screen--charging {
+      background:
+        radial-gradient(circle at top right, rgba(15, 111, 255, 0.18), transparent 34%),
+        linear-gradient(145deg, #fff8ec, #edf5ff);
+      color: #12202b;
+    }
+
+    .preview-screen--podcast {
+      background:
+        radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.22), transparent 26%),
+        linear-gradient(145deg, #fff0ea, #fffaf4 46%, #eef5ff 100%);
+      color: #18222d;
+    }
+
+    .preview-screen::after {
+      content: "";
+      position: absolute;
+      inset: auto -20px -44px auto;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.32), transparent 72%);
+      pointer-events: none;
+    }
+
+    .preview-kicker {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.78;
+    }
+
+    .preview-title {
+      font-family: "Space Grotesk", "Noto Sans SC", sans-serif;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .preview-nav,
+    .preview-stats,
+    .preview-tags,
+    .preview-games,
+    .mini-cards,
+    .wave-bars {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .preview-pill,
+    .mini-pill {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .preview-screen--gaming .preview-pill,
+    .preview-screen--gaming .mini-pill {
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(240, 245, 255, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .preview-screen--charging .preview-pill,
+    .preview-screen--charging .mini-pill,
+    .preview-screen--podcast .preview-pill,
+    .preview-screen--podcast .mini-pill {
+      background: rgba(255, 255, 255, 0.78);
+      color: #4c5967;
+      border: 1px solid rgba(16, 24, 32, 0.08);
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .panel-mock,
+    .chart-mock,
+    .podcast-cover,
+    .board-mock,
+    .podcast-list {
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .board-mock {
+      aspect-ratio: 1;
+      background:
+        linear-gradient(45deg, rgba(255,255,255,0.06) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.06) 75%),
+        linear-gradient(45deg, rgba(255,255,255,0.06) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.06) 75%),
+        linear-gradient(135deg, #0f1728, #162645);
+      background-size: 40px 40px;
+      background-position: 0 0, 20px 20px, 0 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .board-piece {
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.18);
+    }
+
+    .board-piece.light {
+      background: #f4f1e6;
+      color: #12202b;
+    }
+
+    .board-piece.dark {
+      background: #e43752;
+      color: #fff;
+    }
+
+    .board-piece.p1 { top: 14%; left: 12%; }
+    .board-piece.p2 { top: 36%; left: 42%; }
+    .board-piece.p3 { top: 58%; left: 66%; }
+    .board-piece.p4 { top: 74%; left: 20%; }
+
+    .preview-games {
+      justify-content: space-between;
+    }
+
+    .stat-blocks {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .stat-block {
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(16, 24, 32, 0.08);
+    }
+
+    .stat-block strong {
+      display: block;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+
+    .stat-block span {
+      font-size: 11px;
+      color: #5e6b77;
+      line-height: 1.4;
+    }
+
+    .chart-mock {
+      min-height: 146px;
+      border: 1px solid rgba(16, 24, 32, 0.08);
+      background: rgba(255, 255, 255, 0.82);
+      padding: 12px;
+      display: grid;
+      align-content: end;
+      gap: 8px;
+    }
+
+    .chart-line {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 8px;
+      align-items: end;
+      min-height: 88px;
+    }
+
+    .chart-line span {
+      display: block;
+      border-radius: 999px 999px 10px 10px;
+      background: linear-gradient(180deg, #79b4ff, #0f6fff);
+      opacity: 0.95;
+    }
+
+    .chart-line span:nth-child(1) { height: 34%; }
+    .chart-line span:nth-child(2) { height: 58%; }
+    .chart-line span:nth-child(3) { height: 42%; }
+    .chart-line span:nth-child(4) { height: 76%; }
+    .chart-line span:nth-child(5) { height: 64%; }
+    .chart-line span:nth-child(6) { height: 88%; }
+    .chart-line span:nth-child(7) { height: 54%; }
+    .chart-line span:nth-child(8) { height: 68%; }
+
+    .podcast-grid {
+      display: grid;
+      grid-template-columns: 0.92fr 1.08fr;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .podcast-cover {
+      min-height: 158px;
+      background:
+        linear-gradient(145deg, rgba(126, 97, 255, 0.92), rgba(172, 130, 255, 0.88)),
+        linear-gradient(180deg, #7d61ff, #ac82ff);
+      display: grid;
+      place-items: end start;
+      padding: 14px;
+      color: #fff;
+      font-family: "Space Grotesk", "Noto Sans SC", sans-serif;
+      font-size: 24px;
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+    }
+
+    .podcast-list {
+      min-height: 158px;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(16, 24, 32, 0.08);
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .episode-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #fff7f2;
+    }
+
+    .episode-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #7d61ff, #ac82ff);
+    }
+
+    .episode-copy strong,
+    .episode-time {
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .episode-copy span {
+      display: block;
+      font-size: 11px;
+      color: #66727e;
+      margin-top: 2px;
+    }
+
+    .wave-bars {
+      gap: 4px;
+      align-items: end;
+      min-height: 34px;
+    }
+
+    .wave-bars span {
+      width: 5px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #7d61ff, #ac82ff);
+    }
+
+    .wave-bars span:nth-child(1) { height: 12px; }
+    .wave-bars span:nth-child(2) { height: 24px; }
+    .wave-bars span:nth-child(3) { height: 18px; }
+    .wave-bars span:nth-child(4) { height: 30px; }
+    .wave-bars span:nth-child(5) { height: 15px; }
+    .wave-bars span:nth-child(6) { height: 26px; }
+
+    .site-card {
+      position: relative;
+      overflow: hidden;
+      animation: rise-in 0.9s ease both;
+    }
+
+    .site-card:nth-child(2) {
+      animation-delay: 0.06s;
+    }
+
+    .site-card:nth-child(3) {
+      animation-delay: 0.12s;
+    }
+
+    .site-thumb {
+      border-radius: 16px;
+      border: 1px solid rgba(16, 24, 32, 0.08);
+      min-height: 130px;
+      overflow: hidden;
+      position: relative;
+      background: #fff;
+    }
+
+    .site-thumb--podcast {
+      background: linear-gradient(145deg, #fff1e9, #fff9f5 55%, #eef4ff);
+    }
+
+    .site-thumb--charging {
+      background: linear-gradient(145deg, #fff7ec, #edf5ff);
+    }
+
+    .site-thumb--gaming {
+      background: linear-gradient(145deg, #0a1224, #23385b);
+    }
+
+    .thumb-top {
+      display: flex;
+      gap: 6px;
+      padding: 10px 12px;
+    }
+
+    .thumb-top span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(16, 24, 32, 0.18);
+    }
+
+    .site-thumb--gaming .thumb-top span {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .thumb-body {
+      padding: 8px 12px 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .thumb-title {
+      font-family: "Space Grotesk", "Noto Sans SC", sans-serif;
+      font-size: 18px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .site-thumb--gaming .thumb-title,
+    .site-thumb--gaming .thumb-line,
+    .site-thumb--gaming .thumb-micro {
+      color: #eef4ff;
+    }
+
+    .thumb-line {
+      height: 9px;
+      border-radius: 999px;
+      background: rgba(16, 24, 32, 0.1);
+    }
+
+    .site-thumb--gaming .thumb-line {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .thumb-line.short { width: 54%; }
+    .thumb-line.mid { width: 72%; }
+    .thumb-line.long { width: 92%; }
+
+    .thumb-micro {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      font-size: 10px;
+      font-weight: 700;
+      color: #62707d;
+    }
+
+    .thumb-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .thumb-grid span {
+      aspect-ratio: 1;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .thumb-bars {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      align-items: end;
+      min-height: 58px;
+    }
+
+    .thumb-bars span {
+      border-radius: 999px 999px 8px 8px;
+      background: linear-gradient(180deg, #8dbdff, #0f6fff);
+    }
+
+    .thumb-bars span:nth-child(1) { height: 34%; }
+    .thumb-bars span:nth-child(2) { height: 78%; }
+    .thumb-bars span:nth-child(3) { height: 52%; }
+    .thumb-bars span:nth-child(4) { height: 86%; }
+    .thumb-bars span:nth-child(5) { height: 66%; }
+
+    .meta-line {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .card-actions a,
+    .site-actions a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 11px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.82);
+      font-weight: 800;
+    }
+
+    .sites-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .skills-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .skills-controls {
+      display: grid;
+      grid-template-columns: 1fr 220px auto;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .skills-input,
+    .skills-select {
+      width: 100%;
+      min-height: 42px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--ink);
+      padding: 10px 12px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .skills-input:focus,
+    .skills-select:focus {
+      border-color: rgba(15, 111, 255, 0.45);
+      box-shadow: 0 0 0 3px rgba(15, 111, 255, 0.12);
+    }
+
+    .skills-count {
+      justify-self: end;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .skill-card .skill-path {
+      margin: 0;
+      font-family: "JetBrains Mono", "Consolas", "Menlo", monospace;
+      font-size: 12px;
+      color: color-mix(in srgb, var(--muted) 80%, transparent);
+      word-break: break-all;
+    }
+
+    .auto-projects-status {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px dashed var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .auto-projects-grid {
+      margin-top: 14px;
+    }
+
+    .site-thumb--auto {
+      background: linear-gradient(145deg, #101a2d, #22365d 56%, #2e4b7c);
+    }
+
+    .site-thumb--auto .thumb-top span {
+      background: rgba(255, 255, 255, 0.34);
+    }
+
+    .site-thumb--auto .thumb-title,
+    .site-thumb--auto .thumb-line,
+    .site-thumb--auto .thumb-micro {
+      color: #eef4ff;
+    }
+
+    .site-thumb--auto .thumb-line {
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .site-card.pending {
+      border-style: dashed;
+      background: rgba(255, 255, 255, 0.56);
+    }
+
+    .site-card.pending .site-actions span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 11px 14px;
+      border-radius: 14px;
+      border: 1px dashed var(--line);
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .site-tag.status-active {
+      background: rgba(21, 167, 123, 0.13);
+      border-color: rgba(21, 167, 123, 0.4);
+      color: #087a57;
+    }
+
+    .site-tag.status-stable {
+      background: rgba(15, 111, 255, 0.12);
+      border-color: rgba(15, 111, 255, 0.38);
+      color: #0f5fd2;
+    }
+
+    .site-tag.status-experimental {
+      background: rgba(244, 148, 35, 0.12);
+      border-color: rgba(244, 148, 35, 0.4);
+      color: #b06208;
+    }
+
+    .fixed-cta {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 80;
+      display: grid;
+      gap: 8px;
+      width: min(290px, calc(100vw - 40px));
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 34px rgba(16, 24, 32, 0.2);
+    }
+
+    .fixed-cta p {
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .fixed-cta-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .fixed-cta a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 800;
+      transition: transform 0.18s ease, border-color 0.18s ease;
+    }
+
+    .fixed-cta a:hover {
+      transform: translateY(-1px);
+      border-color: rgba(15, 111, 255, 0.35);
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      padding: 20px 22px;
+      background: rgba(255, 255, 255, 0.68);
+    }
+
+    .footer-note strong {
+      display: block;
+      margin-bottom: 8px;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 18px;
+    }
+
+    .dark-theme {
+      color: #eef5ff;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(139, 92, 246, 0.25), transparent 28%),
+        radial-gradient(circle at 90% 12%, rgba(139, 92, 246, 0.22), transparent 28%),
+        linear-gradient(140deg, #06080f 0%, #0b1220 55%, #07101c 100%);
+    }
+
+    .dark-theme::before {
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    }
+
+    .dark-theme .topbar,
+    .dark-theme .hero-copy,
+    .dark-theme .hero-panel,
+    .dark-theme .section,
+    .dark-theme .footer-note,
+    .dark-theme .feature-card,
+    .dark-theme .site-card,
+    .dark-theme .metric,
+    .dark-theme .hero-note,
+    .dark-theme .browser-mockup,
+    .dark-theme .live-preview,
+    .dark-theme .showcase-card,
+    .dark-theme .site-thumb,
+    .dark-theme .story-timeline {
+      background: rgba(12, 18, 30, 0.78) !important;
+      border-color: rgba(163, 189, 255, 0.2) !important;
+      box-shadow: 0 18px 46px rgba(0, 0, 0, 0.42);
+      color: #eef5ff;
+    }
+
+    .dark-theme .top-links a,
+    .dark-theme .chip,
+    .dark-theme .site-tag,
+    .dark-theme .skills-input,
+    .dark-theme .skills-select,
+    .dark-theme .fixed-cta,
+    .dark-theme .fixed-cta a,
+    .dark-theme .card-actions a,
+    .dark-theme .site-actions a,
+    .dark-theme .ghost,
+    .dark-theme .hero-step,
+    .dark-theme .project-meta div,
+    .dark-theme .preview-caption,
+    .dark-theme .browser-url,
+    .dark-theme .stat-block,
+    .dark-theme .podcast-list,
+    .dark-theme .episode-row,
+    .dark-theme .chart-mock {
+      background: rgba(16, 24, 40, 0.9) !important;
+      border-color: rgba(163, 189, 255, 0.22) !important;
+      color: #dbe9ff !important;
+    }
+
+    .dark-theme .feature-card:nth-child(1) {
+      background: linear-gradient(135deg, rgba(9, 16, 30, 0.96), rgba(22, 44, 84, 0.94)) !important;
+    }
+
+    .dark-theme .feature-card:nth-child(2) {
+      background: linear-gradient(135deg, rgba(9, 16, 30, 0.96), rgba(17, 36, 68, 0.94)) !important;
+    }
+
+    .dark-theme .feature-card:nth-child(3) {
+      background: linear-gradient(135deg, rgba(10, 18, 33, 0.96), rgba(25, 43, 78, 0.94)) !important;
+    }
+
+    .dark-theme .feature-card p,
+    .dark-theme .site-card p,
+    .dark-theme .skill-card .skill-path,
+    .dark-theme .skills-count,
+    .dark-theme .fixed-cta p,
+    .dark-theme .meta-line,
+    .dark-theme .hero-panel p,
+    .dark-theme .section-head p,
+    .dark-theme .brand-copy span,
+    .dark-theme .hero-note span,
+    .dark-theme .thumb-micro,
+    .dark-theme .stat-block span,
+    .dark-theme .episode-copy span,
+    .dark-theme .preview-kicker,
+    .dark-theme .story-timeline a,
+    .dark-theme .top-links a,
+    .dark-theme .wave-bars,
+    .dark-theme .showcase-caption {
+      color: #9eb4d2 !important;
+    }
+
+    .dark-theme .eyebrow,
+    .dark-theme .cta,
+    .dark-theme .thumb-bars span,
+    .dark-theme .chart-line span {
+      background: linear-gradient(135deg, #7a5bff, #9b6dff 64%, #c4a1ff) !important;
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .dark-theme .impact-card {
+      border-color: rgba(151, 180, 232, 0.45) !important;
+      background: linear-gradient(145deg, rgba(10, 20, 40, 0.95), rgba(20, 40, 74, 0.92)) !important;
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.36);
+    }
+
+    .dark-theme .impact-card strong {
+      color: #f7faff !important;
+    }
+
+    .dark-theme .impact-card span {
+      color: #c7d8f4 !important;
+    }
+
+    .dark-theme .hero-step.is-active,
+    .dark-theme .top-links a:hover,
+    .dark-theme .card-actions a:hover,
+    .dark-theme .site-actions a:hover,
+    .dark-theme .story-timeline a.is-active,
+    .dark-theme .top-tab.is-active,
+    .dark-theme .lang-toggle {
+      color: #f4f8ff !important;
+      border-color: rgba(83, 162, 255, 0.55) !important;
+      background: rgba(26, 43, 74, 0.94) !important;
+    }
+
+    .dark-theme .top-tabs,
+    .dark-theme .top-tab,
+    .dark-theme .resume-card {
+      background: rgba(12, 18, 30, 0.78);
+      border-color: rgba(163, 189, 255, 0.2);
+      color: #dbe9ff;
+    }
+
+    .dark-theme .resume-hero {
+      background: linear-gradient(145deg, rgba(26, 24, 52, 0.92), rgba(16, 23, 38, 0.92));
+    }
+
+    .dark-theme .resume-photo-wrap,
+    .dark-theme .resume-btn,
+    .dark-theme .resume-timeline .resume-card {
+      border-color: rgba(155, 109, 255, 0.46);
+    }
+
+    .dark-theme .resume-btn {
+      background: rgba(155, 109, 255, 0.18);
+      color: #eaf0ff;
+    }
+
+    .dark-theme .resume-btn:hover {
+      background: rgba(155, 109, 255, 0.3);
+      border-color: rgba(155, 109, 255, 0.68);
+    }
+
+    .dark-theme .resume-card p,
+    .dark-theme .resume-list {
+      color: #a8bfdc;
+    }
+
+    .dark-theme .resume-role,
+    .dark-theme .resume-meta,
+    .dark-theme .resume-photo-fallback {
+      color: #9db3d2;
+    }
+
+    .dark-theme .browser-bar {
+      background: rgba(10, 16, 28, 0.96);
+      border-bottom-color: rgba(163, 189, 255, 0.14);
+    }
+
+    .dark-theme .preview-screen--charging {
+      background:
+        radial-gradient(circle at top right, rgba(15, 111, 255, 0.2), transparent 34%),
+        linear-gradient(145deg, #0c1324, #10213b);
+      color: #dbe9ff;
+    }
+
+    .dark-theme .preview-screen--podcast {
+      background:
+        radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.24), transparent 26%),
+        linear-gradient(145deg, #211429, #111b32 46%, #0e1b2e 100%);
+      color: #dbe9ff;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes rise-in {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes float-bob {
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-5px);
+      }
+    }
+
+    @media (max-width: 1080px) {
+      .feature-grid,
+      .sites-grid,
+      .skills-grid,
+      .resume-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .impact-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .skills-controls {
+        grid-template-columns: 1fr;
+      }
+
+      .skills-count {
+        justify-self: start;
+      }
+
+      .story-timeline {
+        display: none;
+      }
+
+      .hero-copy h1 {
+        max-width: none;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .shell {
+        width: min(100% - 20px, 1240px);
+        padding-top: 14px;
+      }
+
+      .topbar,
+      .section,
+      .hero-copy,
+      .hero-panel,
+      .footer-note {
+        border-radius: 20px;
+      }
+
+      .topbar,
+      .section-head {
+        display: grid;
+        justify-content: stretch;
+      }
+
+      .top-links {
+        justify-content: flex-start;
+      }
+
+      .hero-actions {
+        justify-content: flex-start;
+      }
+
+      .metric-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .preview-grid,
+      .podcast-grid,
+      .stat-blocks,
+      .hero-notes,
+      .project-meta,
+      .resume-intern-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .resume-profile {
+        grid-template-columns: 1fr;
+      }
+
+      .resume-photo-wrap {
+        width: 108px;
+        height: 108px;
+      }
+
+      .showcase-card img,
+      .live-preview img {
+        width: 190%;
+      }
+
+      .hero-copy h1,
+      .section-head h2 {
+        letter-spacing: -0.05em;
+      }
+
+      .hero-right-rail {
+        width: 100%;
+        margin-left: 0;
+      }
+
+      .fixed-cta {
+        right: 12px;
+        left: 12px;
+        width: auto;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal,
+      .reveal.is-visible,
+      .showcase-card,
+      .topbar,
+      .hero-copy,
+      .hero-panel,
+      .section,
+      .feature-card,
+      .site-card {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+      }
+
+      .scroll-progress-bar {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="dark-theme">
+  <div class="scroll-progress" aria-hidden="true">
+    <div id="scrollProgressBar" class="scroll-progress-bar"></div>
+  </div>
+  <aside class="story-timeline" aria-label="章节时间线">
+    <a href="#home" data-anchor>00 Home</a>
+    <a href="#featured" data-anchor>01 Featured</a>
+    <a href="#sites" data-anchor>02 All Sites</a>
+    <a href="#live-map" data-anchor>03 Live Map</a>
+  </aside>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div class="brand-copy">
+          <strong data-i18n="brandTitle">Vikipedia: Let's roll.</strong>
+          <span data-i18n="brandSubtitle">A compact case-study hub for your live products.</span>
+        </div>
+      </div>
+      <div class="top-tabs" role="tablist" aria-label="Main tabs">
+        <button class="top-tab is-active" type="button" data-tab-target="index" data-i18n="tabIndex">Home</button>
+        <button class="top-tab" type="button" data-tab-target="skills" data-i18n="tabSkills">Skills</button>
+        <button class="top-tab" type="button" data-tab-target="resume" data-i18n="tabResume">Resume</button>
+        <button class="top-tab" type="button" data-tab-target="token" data-i18n="tabToken">Token</button>
+      </div>
+      <nav class="top-links" aria-label="快速入口">
+        <button id="langToggle" class="lang-toggle" type="button">中文</button>
+        <a href="https://ttoriaa.github.io/automotive-benchmarking" target="_blank" rel="noreferrer">Battery &amp; Charging</a>
+        <a href="https://ttoriaa.github.io/vikipedia/market_watch/" target="_blank" rel="noreferrer">Market Watch</a>
+        <a href="https://ttoriaa.github.io/gaming-vikipedia/" target="_blank" rel="noreferrer">///M Playground</a>
+        <a href="https://ttoriaa.github.io/shimai-podcast-site/index.html?lang=zh#home" target="_blank" rel="noreferrer">Podcast</a>
+      </nav>
+    </header>
+
+    <aside class="fixed-cta" aria-label="Quick actions">
+      <p data-i18n="ctaBoxText">Need a focused case study walkthrough or a live demo?</p>
+      <div class="fixed-cta-row">
+        <a href="#featured" data-i18n="ctaBoxPrimary">View Featured</a>
+        <a href="case-study-battery-charging.html" target="_blank" rel="noreferrer" data-i18n="ctaBoxCase">Open Case Study</a>
+      </div>
+    </aside>
+
+    <main id="panel-index" class="tab-panel is-active">
+    <section id="home" class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow" data-i18n="eyebrow">Portfolio of live pages</p>
+        <h1>
+          <span class="hero-title-line" data-i18n="heroTitleLine1">Vikipedia:</span>
+          <span class="hero-title-line" data-i18n="heroTitleLine2">Let's roll.</span>
+        </h1>
+        <div class="hero-right-rail">
+          <div class="hero-story" aria-live="polite">
+            <p class="hero-step" data-step="home" data-i18n="heroStepM">///M Playground: a brainy playground with chess, sudoku, snake, and 2048.</p>
+            <p class="hero-step" data-step="featured" data-i18n="heroStepPodcast">Shimai Podcast: a show built to create clarity in an entropic world.</p>
+            <p class="hero-step" data-step="sites" data-i18n="heroStepBattery">Battery &amp; Charging: a deep dive into HVB vehicles and charging performance.</p>
+          </div>
+          <div class="hero-actions">
+            <a class="cta" href="#featured" data-i18n="ctaFeatured">Open Featured Projects</a>
+            <a class="ghost" href="#sites" data-i18n="ctaAll">Browse All Pages</a>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section id="impact" class="section">
+      <div class="section-head">
+        <div>
+          <h2 data-i18n="impactTitle">Impact Wall</h2>
+          <p data-i18n="impactIntro">A live snapshot of portfolio scale, automation, and production readiness.</p>
+        </div>
+      </div>
+      <div id="impactGrid" class="impact-grid" aria-live="polite"></div>
+    </section>
+
+    <section id="featured" class="section">
+      <div class="section-head">
+        <div>
+          <h2 data-i18n="featuredTitle">Featured</h2>
+          <p data-i18n="featuredIntro">Three live products, three distinct product narratives. Each card is framed as goals, methods, and outcomes.</p>
+        </div>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card">
+          <div class="feature-copy">
+            <div class="chip-row">
+              <span class="chip">Interactive</span>
+              <span class="chip">BMW ///M</span>
+            </div>
+            <h3>///M Playground</h3>
+            <p>Case: 把品牌识别做进可玩的系统。通过 tabbed multi-game 架构把注意力停留时间和品牌记忆点统一到一个轻量入口页。</p>
+            <div class="project-meta">
+              <div><strong>Role</strong><span>Brand-led interactive playground</span></div>
+              <div><strong>Mode</strong><span>Tabbed multi-game experience</span></div>
+              <div><strong>Tone</strong><span>Performance, motion, contrast</span></div>
+            </div>
+            <p class="meta-line">Outcome: fast onboarding, high interactivity, strong visual recall.</p>
+          </div>
+          <div class="preview-shell">
+            <div class="browser-mockup">
+              <div class="browser-bar">
+                <span class="browser-dot"></span>
+                <span class="browser-dot"></span>
+                <span class="browser-dot"></span>
+                <div class="browser-url">ttoriaa.github.io/gaming-vikipedia/</div>
+              </div>
+              <div class="preview-screen preview-screen--gaming">
+                <div class="preview-kicker">Sheer Driving Pleasure</div>
+                <div class="live-preview">
+                  <img src="assets/landing-previews/m-playground-home.png" alt="Live screenshot of ///M Playground" loading="lazy" />
+                  <div class="preview-overlay"></div>
+                  <div class="preview-caption"><span>Chess / 2048 / Sudoku / Snake</span><span>screenshot</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-actions">
+            <a href="https://ttoriaa.github.io/gaming-vikipedia/" target="_blank" rel="noreferrer">Open Playground</a>
+          </div>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-copy">
+            <div class="chip-row">
+              <span class="chip">Data Product</span>
+              <span class="chip">Dongchedi</span>
+            </div>
+            <h3>Battery &amp; Charging</h3>
+            <p>Case: 把零散车型参数变成可决策的 benchmark 视图。核心路径是 data table → dashboard → insights，支撑持续更新和对外表达。</p>
+            <div class="project-meta">
+              <div><strong>Role</strong><span>Automotive benchmark portal</span></div>
+              <div><strong>Mode</strong><span>Data table + dashboard + insights</span></div>
+              <div><strong>Tone</strong><span>Clean, analytical, report-ready</span></div>
+            </div>
+            <p class="meta-line">Outcome: comparable metrics, repeatable reporting, stakeholder-ready narrative.</p>
+          </div>
+          <div class="preview-shell">
+            <div class="browser-mockup">
+              <div class="browser-bar">
+                <span class="browser-dot"></span>
+                <span class="browser-dot"></span>
+                <span class="browser-dot"></span>
+                <div class="browser-url">ttoriaa.github.io/automotive-benchmarking</div>
+              </div>
+              <div class="preview-screen preview-screen--charging">
+                <div class="preview-kicker">EV Charging Benchmarking</div>
+                <div class="live-preview">
+                  <img src="assets/landing-previews/charging-home.png" alt="Live screenshot of Battery and Charging" loading="lazy" />
+                  <div class="preview-overlay"></div>
+                  <div class="preview-caption"><span>首页 / 数据表 / 可视化 / 趋势总结</span><span>screenshot</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-actions">
+            <a href="https://ttoriaa.github.io/automotive-benchmarking" target="_blank" rel="noreferrer">Open Site</a>
+            <a href="case-study-battery-charging.html" target="_blank" rel="noreferrer" data-i18n="openCaseStudy">View Case</a>
+          </div>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-copy">
+            <div class="chip-row">
+              <span class="chip">Content</span>
+              <span class="chip">Podcast</span>
+            </div>
+            <h3>时髦小姨 Podcast</h3>
+            <p>Case: 让内容站首屏先传达“节目气质”，再导向收听。通过视觉封面化和短路径导航提升首次访问的理解效率。</p>
+            <div class="project-meta">
+              <div><strong>Role</strong><span>Podcast front door</span></div>
+              <div><strong>Mode</strong><span>Story-led content hub</span></div>
+              <div><strong>Tone</strong><span>Warm, editorial, conversational</span></div>
+            </div>
+            <p class="meta-line">Outcome: clearer content framing, softer editorial tone, cleaner listening journey.</p>
+          </div>
+          <div class="preview-shell">
+            <div class="browser-mockup">
+              <div class="browser-bar">
+                <span class="browser-dot"></span>
+                <span class="browser-dot"></span>
+                <span class="browser-dot"></span>
+                <div class="browser-url">ttoriaa.github.io/shimai-podcast-site/index.html?lang=zh#home</div>
+              </div>
+              <div class="preview-screen preview-screen--podcast">
+                <div class="preview-kicker">Podcast Home</div>
+                <div class="live-preview">
+                  <img src="assets/landing-previews/shimai-podcast-home.png" alt="Live screenshot of 时髦小姨 Podcast" loading="lazy" />
+                  <div class="preview-overlay"></div>
+                  <div class="preview-caption"><span>Chinese home / episodes / content hub</span><span>screenshot</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-actions">
+            <a href="https://ttoriaa.github.io/shimai-podcast-site/index.html?lang=zh#home" target="_blank" rel="noreferrer">Open Podcast</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="sites" class="section">
+      <div class="section-head">
+        <div>
+          <h2 data-i18n="sitesTitle">All Sites</h2>
+          <p data-i18n="sitesIntro">Direct entry points to each published product. Jump to live pages without extra layers.</p>
+        </div>
+      </div>
+      <div class="sites-grid">
+        <article class="site-card">
+          <div class="site-thumb site-thumb--podcast">
+            <div class="thumb-top"><span></span><span></span><span></span></div>
+            <div class="thumb-body">
+              <div class="thumb-title">Podcast</div>
+              <div class="thumb-micro"><span>Home</span><span>Listen</span><span>Chinese</span></div>
+              <div class="thumb-line long"></div>
+              <div class="thumb-line mid"></div>
+              <div class="wave-bars">
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+          </div>
+          <div class="site-tags">
+            <span class="site-tag">Content</span>
+            <span class="site-tag">Podcast</span>
+          </div>
+          <h3>时髦小姨 Podcast</h3>
+          <p data-i18n="sitePodcastSummary">A podcast experience designed to reduce noise and create clarity in an entropic world.</p>
+          <div class="site-actions">
+            <a href="https://ttoriaa.github.io/shimai-podcast-site/index.html?lang=zh#home" target="_blank" rel="noreferrer" data-i18n="siteOpen">Open</a>
+          </div>
+        </article>
+
+        <article class="site-card">
+          <div class="site-thumb site-thumb--charging">
+            <div class="thumb-top"><span></span><span></span><span></span></div>
+            <div class="thumb-body">
+              <div class="thumb-title">Charging</div>
+              <div class="thumb-micro"><span>Data</span><span>Dashboard</span><span>Insights</span></div>
+              <div class="thumb-bars"><span></span><span></span><span></span><span></span><span></span></div>
+              <div class="thumb-line short"></div>
+            </div>
+          </div>
+          <div class="site-tags">
+            <span class="site-tag">Charging</span>
+            <span class="site-tag">Portal</span>
+          </div>
+          <h3>懂车帝 Battery &amp; Charging</h3>
+          <p data-i18n="siteChargingSummary">A deep-dive benchmark on HVB vehicles and charging performance, from specs to decision-ready insights.</p>
+          <div class="site-actions">
+            <a href="https://ttoriaa.github.io/automotive-benchmarking" target="_blank" rel="noreferrer" data-i18n="siteOpen">Open</a>
+          </div>
+        </article>
+
+        <article class="site-card">
+          <div class="site-thumb site-thumb--auto">
+            <div class="thumb-top"><span></span><span></span><span></span></div>
+            <div class="thumb-body">
+              <div class="thumb-title">C7</div>
+              <div class="thumb-micro"><span>OTA</span><span>Portal</span><span>Bilingual</span></div>
+              <div class="thumb-line long"></div>
+              <div class="thumb-line mid"></div>
+              <div class="thumb-line short"></div>
+            </div>
+          </div>
+          <div class="site-tags">
+            <span class="site-tag">Regulation</span>
+            <span class="site-tag">Portal</span>
+          </div>
+          <h3>C7 OTA Regulation Hub</h3>
+          <p data-i18n="siteC7Summary">A bilingual regulation portal that organizes five C7 OTA modules into one review-ready navigation flow.</p>
+          <div class="site-actions">
+            <a href="c7_regulation_tabs.html" target="_blank" rel="noreferrer" data-i18n="siteOpen">Open</a>
+          </div>
+        </article>
+
+        <article class="site-card">
+          <div class="site-thumb site-thumb--auto">
+            <div class="thumb-top"><span></span><span></span><span></span></div>
+            <div class="thumb-body">
+              <div class="thumb-title">Market</div>
+              <div class="thumb-micro"><span>Semi</span><span>AI</span><span>Gold</span></div>
+              <div class="thumb-line long"></div>
+              <div class="thumb-line mid"></div>
+              <div class="thumb-line short"></div>
+            </div>
+          </div>
+          <div class="site-tags">
+            <span class="site-tag">Finance</span>
+            <span class="site-tag">Monitoring</span>
+          </div>
+          <h3>Market Watch</h3>
+          <p>Track semiconductor, AI compute, energy, and gold with multi-source updates, alerts, and digest summaries.</p>
+          <div class="site-actions">
+            <a href="https://ttoriaa.github.io/vikipedia/market_watch/" target="_blank" rel="noreferrer" data-i18n="siteOpen">Open</a>
+          </div>
+        </article>
+
+        <article class="site-card">
+          <div class="site-thumb site-thumb--auto">
+            <div class="thumb-top"><span></span><span></span><span></span></div>
+            <div class="thumb-body">
+              <div class="thumb-title">Copilot</div>
+              <div class="thumb-micro"><span>Guide</span><span>Setup</span><span>Cases</span></div>
+              <div class="thumb-line long"></div>
+              <div class="thumb-line mid"></div>
+              <div class="thumb-line short"></div>
+            </div>
+          </div>
+          <div class="site-tags">
+            <span class="site-tag">AI Workflow</span>
+            <span class="site-tag">Onboarding</span>
+          </div>
+          <h3>GitHub Copilot Quickstart Guide</h3>
+          <p>一页快速说明 GitHub Copilot 是什么、我们为什么要搭、怎么搭，以及它已经能支撑的典型 use cases。</p>
+          <div class="site-actions">
+            <a href="copilot_quickstart_guide.html" target="_blank" rel="noreferrer" data-i18n="siteOpen">Open</a>
+          </div>
+        </article>
+
+        <article class="site-card">
+          <div class="site-thumb site-thumb--auto">
+            <div class="thumb-top"><span></span><span></span><span></span></div>
+            <div class="thumb-body">
+              <div class="thumb-title">Token</div>
+              <div class="thumb-micro"><span>KB</span><span>Logs</span><span>Evidence</span></div>
+              <div class="thumb-line long"></div>
+              <div class="thumb-line mid"></div>
+              <div class="thumb-line short"></div>
+            </div>
+          </div>
+          <div class="site-tags">
+            <span class="site-tag">Knowledge</span>
+            <span class="site-tag">Token</span>
+          </div>
+          <h3>Token</h3>
+          <p data-i18n="siteTokenSummary">Your personal knowledge base surface with latest snapshots, decision logs, and report evidence.</p>
+          <div class="site-actions">
+            <a href="assets/token/index.html" target="_blank" rel="noreferrer" data-i18n="siteOpen">Open</a>
+          </div>
+        </article>
+
+        <article class="site-card">
+          <div class="site-thumb site-thumb--gaming">
+            <div class="thumb-top"><span></span><span></span><span></span></div>
+            <div class="thumb-body">
+              <div class="thumb-title">///M</div>
+              <div class="thumb-micro"><span>Chess</span><span>2048</span><span>Snake</span></div>
+              <div class="thumb-grid"><span></span><span></span><span></span><span></span></div>
+              <div class="thumb-line mid"></div>
+            </div>
+          </div>
+          <div class="site-tags">
+            <span class="site-tag">Interactive</span>
+            <span class="site-tag">Gaming</span>
+          </div>
+          <h3>///M Playground</h3>
+          <p data-i18n="siteGamingSummary">A brain-message playground blending chess, sudoku, snake, and 2048 into one branded interaction layer.</p>
+          <div class="site-actions">
+            <a href="https://ttoriaa.github.io/gaming-vikipedia/" target="_blank" rel="noreferrer" data-i18n="siteOpen">Open</a>
+          </div>
+        </article>
+      </div>
+
+      <div id="autoProjectsStatus" class="auto-projects-status" data-i18n="autoProjectsLoading">Syncing latest GitHub projects...</div>
+      <div id="autoProjectsGrid" class="sites-grid auto-projects-grid" aria-live="polite"></div>
+    </section>
+
+    <section id="live-map" class="footer-note">
+      <strong data-i18n="liveMapTitle">Current live map</strong>
+      <p data-i18n="liveMapDesc">This landing page now behaves like a lightweight portfolio homepage: stable visual previews, concise case-study framing, and direct links to live production pages.</p>
+    </section>
+    </main>
+
+    <main id="panel-resume" class="tab-panel" aria-hidden="true">
+      <section class="section resume-shell">
+        <div class="section-head">
+          <div>
+            <h2 data-i18n="resumeTitle">Resume</h2>
+            <p data-i18n="resumeIntro">A bilingual profile snapshot covering positioning, experience focus, and practical strengths.</p>
+          </div>
+        </div>
+        <div class="resume-grid">
+          <div class="resume-col">
+            <article class="resume-card resume-hero">
+              <div class="resume-profile">
+                <div class="resume-photo-wrap" aria-label="Profile photo area">
+                  <img class="resume-photo" src="./assets/profile.jpg" alt="Profile photo of Wentao Vickie Li" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+                  <div class="resume-photo-fallback" style="display:none;" data-i18n="resumePhotoFallback">Profile Photo<br />assets/profile.jpg</div>
+                </div>
+                <div>
+                  <h3 data-i18n="resumeName">Wentao Vickie Li</h3>
+                  <p class="resume-role" data-i18n="resumeRole">Powertrain Data Management | Data &amp; AI Strategy</p>
+                  <p data-i18n="resumeProfileBody">Product-minded storyteller and builder focused on automotive strategy, digital product narratives, and data-driven communication across cross-functional teams.</p>
+                </div>
+              </div>
+              <div class="resume-actions">
+                <a class="resume-btn" href="Vickie%20Li%202026%20CN%20v2.pdf" target="_blank" rel="noopener noreferrer" download data-i18n="resumeDownloadCn">Download CN Resume PDF</a>
+                <a class="resume-btn" href="Vickie%20Li%202026%20EN.pdf" target="_blank" rel="noopener noreferrer" download data-i18n="resumeDownloadEn">Download EN Resume PDF</a>
+              </div>
+            </article>
+
+            <article class="resume-card">
+              <h3 data-i18n="resumeEducationTitle">Education</h3>
+              <ul class="resume-list">
+                <li data-i18n="resumeEdu1">University of California, Berkeley - Master of Data Science (2022-2023, GPA 4.00)</li>
+                <li data-i18n="resumeEdu2">Beijing University of Posts and Telecommunications - B.Eng. E-Commerce and Data Engineering (2018-2022, GPA 3.85)</li>
+              </ul>
+            </article>
+
+            <article class="resume-card">
+              <h3 data-i18n="resumeSkillsTitle">Core Skills</h3>
+              <ul class="resume-list">
+                <li data-i18n="resumeSkill1">Product storytelling and case-study framing</li>
+                <li data-i18n="resumeSkill2">Data-to-insight transformation for dashboard experiences</li>
+                <li data-i18n="resumeSkill3">Web prototyping with HTML, CSS, JavaScript</li>
+                <li data-i18n="resumeSkill4">Bilingual communication: Chinese / English</li>
+              </ul>
+            </article>
+          </div>
+
+          <div class="resume-col">
+            <article class="resume-card">
+              <h3 data-i18n="resumeWorkTitle">Work Timeline</h3>
+              <div class="resume-timeline">
+                <article class="resume-card">
+                  <h3 data-i18n="timelineBmwTitle">BMW (China) Services Ltd.</h3>
+                  <div class="resume-meta" data-i18n="timelineBmwMeta">Powertrain Data Management | 2024/05 - Present | Beijing</div>
+                  <ul class="resume-list">
+                    <li data-i18n="timelineBmw1">Led an enterprise-government OTA data platform with cross-functional stakeholders across China and Germany teams.</li>
+                    <li data-i18n="timelineBmw2">Built end-to-end powertrain data framework from signal setup and compliance to analytics and quality use cases.</li>
+                  </ul>
+                </article>
+                <article class="resume-card">
+                  <h3 data-i18n="timelineEyTitle">Ernst &amp; Young (China) Advisory</h3>
+                  <div class="resume-meta" data-i18n="timelineEyMeta">Technology Risk Consultant | 2023/08 - 2024/04 | Shanghai</div>
+                  <ul class="resume-list">
+                    <li data-i18n="timelineEy1">Delivered digital transformation and technology risk consulting with process and metric mapping.</li>
+                    <li data-i18n="timelineEy2">Supported enterprise IT/data governance planning including cloud and cybersecurity scope.</li>
+                  </ul>
+                </article>
+              </div>
+            </article>
+
+            <article class="resume-card">
+              <h3 data-i18n="resumeInternshipTitle">Internship Timeline</h3>
+              <div class="resume-intern-grid">
+                <article class="resume-card">
+                  <h3 data-i18n="resumeInternTitle1">Microsoft</h3>
+                  <div class="resume-meta" data-i18n="resumeInternMeta1">Account Technology Strategist | 2022/07 - 2022/10 | Shanghai</div>
+                  <ul class="resume-list">
+                    <li data-i18n="resumeIntern1">Collected client planning inputs, built account roadmap, and supported execution within fiscal cycle.</li>
+                  </ul>
+                </article>
+                <article class="resume-card">
+                  <h3 data-i18n="resumeInternTitle2">Apple</h3>
+                  <div class="resume-meta" data-i18n="resumeInternMeta2">Data Analyst | 2022/03 - 2022/07 | Beijing</div>
+                  <ul class="resume-list">
+                    <li data-i18n="resumeIntern2">Built KPI decomposition and visual dashboards for market-facing optimization.</li>
+                  </ul>
+                </article>
+                <article class="resume-card">
+                  <h3 data-i18n="resumeInternTitle3">Didi</h3>
+                  <div class="resume-meta" data-i18n="resumeInternMeta3">Business Data Analysis Intern | 2022/01 - 2022/03 | Hangzhou</div>
+                  <ul class="resume-list">
+                    <li data-i18n="resumeIntern3">Improved subsidy governance and reduced subsidy rate from 0.8% to 0.6%.</li>
+                  </ul>
+                </article>
+                <article class="resume-card">
+                  <h3 data-i18n="resumeInternTitle4">Tencent</h3>
+                  <div class="resume-meta" data-i18n="resumeInternMeta4">Product &amp; User Growth Intern | 2020/08 - 2020/12 | Beijing</div>
+                  <ul class="resume-list">
+                    <li data-i18n="resumeIntern4">Refined user segmentation and A/B testing strategy to improve recall and content reach.</li>
+                  </ul>
+                </article>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <main id="panel-skills" class="tab-panel" aria-hidden="true">
+      <section class="section resume-shell">
+        <div class="section-head">
+          <div>
+            <h2 data-i18n="skillsTitle">Skills</h2>
+            <p data-i18n="skillsIntro">A dedicated index of trained skills in this repository. Each card links to the corresponding skill folder.</p>
+          </div>
+        </div>
+        <div class="skills-controls">
+          <input id="skillsSearch" class="skills-input" type="search" placeholder="Search skills" data-i18n-placeholder="skillsSearchPlaceholder" />
+          <select id="skillsFilter" class="skills-select" aria-label="Skills status filter">
+            <option value="all" data-i18n="skillsFilterAll">All statuses</option>
+            <option value="active" data-i18n="skillsFilterActive">Active</option>
+            <option value="stable" data-i18n="skillsFilterStable">Stable</option>
+            <option value="experimental" data-i18n="skillsFilterExperimental">Experimental</option>
+          </select>
+          <div id="skillsCount" class="skills-count">0</div>
+        </div>
+        <div id="skillsStatus" class="auto-projects-status" data-i18n="skillsLoading">Loading skills from repository...</div>
+        <div id="skillsGrid" class="sites-grid skills-grid" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <main id="panel-token" class="tab-panel" aria-hidden="true">
+      <section class="section token-shell">
+        <div class="section-head">
+          <div>
+            <h2 data-i18n="tokenTitle">Token</h2>
+            <p class="token-lead" data-i18n="tokenIntro">A direct web view of your personal knowledge base, including skill snapshots, project evidence, and decision logs.</p>
+          </div>
+        </div>
+        <div class="token-actions">
+          <a id="tokenOpenSiteLink" class="resume-btn" href="assets/token/index.html" target="_blank" rel="noopener noreferrer" data-i18n="tokenOpenSite">Open Token Site</a>
+          <a class="resume-btn" href="assets/token/latest.md" target="_blank" rel="noopener noreferrer" data-i18n="tokenOpenLatest">Open latest.md</a>
+        </div>
+        <div id="tokenSummaryStatus" class="auto-projects-status" data-i18n="tokenSummaryLoading">Loading auto summary...</div>
+        <article id="tokenSummaryCard" class="resume-card token-summary-card" style="display:none;">
+          <h3 data-i18n="tokenSummaryTitle">Auto Summary and Lessons</h3>
+          <div id="tokenSummaryContent"></div>
+        </article>
+        <div class="token-frame">
+          <iframe id="tokenKnowledgeFrame" src="assets/token/index.html" title="Token Knowledge Base" loading="lazy"></iframe>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script>
+    (() => {
+      const body = document.body;
+      const progressBar = document.getElementById('scrollProgressBar');
+      const langToggle = document.getElementById('langToggle');
+      const tabButtons = Array.from(document.querySelectorAll('.top-tab[data-tab-target]'));
+      const tabPanels = {
+        index: document.getElementById('panel-index'),
+        resume: document.getElementById('panel-resume'),
+        skills: document.getElementById('panel-skills'),
+        token: document.getElementById('panel-token')
+      };
+      const anchorLinks = Array.from(document.querySelectorAll('.story-timeline a[data-anchor]'));
+      const heroSteps = Array.from(document.querySelectorAll('.hero-step'));
+      const featureCards = Array.from(document.querySelectorAll('.feature-card'));
+      const autoProjectsGrid = document.getElementById('autoProjectsGrid');
+      const autoProjectsStatus = document.getElementById('autoProjectsStatus');
+      const impactGrid = document.getElementById('impactGrid');
+      const skillsGrid = document.getElementById('skillsGrid');
+      const skillsStatus = document.getElementById('skillsStatus');
+      const skillsSearch = document.getElementById('skillsSearch');
+      const skillsFilter = document.getElementById('skillsFilter');
+      const skillsCount = document.getElementById('skillsCount');
+      const tokenSummaryStatus = document.getElementById('tokenSummaryStatus');
+      const tokenSummaryCard = document.getElementById('tokenSummaryCard');
+      const tokenSummaryContent = document.getElementById('tokenSummaryContent');
+      const tokenKnowledgeFrame = document.getElementById('tokenKnowledgeFrame');
+      const tokenOpenSiteLink = document.getElementById('tokenOpenSiteLink');
+      let skillsCatalog = [];
+      let tokenSummary = null;
+      const anchorTargets = anchorLinks
+        .map(link => {
+          const id = link.getAttribute('href')?.replace('#', '');
+          if (!id) {
+            return null;
+          }
+          const section = document.getElementById(id);
+          return section ? { link, section } : null;
+        })
+        .filter(Boolean);
+
+      const i18n = {
+        en: {
+          pageTitle: "Vikipedia: Let's roll.",
+          brandTitle: "Vikipedia: Let's roll.",
+          brandSubtitle: 'A compact case-study hub for your live products.',
+          tabIndex: 'Home',
+          tabResume: 'Resume',
+          tabSkills: 'Skills',
+          tabToken: 'Token',
+          siteOpen: 'Open',
+          eyebrow: 'Portfolio of live pages',
+          heroTitleLine1: 'Vikipedia:',
+          heroTitleLine2: "Let's roll.",
+          heroStepM: '///M Playground: a brainy playground with chess, sudoku, snake, and 2048.',
+          heroStepPodcast: 'Shimai Podcast: a show built to create clarity in an entropic world.',
+          heroStepBattery: 'Battery & Charging: a deep dive into HVB vehicles and charging performance.',
+          ctaFeatured: 'Open Featured Projects',
+          ctaAll: 'Browse All Pages',
+          ctaBoxText: 'Need a focused case study walkthrough or a live demo?',
+          ctaBoxPrimary: 'View Featured',
+          ctaBoxCase: 'Open Case Study',
+          openCaseStudy: 'View Case',
+          impactTitle: 'Impact Wall',
+          impactIntro: 'A live snapshot of portfolio scale, automation, and production readiness.',
+          impactPublishedSites: 'Published Sites',
+          impactSkillsTotal: 'Tracked Skills',
+          impactAutomation: 'Automated Pipelines',
+          impactCaseStudies: 'Case Studies',
+          featuredTitle: 'Featured',
+          featuredIntro: 'Three live products, three distinct product narratives. Each card is framed as goals, methods, and outcomes.',
+          sitesTitle: 'All Sites',
+          sitesIntro: 'Direct entry points to each published product. Jump to live pages without extra layers.',
+          autoProjectsLoading: 'Syncing latest GitHub projects...',
+          autoProjectsEmpty: 'No additional GitHub projects found yet.',
+          autoProjectsError: 'GitHub sync is temporarily unavailable. Please try again later.',
+          autoProjectTag: 'GitHub Sync',
+          autoProjectOpen: 'Open Project',
+          sitePodcastSummary: 'A podcast experience designed to reduce noise and create clarity in an entropic world.',
+          siteChargingSummary: 'A deep-dive benchmark on HVB vehicles and charging performance, from specs to decision-ready insights.',
+          siteC7Summary: 'A bilingual regulation portal that organizes five C7 OTA modules into one review-ready navigation flow.',
+          siteTokenSummary: 'Your personal knowledge base surface with latest snapshots, decision logs, and report evidence.',
+          siteGamingSummary: 'A brain-message playground blending chess, sudoku, snake, and 2048 into one branded interaction layer.',
+          liveMapTitle: 'Current live map',
+          liveMapDesc: 'This landing page now behaves like a lightweight portfolio homepage: stable visual previews, concise case-study framing, and direct links to live production pages.',
+          resumeTitle: 'Resume',
+          resumeIntro: 'A bilingual profile snapshot covering positioning, experience focus, and practical strengths.',
+          resumeName: 'Wentao Vickie Li',
+          resumeRole: 'Powertrain Data Management | Data & AI Strategy',
+          resumeDownloadCn: 'Download CN Resume PDF',
+          resumeDownloadEn: 'Download EN Resume PDF',
+          resumePhotoFallback: 'Profile Photo / assets/profile.jpg',
+          resumeProfileBody: 'Product-minded storyteller and builder focused on automotive strategy, digital product narratives, and data-driven communication across cross-functional teams.',
+          timelineBmwTitle: 'BMW (China) Services Ltd.',
+          timelineBmwMeta: 'Powertrain Data Management | 2024/05 - Present | Beijing',
+          timelineBmw1: 'Led an enterprise-government OTA data platform with cross-functional stakeholders across China and Germany teams.',
+          timelineBmw2: 'Built end-to-end powertrain data framework from signal setup and compliance to analytics and quality use cases.',
+          timelineEyTitle: 'Ernst & Young (China) Advisory',
+          timelineEyMeta: 'Technology Risk Consultant | 2023/08 - 2024/04 | Shanghai',
+          timelineEy1: 'Delivered digital transformation and technology risk consulting with process and metric mapping.',
+          timelineEy2: 'Supported enterprise IT/data governance planning including cloud and cybersecurity scope.',
+          resumeEducationTitle: 'Education',
+          resumeWorkTitle: 'Work Timeline',
+          resumeEdu1: 'University of California, Berkeley - Master of Data Science (2022-2023, GPA 4.00)',
+          resumeEdu2: 'Beijing University of Posts and Telecommunications - B.Eng. E-Commerce and Data Engineering (2018-2022, GPA 3.85)',
+          resumeInternshipTitle: 'Internship Timeline',
+          resumeInternTitle1: 'Microsoft',
+          resumeInternMeta1: 'Account Technology Strategist | 2022/07 - 2022/10 | Shanghai',
+          resumeIntern1: 'Collected client planning inputs, built account roadmap, and supported execution within fiscal cycle.',
+          resumeInternTitle2: 'Apple',
+          resumeInternMeta2: 'Data Analyst | 2022/03 - 2022/07 | Beijing',
+          resumeIntern2: 'Built KPI decomposition and visual dashboards for market-facing optimization.',
+          resumeInternTitle3: 'Didi',
+          resumeInternMeta3: 'Business Data Analysis Intern | 2022/01 - 2022/03 | Hangzhou',
+          resumeIntern3: 'Improved subsidy governance and reduced subsidy rate from 0.8% to 0.6%.',
+          resumeInternTitle4: 'Tencent',
+          resumeInternMeta4: 'Product and User Growth Intern | 2020/08 - 2020/12 | Beijing',
+          resumeIntern4: 'Refined user segmentation and A/B testing strategy to improve recall and content reach.',
+          resumeSkillsTitle: 'Core Skills',
+          resumeSkill1: 'Product storytelling and case-study framing',
+          resumeSkill2: 'Data-to-insight transformation for dashboard experiences',
+          resumeSkill3: 'Web prototyping with HTML, CSS, JavaScript',
+          resumeSkill4: 'Bilingual communication: Chinese / English',
+          skillsTitle: 'Skills',
+          skillsIntro: 'A dedicated index of trained skills in this repository. Each card links to the corresponding skill folder.',
+          skillsLoading: 'Loading skills from repository...',
+          skillsEmpty: 'No skill directories were found in .github/skills.',
+          skillsError: 'Unable to load skills right now. Please try again later.',
+          skillsNoDescription: 'No description found in SKILL.md yet.',
+          skillsSearchPlaceholder: 'Search by skill title, description, or path',
+          skillsFilterAll: 'All statuses',
+          skillsFilterActive: 'Active',
+          skillsFilterStable: 'Stable',
+          skillsFilterExperimental: 'Experimental',
+          skillsStatusActive: 'Active',
+          skillsStatusStable: 'Stable',
+          skillsStatusExperimental: 'Experimental',
+          skillsCountLabel: '{{count}} skills',
+          skillsTag: 'Skill',
+          skillsOpen: 'Open Skill',
+          tokenTitle: 'Token',
+          tokenIntro: 'A direct web view of your personal knowledge base, including skill snapshots, project evidence, and decision logs.',
+          tokenOpenSite: 'Open Token Site',
+          tokenOpenLatest: 'Open latest.md',
+          tokenSummaryTitle: 'Auto Summary and Lessons',
+          tokenSummaryLoading: 'Loading auto summary...',
+          tokenSummaryError: 'Unable to load summary right now.',
+          tokenOverviewTitle: 'Overview',
+          tokenPatternsTitle: 'Patterns Observed',
+          tokenLessonsTitle: 'Experience and Lessons',
+          tokenNextActionsTitle: 'Next Actions',
+          langButton: '中文'
+        },
+        zh: {
+          pageTitle: "Vikipedia: Let's roll.",
+          brandTitle: "Vikipedia: Let's roll.",
+          brandSubtitle: '一个紧凑的案例作品首页，连接你所有线上项目。',
+          tabIndex: '首页',
+          tabResume: '简历',
+          tabSkills: '技能',
+          tabToken: 'Token',
+          siteOpen: '打开',
+          eyebrow: '线上项目作品集入口',
+          heroTitleLine1: 'Vikipedia:',
+          heroTitleLine2: "Let's roll.",
+          heroStepM: '///M Playground：脑力游乐场，聚合 chess / sudoku / snake / 2048，轻快但有品牌张力。',
+          heroStepPodcast: '时髦小姨 Podcast：一个播客。在熵增世界里，做内容的熵减。',
+          heroStepBattery: 'Battery & Charging：深挖 HVB 车型与充电性能，用数据讲清差异与趋势。',
+          ctaFeatured: '查看精选项目',
+          ctaAll: '浏览全部站点',
+          ctaBoxText: '需要更聚焦的案例拆解或现场演示？',
+          ctaBoxPrimary: '查看精选',
+          ctaBoxCase: '打开案例页',
+          openCaseStudy: '查看案例',
+          impactTitle: 'Impact 数字墙',
+          impactIntro: '实时展示作品规模、自动化程度与交付成熟度。',
+          impactPublishedSites: '已发布站点',
+          impactSkillsTotal: '技能条目',
+          impactAutomation: '自动化流水线',
+          impactCaseStudies: '案例页面',
+          featuredTitle: '精选项目',
+          featuredIntro: '三个线上产品，三条不同叙事线。每张卡片都按目标、方法、结果来组织。',
+          sitesTitle: '全部站点',
+          sitesIntro: '每个已发布网站的直达入口，无需额外跳转层级。',
+          autoProjectsLoading: '正在同步最新 GitHub 项目...',
+          autoProjectsEmpty: '暂未发现可新增的 GitHub 项目。',
+          autoProjectsError: 'GitHub 同步暂时不可用，请稍后再试。',
+          autoProjectTag: 'GitHub 同步',
+          autoProjectOpen: '打开项目',
+          sitePodcastSummary: '一个播客站点，在信息熵增的世界里，用内容节奏和结构帮助用户做熵减。',
+          siteChargingSummary: '聚焦 HVB 车型与充电性能的深度 benchmark，从参数到决策洞察一体化呈现。',
+          siteC7Summary: '一个双语法规 portal，把 C7 OTA 五个模块整合成适合评审和导航的统一入口。',
+          siteTokenSummary: '你的个人知识库入口，聚合最新快照、决策日志与报告证据。',
+          siteGamingSummary: '一个融合 chess、sudoku、snake、2048 的脑力互动场，把品牌表达做成可玩体验。',
+          liveMapTitle: '当前线上地图',
+          liveMapDesc: '这个 landing page 现在是轻量作品集首页：稳定预览、清晰案例框架、直达线上页面。',
+          resumeTitle: '个人简历',
+          resumeIntro: '中英文切换的简历概览，覆盖定位、经验重点和核心能力。',
+          resumeName: '李文韬 Vickie LI',
+          resumeRole: 'Powertrain Data Management | Data & AI Strategy',
+          resumeDownloadCn: '下载中文简历 PDF',
+          resumeDownloadEn: '下载英文简历 PDF',
+          resumePhotoFallback: '个人照片 / assets/profile.jpg',
+          resumeProfileBody: '以产品叙事与落地构建为核心，关注汽车战略、数字化产品表达与数据驱动沟通，擅长跨团队协作推进。',
+          timelineBmwTitle: '宝马（中国）服务有限公司',
+          timelineBmwMeta: 'Powertrain Data Management | 2024/05 - 至今 | 北京',
+          timelineBmw1: '牵头企业-政府 OTA 数据平台项目，协调中国与德国团队及多部门利益相关方推进交付。',
+          timelineBmw2: '搭建动力总成端到端数据体系，覆盖信号定义、数据合规、分析应用与质量场景。',
+          timelineEyTitle: '安永（中国）企业咨询有限公司',
+          timelineEyMeta: 'Technology Risk Consultant | 2023/08 - 2024/04 | 上海',
+          timelineEy1: '为大型企业提供数字化转型与技术风险咨询，梳理流程、指标与系统风险。',
+          timelineEy2: '参与企业 IT 与数据治理规划，覆盖云与网络安全等范围。',
+          resumeEducationTitle: '教育背景',
+          resumeWorkTitle: '工作时间线',
+          resumeEdu1: '加州大学伯克利分校 - 数据科学硕士（2022-2023，GPA 4.00）',
+          resumeEdu2: '北京邮电大学 - 电子商务工程及法律本科（2018-2022，GPA 3.85）',
+          resumeInternshipTitle: '实习时间线',
+          resumeInternTitle1: '微软',
+          resumeInternMeta1: '客户技术战略 Account Technology Strategist | 2022/07 - 2022/10 | 上海',
+          resumeIntern1: '通过客户访谈搭建 Account Plan 与产品技术路线图，并在财年内推动执行。',
+          resumeInternTitle2: '苹果',
+          resumeInternMeta2: '数据分析 Data Analyst | 2022/03 - 2022/07 | 北京',
+          resumeIntern2: '完善线上业务核心指标体系并构建可视化看板，支持市场策略优化与落地执行。',
+          resumeInternTitle3: '滴滴',
+          resumeInternMeta3: '商业数据分析 | 2022/01 - 2022/03 | 杭州',
+          resumeIntern3: '通过补贴率拆解与资源监控优化，将补贴率由 0.8% 降至 0.6%。',
+          resumeInternTitle4: '腾讯',
+          resumeInternMeta4: '产品与用户增长 | 2020/08 - 2020/12 | 北京',
+          resumeIntern4: '细化用户标签与 A/B Test 策略，提升召回率和内容触达效率。',
+          resumeSkillsTitle: '核心能力',
+          resumeSkill1: '产品叙事与 case-study 结构化表达',
+          resumeSkill2: '从数据到洞察的可视化与仪表盘体验设计',
+          resumeSkill3: 'HTML / CSS / JavaScript 快速原型构建',
+          resumeSkill4: '中英双语沟通与内容交付',
+          skillsTitle: '技能库',
+          skillsIntro: '这里集中展示仓库中已训练的 skills。每张卡片都可直接跳转到对应 skill 目录。',
+          skillsLoading: '正在从仓库加载 skills...',
+          skillsEmpty: '在 .github/skills 下暂未发现 skill 目录。',
+          skillsError: '当前无法加载 skills，请稍后再试。',
+          skillsNoDescription: '该 Skill 的 SKILL.md 暂无可提取描述。',
+          skillsSearchPlaceholder: '按 skill 名称、描述或路径搜索',
+          skillsFilterAll: '全部状态',
+          skillsFilterActive: '活跃',
+          skillsFilterStable: '稳定',
+          skillsFilterExperimental: '实验中',
+          skillsStatusActive: '活跃',
+          skillsStatusStable: '稳定',
+          skillsStatusExperimental: '实验中',
+          skillsCountLabel: '{{count}} 个 skill',
+          skillsTag: '技能',
+          skillsOpen: '打开技能',
+          tokenTitle: 'Token',
+          tokenIntro: '直接查看你的个人知识库网页，包含技能快照、项目证据与决策日志。',
+          tokenOpenSite: '打开 Token 页面',
+          tokenOpenLatest: '打开 latest.md',
+          tokenSummaryTitle: '自动总结与经验',
+          tokenSummaryLoading: '正在加载自动总结...',
+          tokenSummaryError: '当前无法加载总结，请稍后重试。',
+          tokenOverviewTitle: '总体概览',
+          tokenPatternsTitle: '观察到的模式',
+          tokenLessonsTitle: '经验与沉淀',
+          tokenNextActionsTitle: '下一步建议',
+          langButton: 'English'
+        }
+      };
+
+      let autoProjects = [];
+
+      const classifySkillStatus = (skill) => {
+        const hay = `${skill.name || ''} ${skill.description || ''} ${skill.path || ''}`.toLowerCase();
+        if (/daily|pipeline|sync|publish|runner|task|assessment|update|backup/.test(hay)) {
+          return 'active';
+        }
+        if (/template|research|search|summary|score|benchmark/.test(hay)) {
+          return 'stable';
+        }
+        return 'experimental';
+      };
+
+      const formatCountLabel = (lang, count) => {
+        const dict = i18n[lang] || i18n.en;
+        return (dict.skillsCountLabel || '{{count}}').replace('{{count}}', String(count));
+      };
+
+      const renderImpact = (lang) => {
+        if (!impactGrid) {
+          return;
+        }
+        const dict = i18n[lang] || i18n.en;
+        const metrics = [
+          { value: '4+', label: dict.impactPublishedSites },
+          { value: String(skillsCatalog.length), label: dict.impactSkillsTotal },
+          { value: '3', label: dict.impactAutomation },
+          { value: '1', label: dict.impactCaseStudies }
+        ];
+        impactGrid.innerHTML = metrics.map((item) => `
+          <article class="impact-card reveal is-visible">
+            <strong>${escapeHtml(item.value)}</strong>
+            <span>${escapeHtml(item.label)}</span>
+          </article>
+        `).join('');
+      };
+
+      const escapeHtml = (value) => String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+
+      const renderAutoProjects = (lang) => {
+        if (!autoProjectsGrid || !autoProjectsStatus) {
+          return;
+        }
+
+        const dict = i18n[lang] || i18n.en;
+        if (!Array.isArray(autoProjects) || autoProjects.length === 0) {
+          autoProjectsGrid.innerHTML = '';
+          autoProjectsStatus.textContent = dict.autoProjectsEmpty;
+          autoProjectsStatus.style.display = '';
+          return;
+        }
+
+        autoProjectsStatus.style.display = 'none';
+        autoProjectsGrid.innerHTML = autoProjects.map((project) => {
+          const title = escapeHtml(project.name || 'Untitled Project');
+          const desc = escapeHtml(project.description || 'Public repository discovered from GitHub sync.');
+          const url = escapeHtml(project.url || project.repo_url || '#');
+          const language = escapeHtml(project.language || 'Project');
+          const category = escapeHtml(project.category || dict.autoProjectTag);
+          const targetLabel = escapeHtml(project.target_label || (project.url_type === 'homepage' || project.url_type === 'pages' ? 'Live' : project.url_type === 'project_board' ? 'Board' : 'Repo'));
+
+          return `
+            <article class="site-card auto-generated reveal is-visible">
+              <div class="site-thumb site-thumb--auto">
+                <div class="thumb-top"><span></span><span></span><span></span></div>
+                <div class="thumb-body">
+                  <div class="thumb-title">${title}</div>
+                  <div class="thumb-micro"><span>${category}</span><span>${language}</span><span>${targetLabel}</span></div>
+                  <div class="thumb-line long"></div>
+                  <div class="thumb-line short"></div>
+                </div>
+              </div>
+              <div class="site-tags">
+                <span class="site-tag">${dict.autoProjectTag}</span>
+                <span class="site-tag">${language}</span>
+              </div>
+              <h3>${title}</h3>
+              <p>${desc}</p>
+              <div class="site-actions">
+                <a href="${url}" target="_blank" rel="noreferrer">${dict.autoProjectOpen}</a>
+              </div>
+            </article>
+          `;
+        }).join('');
+      };
+
+      const renderTokenSummary = (lang) => {
+        if (!tokenSummaryContent || !tokenSummaryCard || !tokenSummaryStatus) {
+          return;
+        }
+        const dict = i18n[lang] || i18n.en;
+        if (!tokenSummary) {
+          tokenSummaryCard.style.display = 'none';
+          tokenSummaryStatus.style.display = '';
+          tokenSummaryStatus.textContent = dict.tokenSummaryLoading;
+          return;
+        }
+
+        const localizedSummary = tokenSummary[lang] || tokenSummary.en || tokenSummary.zh || tokenSummary;
+        const groups = [
+          { title: dict.tokenOverviewTitle, items: localizedSummary.overview || [] },
+          { title: dict.tokenPatternsTitle, items: localizedSummary.patterns || [] },
+          { title: dict.tokenLessonsTitle, items: localizedSummary.lessons || [] },
+          { title: dict.tokenNextActionsTitle, items: localizedSummary.next_actions || [] }
+        ];
+
+        tokenSummaryContent.innerHTML = groups.map((group) => {
+          const items = (Array.isArray(group.items) ? group.items : [])
+            .map((item) => `<li>${escapeHtml(item)}</li>`)
+            .join('');
+          return `
+            <section class="token-summary-group">
+              <h4>${escapeHtml(group.title)}</h4>
+              <ul>${items || '<li>n/a</li>'}</ul>
+            </section>
+          `;
+        }).join('');
+
+        tokenSummaryStatus.style.display = 'none';
+        tokenSummaryCard.style.display = '';
+      };
+
+      const loadTokenSummary = async (lang) => {
+        if (!tokenSummaryStatus) {
+          return;
+        }
+        const dict = i18n[lang] || i18n.en;
+        tokenSummaryStatus.style.display = '';
+        tokenSummaryStatus.textContent = dict.tokenSummaryLoading;
+
+        try {
+          const response = await fetch('assets/token/latest.json', { cache: 'no-store' });
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+          const payload = await response.json();
+          tokenSummary = payload?.auto_summary || null;
+          renderTokenSummary(lang);
+        } catch (error) {
+          tokenSummary = null;
+          if (tokenSummaryCard) {
+            tokenSummaryCard.style.display = 'none';
+          }
+          tokenSummaryStatus.style.display = '';
+          tokenSummaryStatus.textContent = dict.tokenSummaryError;
+        }
+      };
+
+      const syncTokenKnowledgeLanguage = (lang) => {
+        const target = lang === 'zh'
+          ? 'assets/token/index.zh.html'
+          : 'assets/token/index.html';
+        if (tokenKnowledgeFrame && tokenKnowledgeFrame.getAttribute('src') !== target) {
+          tokenKnowledgeFrame.setAttribute('src', target);
+        }
+        if (tokenOpenSiteLink) {
+          tokenOpenSiteLink.setAttribute('href', target);
+        }
+      };
+
+      const renderSkills = (lang) => {
+        if (!skillsGrid || !skillsStatus) {
+          return;
+        }
+
+        const dict = i18n[lang] || i18n.en;
+        const query = (skillsSearch?.value || '').trim().toLowerCase();
+        const statusFilter = skillsFilter?.value || 'all';
+
+        if (!Array.isArray(skillsCatalog) || skillsCatalog.length === 0) {
+          skillsGrid.innerHTML = '';
+          skillsStatus.style.display = '';
+          skillsStatus.textContent = dict.skillsEmpty;
+          if (skillsCount) {
+            skillsCount.textContent = formatCountLabel(lang, 0);
+          }
+          renderImpact(lang);
+          return;
+        }
+
+        const filteredSkills = skillsCatalog.filter((skill) => {
+          const status = classifySkillStatus(skill);
+          const hay = `${skill.name || ''} ${skill.description || ''} ${skill.path || ''}`.toLowerCase();
+          const matchedQuery = !query || hay.includes(query);
+          const matchedStatus = statusFilter === 'all' || status === statusFilter;
+          return matchedQuery && matchedStatus;
+        });
+
+        skillsStatus.style.display = 'none';
+        if (skillsCount) {
+          skillsCount.textContent = formatCountLabel(lang, filteredSkills.length);
+        }
+
+        if (filteredSkills.length === 0) {
+          skillsGrid.innerHTML = '';
+          skillsStatus.style.display = '';
+          skillsStatus.textContent = dict.skillsEmpty;
+          renderImpact(lang);
+          return;
+        }
+
+        skillsGrid.innerHTML = filteredSkills.map((skill) => {
+          const title = escapeHtml(skill.name);
+          const summary = escapeHtml(skill.description || dict.skillsNoDescription);
+          const repoPathText = escapeHtml(skill.path);
+          const url = escapeHtml(skill.url);
+          const status = classifySkillStatus(skill);
+          const statusLabelMap = {
+            active: dict.skillsStatusActive,
+            stable: dict.skillsStatusStable,
+            experimental: dict.skillsStatusExperimental
+          };
+          const statusLabel = escapeHtml(statusLabelMap[status] || status);
+
+          return `
+            <article class="site-card skill-card reveal is-visible">
+              <div class="site-tags">
+                <span class="site-tag">${dict.skillsTag}</span>
+                <span class="site-tag status-${status}">${statusLabel}</span>
+              </div>
+              <h3>${title}</h3>
+              <p>${summary}</p>
+              <p class="skill-path">${repoPathText}</p>
+              <div class="site-actions">
+                <a href="${url}" target="_blank" rel="noreferrer">${dict.skillsOpen}</a>
+              </div>
+            </article>
+          `;
+        }).join('');
+
+        renderImpact(lang);
+      };
+
+      const loadSkillsCatalog = async (lang) => {
+        if (!skillsStatus || !skillsGrid) {
+          return;
+        }
+
+        const dict = i18n[lang] || i18n.en;
+        skillsStatus.style.display = '';
+        skillsStatus.textContent = dict.skillsLoading;
+
+        try {
+          const resp = await fetch('assets/skills-catalog.json', { cache: 'no-store' });
+          if (!resp.ok) {
+            throw new Error(`HTTP ${resp.status}`);
+          }
+
+          const payload = await resp.json();
+          const skills = Array.isArray(payload?.skills) ? payload.skills : [];
+          skillsCatalog = skills.map((skill) => ({
+            name: skill.title || skill.slug || 'Untitled Skill',
+            description: skill.description || '',
+            path: skill.path || '',
+            url: skill.url || '#'
+          }));
+          renderSkills(lang);
+        } catch (error) {
+          skillsCatalog = [];
+          skillsGrid.innerHTML = '';
+          skillsStatus.style.display = '';
+          skillsStatus.textContent = dict.skillsError;
+        }
+      };
+
+      const loadAutoProjects = async (lang) => {
+        if (!autoProjectsGrid || !autoProjectsStatus) {
+          return;
+        }
+
+        const dict = i18n[lang] || i18n.en;
+        autoProjectsStatus.style.display = '';
+        autoProjectsStatus.textContent = dict.autoProjectsLoading;
+
+        try {
+          const response = await fetch('assets/github-projects.json', { cache: 'no-store' });
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+          const payload = await response.json();
+          autoProjects = Array.isArray(payload.projects) ? payload.projects : [];
+          renderAutoProjects(lang);
+        } catch (error) {
+          autoProjects = [];
+          autoProjectsGrid.innerHTML = '';
+          autoProjectsStatus.style.display = '';
+          autoProjectsStatus.textContent = dict.autoProjectsError;
+        }
+      };
+
+      const applyLanguage = (lang) => {
+        const dict = i18n[lang] || i18n.en;
+        document.title = dict.pageTitle;
+        document.querySelectorAll('[data-i18n]').forEach((node) => {
+          const key = node.getAttribute('data-i18n');
+          if (key && dict[key]) {
+            node.textContent = dict[key];
+          }
+        });
+        if (langToggle) {
+          langToggle.textContent = dict.langButton;
+          langToggle.setAttribute('aria-label', lang === 'en' ? 'Switch to Chinese' : '切换到英文');
+        }
+        if (skillsSearch) {
+          skillsSearch.placeholder = dict.skillsSearchPlaceholder || '';
+        }
+        document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+
+        renderSkills(lang);
+        renderImpact(lang);
+        syncTokenKnowledgeLanguage(lang);
+        renderTokenSummary(lang);
+
+        if (Array.isArray(autoProjects) && autoProjects.length > 0) {
+          renderAutoProjects(lang);
+        }
+      };
+
+      let currentLang = 'en';
+      applyLanguage(currentLang);
+      loadSkillsCatalog(currentLang);
+      loadAutoProjects(currentLang);
+      loadTokenSummary(currentLang);
+      if (skillsSearch) {
+        skillsSearch.addEventListener('input', () => renderSkills(currentLang));
+      }
+      if (skillsFilter) {
+        skillsFilter.addEventListener('change', () => renderSkills(currentLang));
+      }
+      if (langToggle) {
+        langToggle.addEventListener('click', () => {
+          currentLang = currentLang === 'en' ? 'zh' : 'en';
+          applyLanguage(currentLang);
+        });
+      }
+
+      let currentTab = 'index';
+      const setTab = (tab) => {
+        currentTab = tabPanels[tab] ? tab : 'index';
+        body.setAttribute('data-active-tab', currentTab);
+        tabButtons.forEach((btn) => {
+          const isCurrent = btn.getAttribute('data-tab-target') === currentTab;
+          btn.classList.toggle('is-active', isCurrent);
+          btn.setAttribute('aria-selected', isCurrent ? 'true' : 'false');
+        });
+        Object.entries(tabPanels).forEach(([name, panel]) => {
+          if (!panel) {
+            return;
+          }
+          const isCurrent = name === currentTab;
+          panel.classList.toggle('is-active', isCurrent);
+          panel.setAttribute('aria-hidden', isCurrent ? 'false' : 'true');
+        });
+      };
+
+      tabButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          setTab(btn.getAttribute('data-tab-target') || 'index');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          if (currentTab === 'index') {
+            updateProgress();
+            updateAnchorByViewport();
+          }
+        });
+      });
+
+      const revealTargets = Array.from(document.querySelectorAll('.section, .feature-card, .site-card, .footer-note'));
+      revealTargets.forEach(el => el.classList.add('reveal'));
+
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.14, rootMargin: '0px 0px -8% 0px' });
+
+      revealTargets.forEach(el => io.observe(el));
+
+      const activateNav = (id) => {
+        anchorLinks.forEach((link) => {
+          const isCurrent = link.getAttribute('href') === `#${id}`;
+          link.classList.toggle('is-active', isCurrent);
+        });
+
+        const heroStepMap = {
+          home: 'home',
+          featured: 'featured',
+          sites: 'sites',
+          'live-map': 'sites'
+        };
+        const activeStep = heroStepMap[id] || 'home';
+
+        heroSteps.forEach((step) => {
+          const target = step.getAttribute('data-step');
+          step.classList.toggle('is-active', target === activeStep);
+        });
+
+        if (featureCards.length > 0) {
+          featureCards.forEach((card, index) => {
+            const shouldFocus = (id === 'featured' && index === 0) || (id === 'sites' && index === 1) || (id === 'live-map' && index === 2);
+            card.classList.toggle('is-focus', shouldFocus);
+          });
+        }
+      };
+
+      const updateAnchorByViewport = () => {
+        if (anchorTargets.length === 0) {
+          return;
+        }
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        if (total > 0 && window.scrollY / total > 0.98) {
+          activateNav(anchorTargets[anchorTargets.length - 1].section.id);
+          return;
+        }
+
+        const marker = window.scrollY + 220;
+        let current = anchorTargets[0];
+
+        anchorTargets.forEach((item) => {
+          const top = window.scrollY + item.section.getBoundingClientRect().top;
+          if (top <= marker) {
+            current = item;
+          }
+        });
+
+        activateNav(current.section.id);
+
+      };
+
+      const heroLeft = document.querySelector('.hero-copy');
+      const heroRight = document.querySelector('.hero-panel');
+      const media = window.matchMedia('(max-width: 1080px)');
+
+      const updateProgress = () => {
+        if (!progressBar) {
+          return;
+        }
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = total <= 0 ? 0 : Math.min(1, Math.max(0, window.scrollY / total));
+        progressBar.style.width = `${(progress * 100).toFixed(2)}%`;
+      };
+
+      const applyParallax = () => {
+        if (!heroLeft || !heroRight) {
+          return;
+        }
+        if (media.matches) {
+          heroLeft.style.transform = '';
+          heroRight.style.transform = '';
+          return;
+        }
+        const y = Math.min(window.scrollY, 260);
+        heroLeft.style.transform = `translateY(${y * 0.045}px)`;
+        heroRight.style.transform = `translateY(${y * -0.032}px)`;
+      };
+
+      const onScroll = () => {
+        if (currentTab !== 'index') {
+          return;
+        }
+        applyParallax();
+        updateProgress();
+        updateAnchorByViewport();
+      };
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
+      setTab('index');
+      applyParallax();
+      updateProgress();
+      updateAnchorByViewport();
+    })();
+  </script>
+</body>
+</html>

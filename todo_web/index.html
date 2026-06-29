@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daily Todo Board</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero">
+        <h1>Daily Todo Board</h1>
+        <p>Create tasks, move them across Pending, Doing, and Done, and keep everything saved in SQLite.</p>
+      </header>
+
+      <section class="auth card">
+        <div class="auth-head">
+          <h2>Account</h2>
+          <div id="auth-status" class="auth-status">Not signed in</div>
+        </div>
+
+        <form id="auth-form" class="auth-form">
+          <label>
+            Username
+            <input id="auth-username" type="text" minlength="3" maxlength="40" required />
+          </label>
+          <label>
+            Password
+            <input id="auth-password" type="password" minlength="6" maxlength="120" required />
+          </label>
+          <div class="auth-actions">
+            <button type="button" id="btn-login">Login</button>
+            <button type="button" id="btn-register">Register</button>
+            <button type="button" id="btn-logout" class="ghost">Logout</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="filters card">
+        <h2>Search & Filters</h2>
+        <form id="filter-form">
+          <label>
+            Search
+            <input id="filter-q" type="text" placeholder="title or description" />
+          </label>
+          <label>
+            Status
+            <select id="filter-status">
+              <option value="">All</option>
+              <option value="pending">Pending</option>
+              <option value="doing">Doing</option>
+              <option value="done">Done</option>
+            </select>
+          </label>
+          <label>
+            Priority
+            <select id="filter-priority">
+              <option value="">All</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </label>
+          <label>
+            Due After
+            <input id="filter-due-after" type="date" />
+          </label>
+          <label>
+            Due Before
+            <input id="filter-due-before" type="date" />
+          </label>
+          <div class="filter-actions">
+            <button type="submit">Apply</button>
+            <button type="button" id="btn-clear-filters" class="ghost">Clear</button>
+            <button type="button" id="btn-export-json">Export JSON</button>
+            <button type="button" id="btn-export-csv">Export CSV</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="composer card">
+        <h2>Add Task</h2>
+        <form id="todo-form">
+          <label>
+            Title
+            <input id="title" name="title" type="text" placeholder="What needs to be done?" required maxlength="140" />
+          </label>
+
+          <label>
+            Description
+            <textarea id="description" name="description" placeholder="Optional details" rows="3" maxlength="500"></textarea>
+          </label>
+
+          <label>
+            Status
+            <select id="status" name="status">
+              <option value="pending">Pending</option>
+              <option value="doing">Doing</option>
+              <option value="done">Done</option>
+            </select>
+          </label>
+
+          <label>
+            Due Date
+            <input id="due_date" name="due_date" type="date" />
+          </label>
+
+          <label>
+            Priority
+            <select id="priority" name="priority">
+              <option value="high">High</option>
+              <option value="medium" selected>Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </label>
+
+          <button type="submit">Add Todo</button>
+        </form>
+      </section>
+
+      <section class="board" id="board"></section>
+    </main>
+
+    <template id="todo-template">
+      <article class="todo-card">
+        <div class="todo-top">
+          <label class="check-wrap">
+            <input type="checkbox" class="done-toggle" />
+            <span class="check-label">Mark done</span>
+          </label>
+          <select class="status-select">
+            <option value="pending">Pending</option>
+            <option value="doing">Doing</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+        <h3 class="todo-title"></h3>
+        <p class="todo-desc"></p>
+        <div class="todo-tags"></div>
+        <div class="todo-meta"></div>
+        <div class="todo-actions">
+          <button class="btn-edit" type="button">Edit</button>
+          <button class="btn-delete" type="button">Delete</button>
+        </div>
+      </article>
+    </template>
+
+    <dialog id="edit-dialog">
+      <form method="dialog" id="edit-form">
+        <h3>Edit Todo</h3>
+        <input type="hidden" id="edit-id" />
+
+        <label>
+          Title
+          <input id="edit-title" type="text" required maxlength="140" />
+        </label>
+
+        <label>
+          Description
+          <textarea id="edit-description" rows="4" maxlength="500"></textarea>
+        </label>
+
+        <label>
+          Status
+          <select id="edit-status">
+            <option value="pending">Pending</option>
+            <option value="doing">Doing</option>
+            <option value="done">Done</option>
+          </select>
+        </label>
+
+        <label>
+          Due Date
+          <input id="edit-due-date" type="date" />
+        </label>
+
+        <label>
+          Priority
+          <select id="edit-priority">
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </label>
+
+        <menu>
+          <button value="cancel" type="button" id="edit-cancel">Cancel</button>
+          <button value="default" type="submit" class="primary">Save</button>
+        </menu>
+      </form>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>

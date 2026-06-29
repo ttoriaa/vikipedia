@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>职场雷达 | 市场招聘聚合</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="ambient ambient-a" aria-hidden="true"></div>
+  <div class="ambient ambient-b" aria-hidden="true"></div>
+
+  <main class="page">
+    <header class="hero">
+      <div class="hero-headline">
+        <p class="eyebrow">Job Intelligence Board</p>
+        <h1>职场雷达：车企 / 互联网 / 机器人岗位聚合</h1>
+        <p class="hero-text">
+          聚焦你最关心的岗位方向：车辆项目管理、数据产品经理、数据项目管理、技术售前支持。
+          首页会结合你的简历能力画像，自动给出最适配岗位建议。
+        </p>
+      </div>
+      <div class="hero-meta">
+        <p><strong>关注领域</strong><span>车企 / 互联网 / 机器人与具身智能</span></p>
+        <p><strong>数据来源</strong><span>BOSS + 可扩展来源（自动抓取结果文件）</span></p>
+        <p><strong>当前版本</strong><span>v0.2 自动更新 + 投递追踪</span></p>
+      </div>
+    </header>
+
+    <nav class="tabs" aria-label="页面标签">
+      <button class="tab-btn active" data-tab="home">首页 · 综合适配</button>
+      <button class="tab-btn" data-tab="auto">车企岗位</button>
+      <button class="tab-btn" data-tab="robot">机器人 / 具身智能</button>
+      <button class="tab-btn" data-tab="resume">我的简历</button>
+    </nav>
+
+    <section id="tab-home" class="tab-panel active" aria-labelledby="home">
+      <div class="panel-top">
+        <div>
+          <h2>综合最适配岗位</h2>
+          <p>按岗位方向 + 行业偏好 + 简历技能匹配度进行评分，优先展示 Top 推荐。</p>
+          <p id="dataMeta" class="data-meta">数据加载中...</p>
+        </div>
+        <div class="panel-actions">
+          <label for="roleFilter">岗位筛选</label>
+          <select id="roleFilter">
+            <option value="all">全部岗位</option>
+            <option value="车辆项目管理">车辆项目管理</option>
+            <option value="数据产品经理">数据产品经理</option>
+            <option value="数据项目管理">数据项目管理</option>
+            <option value="技术售前支持">技术售前支持</option>
+          </select>
+          <label for="snapshotDateFilter">日期回看</label>
+          <select id="snapshotDateFilter">
+            <option value="latest">最新数据</option>
+          </select>
+        </div>
+      </div>
+
+      <section class="tracking-board" aria-label="投递追踪看板">
+        <h3>投递追踪看板</h3>
+        <div id="statusBoard" class="status-grid"></div>
+      </section>
+
+      <div id="recommendationGrid" class="card-grid"></div>
+    </section>
+
+    <section id="tab-auto" class="tab-panel" aria-labelledby="auto">
+      <h2>车企领域岗位</h2>
+      <p class="sub">覆盖主机厂、Tier1、智能驾驶相关车企生态岗位。</p>
+      <div id="autoGrid" class="card-grid"></div>
+    </section>
+
+    <section id="tab-robot" class="tab-panel" aria-labelledby="robot">
+      <h2>机器人 / 具身智能岗位</h2>
+      <p class="sub">聚焦具身智能、机器人平台、软硬件协同与数据闭环岗位。</p>
+      <div id="robotGrid" class="card-grid"></div>
+    </section>
+
+    <section id="tab-resume" class="tab-panel" aria-labelledby="resume">
+      <h2>我的简历（Resume EN）</h2>
+      <p class="sub">已嵌入你的英文简历页面，可直接对照岗位要求优化投递策略。</p>
+      <div class="resume-wrap">
+        <iframe src="../vickie_resume_profile_en.html" title="Resume EN" loading="lazy"></iframe>
+      </div>
+    </section>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>

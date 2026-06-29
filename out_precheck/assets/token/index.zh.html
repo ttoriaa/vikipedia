@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>个人知识库</title>
+    <style>
+        :root {
+            --bg: #f4efe5;
+            --panel: #fffdf9;
+            --ink: #1c2733;
+            --muted: #5a6977;
+            --line: #d6c9b3;
+            --accent: #0f6a63;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: radial-gradient(circle at 15% 0%, #ede2cf 0%, var(--bg) 45%);
+            color: var(--ink);
+            font-family: Segoe UI, Arial, sans-serif;
+            padding: 18px;
+        }
+        .wrap { max-width: 1200px; margin: 0 auto; display: grid; gap: 14px; }
+        .hero {
+            border-radius: 16px;
+            background: linear-gradient(130deg, #0f5a55, #1f3751);
+            color: #edf5f6;
+            padding: 20px;
+        }
+        .hero h1 { margin: 0; }
+        .meta { margin-top: 6px; color: #d7e7e9; }
+        .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+        .card {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 14px;
+        }
+        .card h2 { margin: 0 0 10px; font-size: 18px; color: var(--accent); }
+        ul { margin: 0; padding-left: 18px; display: grid; gap: 8px; }
+        li span { color: var(--muted); font-size: 12px; margin-left: 6px; }
+        a { color: #0e5460; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .full { grid-column: 1 / -1; }
+        @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <main class="wrap">
+        <section class="hero">
+            <h1>个人知识库</h1>
+            <div class="meta">生成时间: 2026-06-24 13:11:38 | 工作区: vikipedia-agents</div>
+            <div class="meta">技能数: 22 | 根目录页面: 11 | 站点页面: 26</div>
+        </section>
+
+        <section class="grid">
+            <article class="card">
+                <h2>技能快照</h2>
+                <ul><li><strong>confluence-bulk-page-ops</strong>: Perform controlled batch operations on a root Confluence page and all descendant pages using PAT-backed local scripts.</li><li><strong>confluence-search</strong>: Search and retrieve Confluence content for both CC and ATC via PAT-backed local-script retrieval.</li><li><strong>confluence-update</strong>: Perform controlled updates for both CC and ATC through local skill scripts and PAT authentication.</li><li><strong>daily-market-news-research</strong>: 把多市场每日新闻检索固化成可重复执行流程：围绕美国、中国、韩国、香港市场，按股票池或主题检索半导体、AI 算力、存储、黄金、贵金属等相关新闻，并输出可直接复制到 Feishu 或 Confluence 的双语 Markdown 简报。</li><li><strong>dcc-rpa-assessment</strong>: Produce one merged CSV where each row remains a recognized data type, the first five columns stay aligned with the DCC dictionary contract, and appended columns capture row-level processing behavior.</li><li><strong>dongchedi-charging-confluence-pipeline</strong>: 执行懂车帝 charging 数据日常流水线，生成当日报告产物，并按需发布到 Confluence。默认执行完整流程（生成 + 发布），同时支持 dry-run 安全模式。</li><li><strong>dongchedi-charging-performance-summary</strong>: 产出基于懂车帝参数页的车型级充电性能总结，确保字段对齐、口径一致、缺失值透明标注，可直接用于报告、邮件或文档。</li><li><strong>dongchedi-site-sync-after-daily</strong>: 在你完成当日懂车帝充电数据更新后，自动重建网站数据页、可视化页面和趋势总结页面，并按需触发 GitHub Pages 部署，让线上站点尽快同步。</li><li><strong>github-search</strong>: Find relevant source artifacts from GitHub for technical or compliance context.</li><li><strong>github-update</strong>: Prepare and coordinate GitHub-side updates with clear, auditable intent.</li><li><strong>html-slide-deck-generator</strong>: Generate a standalone HTML slide deck from a PowerPoint-style context while preserving the source visual direction and keeping an editable structure for wording and design iteration.</li><li><strong>jira-search</strong>: Retrieve Jira planning and execution evidence relevant to the request.</li></ul>
+            </article>
+            <article class="card">
+                <h2>GitHub 项目更新</h2>
+                <ul><li><a href='https://ttoriaa.github.io/vikipedia/' target='_blank' rel='noopener'>vikipedia</a> <span>2026-06-24T03:21:54Z</span></li><li><a href='https://ttoriaa.github.io/shimai-podcast-site/' target='_blank' rel='noopener'>shimai-podcast-site</a> <span>2026-06-24T01:24:53Z</span></li><li><a href='https://ttoriaa.github.io/market-research/' target='_blank' rel='noopener'>market-research</a> <span>2026-06-22T05:53:35Z</span></li><li><a href='https://ttoriaa.github.io/automotive-benchmarking/' target='_blank' rel='noopener'>automotive-benchmarking</a> <span>2026-06-17T09:11:11Z</span></li><li><a href='https://ttoriaa.github.io/gaming-vikipedia/' target='_blank' rel='noopener'>gaming-vikipedia</a> <span>2026-06-16T08:35:25Z</span></li></ul>
+            </article>
+            <article class="card">
+                <h2>近期决策</h2>
+                <ul><li><strong>2026-06-24 11:29:40</strong> Knowledge base automation rollout<br/><span>Ship KB tasks and scripts in workspace</span></li></ul>
+            </article>
+            <article class="card">
+                <h2>网站构建快照</h2>
+                <ul><li><a href='../../index.html' target='_blank' rel='noopener'>index.html</a> <span>2026-06-24 12:05:41</span></li><li><a href='../../reports/knowledge_base/latest.html' target='_blank' rel='noopener'>reports/knowledge_base/latest.html</a> <span>2026-06-24 11:57:54</span></li><li><a href='../../reports/knowledge_base/latest.zh.html' target='_blank' rel='noopener'>reports/knowledge_base/latest.zh.html</a> <span>2026-06-24 11:57:54</span></li><li><a href='../../reports/knowledge_base/index.zh.html' target='_blank' rel='noopener'>reports/knowledge_base/index.zh.html</a> <span>2026-06-24 11:57:54</span></li><li><a href='../../reports/knowledge_base/index.html' target='_blank' rel='noopener'>reports/knowledge_base/index.html</a> <span>2026-06-24 11:57:54</span></li><li><a href='../../reports/knowledge_base/2026-06-24/personal_kb.html' target='_blank' rel='noopener'>reports/knowledge_base/2026-06-24/personal_kb.html</a> <span>2026-06-24 11:57:54</span></li><li><a href='../../reports/knowledge_base/2026-06-24/personal_kb.zh.html' target='_blank' rel='noopener'>reports/knowledge_base/2026-06-24/personal_kb.zh.html</a> <span>2026-06-24 11:57:54</span></li><li><a href='../../site/insights.html' target='_blank' rel='noopener'>site/insights.html</a> <span>2026-06-24 11:17:32</span></li><li><a href='../../site/dashboard.html' target='_blank' rel='noopener'>site/dashboard.html</a> <span>2026-06-24 11:17:32</span></li><li><a href='../../site/data.html' target='_blank' rel='noopener'>site/data.html</a> <span>2026-06-24 11:17:32</span></li><li><a href='../../site/latest/index.html' target='_blank' rel='noopener'>site/latest/index.html</a> <span>2026-06-24 11:17:32</span></li><li><a href='../../site/reports/2026-06-24/summary.html' target='_blank' rel='noopener'>site/reports/2026-06-24/summary.html</a> <span>2026-06-24 11:17:32</span></li><li><a href='../../site/reports/2026-06-23/summary.html' target='_blank' rel='noopener'>site/reports/2026-06-23/summary.html</a> <span>2026-06-24 11:17:32</span></li><li><a href='../../site/reports/2026-06-22/summary.html' target='_blank' rel='noopener'>site/reports/2026-06-22/summary.html</a> <span>2026-06-24 11:17:32</span></li><li><a href='../../site/reports/2026-06-17/summary.html' target='_blank' rel='noopener'>site/reports/2026-06-17/summary.html</a> <span>2026-06-24 11:17:32</span></li></ul>
+            </article>
+            <article class="card">
+                <h2>懂车帝日报</h2>
+                <ul><li><a href='../../reports/dongchedi_daily/2026-06-24/summary.md' target='_blank' rel='noopener'>reports/dongchedi_daily/2026-06-24/summary.md</a> <span>2026-06-24 10:34:58</span></li><li><a href='../../reports/dongchedi_daily/2026-06-23/summary.md' target='_blank' rel='noopener'>reports/dongchedi_daily/2026-06-23/summary.md</a> <span>2026-06-23 14:17:05</span></li><li><a href='../../reports/dongchedi_daily/2026-06-22/summary.md' target='_blank' rel='noopener'>reports/dongchedi_daily/2026-06-22/summary.md</a> <span>2026-06-22 10:03:26</span></li><li><a href='../../reports/dongchedi_daily/2026-06-21/summary.md' target='_blank' rel='noopener'>reports/dongchedi_daily/2026-06-21/summary.md</a> <span>2026-06-22 09:46:14</span></li><li><a href='../../reports/dongchedi_daily/2026-06-20/summary.md' target='_blank' rel='noopener'>reports/dongchedi_daily/2026-06-20/summary.md</a> <span>2026-06-22 09:46:06</span></li><li><a href='../../reports/dongchedi_daily/2026-06-19/summary.md' target='_blank' rel='noopener'>reports/dongchedi_daily/2026-06-19/summary.md</a> <span>2026-06-19 12:05:21</span></li><li><a href='../../reports/dongchedi_daily/2026-06-18/summary.md' target='_blank' rel='noopener'>reports/dongchedi_daily/2026-06-18/summary.md</a> <span>2026-06-19 12:05:21</span></li><li><a href='../../reports/dongchedi_daily/2026-06-17/summary.md' target='_blank' rel='noopener'>reports/dongchedi_daily/2026-06-17/summary.md</a> <span>2026-06-17 16:42:52</span></li><li><a href='../../reports/dongchedi_daily/2026-06-16/summary.md' target='_blank' rel='noopener'>reports/dongchedi_daily/2026-06-16/summary.md</a> <span>2026-06-16 09:00:08</span></li><li><a href='../../reports/dongchedi_daily/2026-06-15/summary.md' target='_blank' rel='noopener'>reports/dongchedi_daily/2026-06-15/summary.md</a> <span>2026-06-15 15:01:41</span></li><li><a href='../../reports/dongchedi_daily/2026-06-14/summary.md' target='_blank' rel='noopener'>reports/dongchedi_daily/2026-06-14/summary.md</a> <span>2026-06-15 10:44:34</span></li><li><a href='../../reports/dongchedi_daily/2026-06-13/summary.md' target='_blank' rel='noopener'>reports/dongchedi_daily/2026-06-13/summary.md</a> <span>2026-06-13 20:44:06</span></li><li><a href='../../reports/dongchedi_daily/2026-06-12/summary.md' target='_blank' rel='noopener'>reports/dongchedi_daily/2026-06-12/summary.md</a> <span>2026-06-12 10:11:06</span></li><li><a href='../../reports/dongchedi_daily/2026-06-07/summary.md' target='_blank' rel='noopener'>reports/dongchedi_daily/2026-06-07/summary.md</a> <span>2026-06-12 10:11:05</span></li><li><a href='../../reports/dongchedi_daily/2026-06-06/summary.md' target='_blank' rel='noopener'>reports/dongchedi_daily/2026-06-06/summary.md</a> <span>2026-06-12 10:11:05</span></li></ul>
+            </article>
+            <article class="card">
+                <h2>Daily Brief 与新闻</h2>
+                <ul><li><a href='../../reports/daily_brief/2026-06-23/daily_brief_2026-06-23.md' target='_blank' rel='noopener'>reports/daily_brief/2026-06-23/daily_brief_2026-06-23.md</a> <span>2026-06-23 14:34:48</span></li><li><a href='../../reports/daily_market_news/2026-06-23/daily_market_news_2026-06-23.md' target='_blank' rel='noopener'>reports/daily_market_news/2026-06-23/daily_market_news_2026-06-23.md</a> <span>2026-06-23 14:31:54</span></li><li><a href='../../reports/daily_market_news/2026-06-22/daily_market_news_2026-06-22.md' target='_blank' rel='noopener'>reports/daily_market_news/2026-06-22/daily_market_news_2026-06-22.md</a> <span>2026-06-22 18:33:07</span></li></ul>
+            </article>
+            <article class="card">
+                <h2>任务执行证据</h2>
+                <ul><li><a href='../../reports/task_logs/token_github_daily_task_2026-06-24_114931.log' target='_blank' rel='noopener'>reports/task_logs/token_github_daily_task_2026-06-24_114931.log</a> <span>2026-06-24 11:49:33</span></li><li><a href='../../reports/task_logs/token_github_daily_task_2026-06-24_114920.log' target='_blank' rel='noopener'>reports/task_logs/token_github_daily_task_2026-06-24_114920.log</a> <span>2026-06-24 11:49:23</span></li><li><a href='../../reports/task_logs/charging_healthcheck_2026-06-24_110005.log' target='_blank' rel='noopener'>reports/task_logs/charging_healthcheck_2026-06-24_110005.log</a> <span>2026-06-24 11:00:05</span></li><li><a href='../../reports/task_logs/charging_healthcheck_2026-06-24_100010.log' target='_blank' rel='noopener'>reports/task_logs/charging_healthcheck_2026-06-24_100010.log</a> <span>2026-06-24 10:00:10</span></li><li><a href='../../reports/task_logs/charging_healthcheck_2026-06-23_110005.log' target='_blank' rel='noopener'>reports/task_logs/charging_healthcheck_2026-06-23_110005.log</a> <span>2026-06-23 11:00:05</span></li><li><a href='../../reports/task_logs/charging_healthcheck_2026-06-23_100324.log' target='_blank' rel='noopener'>reports/task_logs/charging_healthcheck_2026-06-23_100324.log</a> <span>2026-06-23 10:03:24</span></li><li><a href='../../reports/task_logs/charging_task_2026-06-23_093606.log' target='_blank' rel='noopener'>reports/task_logs/charging_task_2026-06-23_093606.log</a> <span>2026-06-23 09:36:20</span></li><li><a href='../../reports/task_logs/motor_task_2026-06-23_093606.log' target='_blank' rel='noopener'>reports/task_logs/motor_task_2026-06-23_093606.log</a> <span>2026-06-23 09:36:06</span></li><li><a href='../../reports/task_logs/charging_task_2026-06-23_093038.log' target='_blank' rel='noopener'>reports/task_logs/charging_task_2026-06-23_093038.log</a> <span>2026-06-23 09:30:59</span></li><li><a href='../../reports/task_logs/motor_task_2026-06-23_093038.log' target='_blank' rel='noopener'>reports/task_logs/motor_task_2026-06-23_093038.log</a> <span>2026-06-23 09:30:38</span></li><li><a href='../../reports/task_logs/charging_healthcheck_2026-06-22_110004.log' target='_blank' rel='noopener'>reports/task_logs/charging_healthcheck_2026-06-22_110004.log</a> <span>2026-06-22 11:00:04</span></li><li><a href='../../reports/task_logs/charging_healthcheck_2026-06-22_100015.log' target='_blank' rel='noopener'>reports/task_logs/charging_healthcheck_2026-06-22_100015.log</a> <span>2026-06-22 10:00:15</span></li><li><a href='../../reports/task_logs/charging_task_2026-06-22_094643.log' target='_blank' rel='noopener'>reports/task_logs/charging_task_2026-06-22_094643.log</a> <span>2026-06-22 09:47:38</span></li><li><a href='../../reports/task_logs/charging_healthcheck_2026-06-22_094643.log' target='_blank' rel='noopener'>reports/task_logs/charging_healthcheck_2026-06-22_094643.log</a> <span>2026-06-22 09:46:43</span></li><li><a href='../../reports/task_logs/motor_task_2026-06-22_094643.log' target='_blank' rel='noopener'>reports/task_logs/motor_task_2026-06-22_094643.log</a> <span>2026-06-22 09:46:43</span></li></ul>
+            </article>
+            <article class="card full">
+                <h2>快速链接</h2>
+                <ul>
+                    <li><a href="latest.md" target="_blank" rel="noopener">最新快照 latest.md</a></li>
+                    <li><a href="2026-06-24/personal_kb.md" target="_blank" rel="noopener">今日 personal_kb.md</a></li>
+                    <li><a href="notes" target="_blank" rel="noopener">决策笔记目录</a></li>
+                </ul>
+            </article>
+            <article class="card full">
+                <h2>自动总结与经验</h2>
+                <ul><li>当前快照覆盖 22 个技能条目、11 个根目录 HTML 页面，以及 26 个 site HTML 页面。</li><li>证据池包含 15 份懂车帝日报、3 份 daily brief/news 文件，以及 15 份近期任务日志。</li><li>GitHub landing feed 当前跟踪 6 个项目，可用于 Token/landing 更新。</li><li>决策记忆当前包含 1 条结构化记录。</li><li>网站更新主要集中在 reports/knowledge_base（近期快照中 6 个文件）。</li><li>报告活动主要集中在 reports/dongchedi_daily/2026-06-24（近期快照中 1 个文件）。</li><li>任务执行节奏较稳定：日志显示为连续自动运行，而不是零散人工更新。</li><li>将决策日志沉淀为 JSONL，可以显著提升从动作到原因的可追溯性。</li><li>稳定的 latest.md/latest.html 入口能明显降低人和自动化流程的检索成本。</li><li>近期重点显示自动化优先的复利价值在增强：Knowledge base automation rollout。</li><li>每次关键执行后补一条决策记录，包含目标、选项与预期影响。</li><li>持续保持日报生成，让周度复盘可见趋势级信号。</li><li>每周从记录中提炼一条综合总结，沉淀为可复用 playbook。</li></ul>
+            </article>
+        </section>
+    </main>
+</body>
+</html>
