@@ -1,0 +1,109 @@
+name: Semiconductor Daily Scoring
+
+on:
+  schedule:
+    - cron: "35 1 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      date:
+        description: Report date in YYYY-MM-DD
+        required: false
+        type: string
+      universe:
+        description: Universe preset
+        required: false
+        default: ai6
+        type: choice
+        options:
+          - core3
+          - ai6
+      companies:
+        description: Optional custom companies, format SYMBOL:SCOPE:TYPE,...
+        required: false
+        type: string
+      emit_json:
+        description: Optional JSON output path, e.g. reports/semiconductor_daily/latest.json
+        required: false
+        type: string
+      dry_run:
+        description: Dry run mode
+        required: false
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+      auto_commit:
+        description: Auto commit generated report
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+permissions:
+  contents: write
+
+jobs:
+  score:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run scoring
+        run: |
+          DATE_ARG=""
+          if [ -n "${{ inputs.date }}" ]; then
+            DATE_ARG="--date ${{ inputs.date }}"
+          fi
+
+          COMMIT_ARG=""
+          if [ "${{ inputs.auto_commit || 'false' }}" = "true" ]; then
+            COMMIT_ARG="--auto-commit"
+          fi
+
+          COMPANIES_ARG=""
+          if [ -n "${{ inputs.companies }}" ]; then
+            COMPANIES_ARG="--companies ${{ inputs.companies }}"
+          fi
+
+          EMIT_JSON_ARG=""
+          if [ -n "${{ inputs.emit_json }}" ]; then
+            EMIT_JSON_ARG="--emit-json ${{ inputs.emit_json }}"
+          fi
+
+          python scripts/run_daily_semiconductor_scoring.py \
+            --universe "${{ inputs.universe || 'ai6' }}" \
+            --dry-run "${{ inputs.dry_run || 'true' }}" \
+            $DATE_ARG \
+            $COMPANIES_ARG \
+            $EMIT_JSON_ARG \
+            $COMMIT_ARG
+
+      - name: Upload report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: semiconductor-daily-report
+          path: |
+            reports/semiconductor_daily/*.md
+            reports/semiconductor_daily/*.json
+
+      - name: Commit and push if changed
+        if: ${{ (inputs.dry_run || 'true') == 'false' && (inputs.auto_commit || 'false') == 'true' }}
+        run: |
+          if [ -n "$(git status --porcelain reports/semiconductor_daily)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add reports/semiconductor_daily/*.md
+            git commit -m "chore: update semiconductor daily scoring report"
+            git push
+          else
+            echo "No report changes to commit."
+          fi

@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Semiconductor Daily Scoring Viewer</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --card: #ffffff;
+      --ink: #17212b;
+      --muted: #5c6b78;
+      --line: #dbe3ea;
+      --bull: #1c8c4f;
+      --neutral: #7d8b98;
+      --bear: #c23b3b;
+      --accent: #0f6fb7;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 100% 0%, #e4eef8 0%, transparent 42%),
+        radial-gradient(circle at 0% 100%, #e8f4ee 0%, transparent 36%),
+        var(--bg);
+    }
+
+    .wrap {
+      width: min(1100px, calc(100% - 28px));
+      margin: 26px auto 38px;
+    }
+
+    .hero {
+      background: linear-gradient(140deg, #12344d 0%, #0f6fb7 72%);
+      color: #fff;
+      border-radius: 16px;
+      padding: 18px 18px 16px;
+      box-shadow: 0 14px 28px rgba(12, 41, 62, 0.25);
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: 1.4rem;
+      line-height: 1.2;
+      letter-spacing: 0.1px;
+    }
+
+    .hero p {
+      margin: 8px 0 0;
+      opacity: 0.9;
+      font-size: 0.95rem;
+    }
+
+    .toolbar {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn {
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .btn:hover { background: rgba(255, 255, 255, 0.24); }
+
+    .hint {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      opacity: 0.82;
+    }
+
+    .grid {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 12px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .kpi {
+      grid-column: span 3;
+      min-height: 106px;
+    }
+
+    .kpi h3 {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .kpi .v {
+      margin-top: 9px;
+      font-size: 1.7rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .kpi .s {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .main {
+      grid-column: span 12;
+    }
+
+    .company-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .company-title {
+      font-size: 1.12rem;
+      font-weight: 700;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      border: 1px solid transparent;
+    }
+
+    .bullish { color: var(--bull); background: #e7f5ec; border-color: #c6e9d4; }
+    .neutral { color: var(--neutral); background: #f0f3f6; border-color: #dfe6ed; }
+    .bearish { color: var(--bear); background: #fdecec; border-color: #f6c9c9; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      padding: 8px 7px;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.45px;
+      font-weight: 700;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .signal {
+      font-weight: 700;
+      min-width: 42px;
+      display: inline-block;
+    }
+
+    .sig-pos { color: var(--bull); }
+    .sig-zero { color: var(--neutral); }
+    .sig-neg { color: var(--bear); }
+
+    .sources {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .sources a { color: var(--accent); text-decoration: none; }
+    .sources a:hover { text-decoration: underline; }
+
+    .empty {
+      color: var(--muted);
+      border: 1px dashed var(--line);
+      border-radius: 12px;
+      padding: 18px;
+      text-align: center;
+      font-size: 0.92rem;
+      background: #fff;
+    }
+
+    @media (max-width: 900px) {
+      .kpi { grid-column: span 6; }
+    }
+
+    @media (max-width: 580px) {
+      .kpi { grid-column: span 12; }
+      .hero h1 { font-size: 1.18rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>Semiconductor Daily Scoring Viewer</h1>
+      <p>展示 Markdown 打分成果，默认读取 latest_skhynix.md；JSON 仅作为次要兜底，也可手动加载任意 Markdown/JSON 文件。</p>
+      <div class="toolbar">
+        <button class="btn" id="reloadBtn" type="button">Reload Default Markdown</button>
+        <label class="btn" for="fileInput">Load Local Markdown/JSON</label>
+        <input id="fileInput" type="file" accept=".md,.markdown,application/json,text/markdown" style="display:none" />
+      </div>
+      <div class="hint">默认路径: ./reports/semiconductor_daily/semiconductor_daily_2026-06-22.md | 若本地文件打开失败，请通过静态服务或手动加载文件。</div>
+    </section>
+
+    <section class="grid" id="dashboard">
+      <article class="card kpi">
+        <h3>Report Date</h3>
+        <div class="v" id="kpiDate">-</div>
+        <div class="s">Scoring snapshot date</div>
+      </article>
+      <article class="card kpi">
+        <h3>Companies</h3>
+        <div class="v" id="kpiCompanies">-</div>
+        <div class="s">Company count</div>
+      </article>
+      <article class="card kpi">
+        <h3>Top Score</h3>
+        <div class="v" id="kpiTop">-</div>
+        <div class="s" id="kpiTopName">No data</div>
+      </article>
+      <article class="card kpi">
+        <h3>Average Score</h3>
+        <div class="v" id="kpiAvg">-</div>
+        <div class="s">Simple average</div>
+      </article>
+
+      <article class="card main" id="companyContainer">
+        <div class="empty">Loading data...</div>
+      </article>
+    </section>
+  </div>
+
+  <script>
+    const DEFAULT_MARKDOWN = "./reports/semiconductor_daily/semiconductor_daily_2026-06-22.md";
+    const DEFAULT_JSON = "./reports/semiconductor_daily/latest_skhynix.json";
+
+    function scoreClass(label) {
+      if (!label) return "neutral";
+      if (label.includes("bullish")) return "bullish";
+      if (label.includes("bearish")) return "bearish";
+      return "neutral";
+    }
+
+    function signalClass(v) {
+      if (v > 0) return "sig-pos";
+      if (v < 0) return "sig-neg";
+      return "sig-zero";
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function markdownToHtml(md) {
+      const lines = String(md || "").replace(/\r\n/g, "\n").split("\n");
+      const html = [];
+      let inTable = false;
+      let tableRows = [];
+
+      const flushTable = () => {
+        if (!tableRows.length) return;
+        const rows = tableRows.filter(Boolean);
+        if (!rows.length) {
+          tableRows = [];
+          inTable = false;
+          return;
+        }
+        const parsed = rows.map((row) => row.split("|").map((cell) => cell.trim()).filter(Boolean));
+        if (parsed.length >= 2) {
+          const headers = parsed[0];
+          const body = parsed.slice(2);
+          html.push('<table><thead><tr>' + headers.map((h) => `<th>${escapeHtml(h)}</th>`).join("") + '</tr></thead><tbody>');
+          for (const row of body) {
+            html.push('<tr>' + row.map((c) => `<td>${escapeHtml(c)}</td>`).join("") + '</tr>');
+          }
+          html.push('</tbody></table>');
+        }
+        tableRows = [];
+        inTable = false;
+      };
+
+      for (const rawLine of lines) {
+        const line = rawLine.trimEnd();
+        if (line.startsWith("|")) {
+          inTable = true;
+          tableRows.push(line);
+          continue;
+        }
+        if (inTable) flushTable();
+        if (!line.trim()) {
+          html.push('<div style="height:8px"></div>');
+          continue;
+        }
+        if (line.startsWith("# ")) {
+          html.push(`<h2 style="margin: 18px 0 10px">${escapeHtml(line.slice(2))}</h2>`);
+          continue;
+        }
+        if (line.startsWith("## ")) {
+          html.push(`<h3 style="margin: 14px 0 8px">${escapeHtml(line.slice(3))}</h3>`);
+          continue;
+        }
+        if (line.startsWith("- ")) {
+          html.push(`<div style="margin: 4px 0">• ${escapeHtml(line.slice(2))}</div>`);
+          continue;
+        }
+        html.push(`<p style="margin: 6px 0">${escapeHtml(line)}</p>`);
+      }
+      if (inTable) flushTable();
+      return html.join("");
+    }
+
+    function setKPIs(payload) {
+      const companies = payload.companies || [];
+      const scores = companies.map(c => Number(c.score || 0));
+      const top = companies.slice().sort((a, b) => (b.score || 0) - (a.score || 0))[0];
+      const avg = scores.length ? (scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+
+      document.getElementById("kpiDate").textContent = payload.date || "-";
+      document.getElementById("kpiCompanies").textContent = String(companies.length || 0);
+      document.getElementById("kpiTop").textContent = top ? String(top.score) : "-";
+      document.getElementById("kpiTopName").textContent = top ? `${top.name || top.symbol} (${top.label || "neutral"})` : "No data";
+      document.getElementById("kpiAvg").textContent = companies.length ? avg.toFixed(1) : "-";
+    }
+
+    function renderCompanies(payload) {
+      const container = document.getElementById("companyContainer");
+      const companies = payload.companies || [];
+      if (!companies.length) {
+        container.innerHTML = '<div class="empty">No company rows found in JSON.</div>';
+        return;
+      }
+
+      const html = companies.map((c) => {
+        const factorRows = (c.signals || []).map((sig, i) => {
+          const factor = (payload.factor_names && payload.factor_names[i]) || `factor_${i + 1}`;
+          const evidence = c.evidence && c.evidence[factor] ? c.evidence[factor] : "";
+          return `
+            <tr>
+              <td>${factor}</td>
+              <td><span class="signal ${signalClass(sig)}">${sig}</span></td>
+              <td>${evidence}</td>
+            </tr>
+          `;
+        }).join("");
+
+        return `
+          <section style="margin-bottom:20px">
+            <div class="company-header">
+              <div class="company-title">${c.name || c.symbol} (${c.symbol})</div>
+              <span class="badge ${scoreClass(c.label)}">${c.label || "neutral"} | score ${c.score ?? "-"}</span>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Factor</th>
+                  <th>Signal</th>
+                  <th>Evidence</th>
+                </tr>
+              </thead>
+              <tbody>${factorRows}</tbody>
+            </table>
+            <div class="sources">
+              <span>Type: ${c.type || "-"}</span>
+              <span>Quote: <a href="${c.quote_url || '#'}" target="_blank" rel="noreferrer">${c.quote_url || "N/A"}</a></span>
+              <span>News: <a href="${c.news_url || '#'}" target="_blank" rel="noreferrer">${c.news_url || "N/A"}</a></span>
+            </div>
+          </section>
+        `;
+      }).join("");
+
+      container.innerHTML = html;
+    }
+
+    function normalizePayload(payload) {
+      if (!payload || typeof payload !== "object") return null;
+      if (!Array.isArray(payload.companies)) return null;
+      if (!Array.isArray(payload.factor_names)) {
+        payload.factor_names = [
+          "application_demand",
+          "compute_expansion",
+          "memory_tightness",
+          "delivery_feasibility",
+          "advanced_packaging",
+          "infrastructure_readiness",
+          "financial_quality",
+          "cycle_position",
+          "capex_efficiency",
+          "customer_concentration",
+          "technology_execution",
+          "geo_policy_risk"
+        ];
+      }
+      return payload;
+    }
+
+    function renderMarkdownDocument(md) {
+      const container = document.getElementById("companyContainer");
+      const text = String(md || "").trim();
+      if (!text) {
+        container.innerHTML = '<div class="empty">Markdown file is empty.</div>';
+        return;
+      }
+
+      const heading = text.match(/^#\s+(.+)$/m);
+      const scoreMatch = text.match(/\|\s*([^|]+)\s*\|\s*([^|]+)\s*\|\s*([-0-9]+)\s*\|\s*([^|]+)\s*\|/);
+      const companyMatch = text.match(/^##\s+(.+)$/m);
+
+      document.getElementById("kpiDate").textContent = heading ? heading[1].replace(/^Semiconductor Daily Scoring\s*-\s*/, "") : "-";
+      document.getElementById("kpiCompanies").textContent = text.match(/^##\s+/gm)?.length ? String(text.match(/^##\s+/gm).length) : "-";
+      document.getElementById("kpiTop").textContent = scoreMatch ? scoreMatch[3] : "-";
+      document.getElementById("kpiTopName").textContent = companyMatch ? companyMatch[1] : "Markdown report";
+      document.getElementById("kpiAvg").textContent = "-";
+
+      container.innerHTML = `<div class="card"><div class="empty" style="text-align:left; border-style:solid">${markdownToHtml(text)}</div></div>`;
+    }
+
+    async function loadMarkdown(url) {
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const md = await res.text();
+      renderMarkdownDocument(md);
+    }
+
+    async function loadDefaultMarkdown() {
+      try {
+        await loadMarkdown(DEFAULT_MARKDOWN);
+      } catch (err) {
+        try {
+          const res = await fetch(DEFAULT_JSON, { cache: "no-store" });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const json = await res.json();
+          const payload = normalizePayload(json);
+          if (!payload) throw new Error("Invalid JSON schema");
+          setKPIs(payload);
+          renderCompanies(payload);
+        } catch (fallbackErr) {
+          document.getElementById("companyContainer").innerHTML =
+            `<div class="empty">Default Markdown load failed: ${err.message}. JSON fallback also failed: ${fallbackErr.message}. You can click <b>Load Local Markdown/JSON</b>.</div>`;
+        }
+      }
+    }
+
+    document.getElementById("reloadBtn").addEventListener("click", loadDefaultMarkdown);
+
+    document.getElementById("fileInput").addEventListener("change", (evt) => {
+      const file = evt.target.files && evt.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const content = String(reader.result || "");
+          if (file.name.toLowerCase().endsWith(".md") || file.type.startsWith("text/")) {
+            renderMarkdownDocument(content);
+            return;
+          }
+          const json = JSON.parse(content);
+          const payload = normalizePayload(json);
+          if (!payload) throw new Error("Invalid JSON schema");
+          setKPIs(payload);
+          renderCompanies(payload);
+        } catch (err) {
+          document.getElementById("companyContainer").innerHTML =
+            `<div class="empty">File parse failed: ${err.message}</div>`;
+        }
+      };
+      reader.readAsText(file, "utf-8");
+    });
+
+    loadDefaultMarkdown();
+  </script>
+</body>
+</html>

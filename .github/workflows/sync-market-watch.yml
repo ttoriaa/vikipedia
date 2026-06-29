@@ -1,0 +1,76 @@
+name: Sync Market Watch Data
+
+on:
+  schedule:
+    - cron: "15 2,6,10,14 * * 1-5"
+    - cron: "35 21 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      snapshot_type:
+        description: "Snapshot type"
+        required: false
+        default: "intraday"
+        type: choice
+        options:
+          - intraday
+          - post_close
+      notify_feishu:
+        description: "Send Feishu webhook"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+      skip_news:
+        description: "Skip news fetch for faster/stable run"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      SNAPSHOT_TYPE: ${{ inputs.snapshot_type || vars.MARKET_WATCH_DEFAULT_SNAPSHOT_TYPE || 'intraday' }}
+      FEISHU_MARKET_WEBHOOK: ${{ secrets.FEISHU_MARKET_WEBHOOK }}
+      ALPHAVANTAGE_API_KEY: ${{ secrets.ALPHAVANTAGE_API_KEY }}
+      ENABLE_NOTIFY: ${{ inputs.notify_feishu || 'false' }}
+      SKIP_NEWS: ${{ inputs.skip_news || vars.MARKET_WATCH_SKIP_NEWS || 'false' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run market watch update
+        run: |
+          ARGS="--snapshot-type ${SNAPSHOT_TYPE}"
+          if [ "$(echo "${ENABLE_NOTIFY}" | tr '[:upper:]' '[:lower:]')" = "true" ]; then
+            ARGS="${ARGS} --notify-feishu"
+          fi
+          if [ "$(echo "${SKIP_NEWS}" | tr '[:upper:]' '[:lower:]')" = "true" ]; then
+            ARGS="${ARGS} --skip-news"
+          fi
+          python scripts/update_market_watch_data.py ${ARGS}
+
+      - name: Commit changes
+        run: |
+          if git diff --quiet -- market_watch/data; then
+            echo "No market_watch changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add market_watch/data
+          git commit -m "chore: sync market watch data"
+          git push
