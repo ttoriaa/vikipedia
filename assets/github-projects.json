@@ -1,7 +1,29 @@
 {
-  "generated_at": "2026-06-29T09:44:00.766799+00:00",
+  "generated_at": "2026-06-30T01:32:18.793913+00:00",
   "source": "https://github.com/ttoriaa",
   "projects": [
+    {
+      "name": "shimai-podcast-site",
+      "description": "For podcast website.",
+      "url": "https://ttoriaa.github.io/shimai-podcast-site/",
+      "url_type": "pages",
+      "target_label": "Live",
+      "repo_url": "https://github.com/ttoriaa/shimai-podcast-site",
+      "language": "JavaScript",
+      "category": "Project",
+      "pushed_at": "2026-06-30T00:05:14Z"
+    },
+    {
+      "name": "vikipedia",
+      "description": "",
+      "url": "https://ttoriaa.github.io/vikipedia/",
+      "url_type": "pages",
+      "target_label": "Live",
+      "repo_url": "https://github.com/ttoriaa/vikipedia",
+      "language": "HTML",
+      "category": "Project",
+      "pushed_at": "2026-06-29T09:48:59Z"
+    },
     {
       "name": "C7-OTA-Hub",
       "description": "",
@@ -14,17 +36,6 @@
       "pushed_at": "2026-06-29T07:09:07Z"
     },
     {
-      "name": "vikipedia",
-      "description": "",
-      "url": "https://ttoriaa.github.io/vikipedia/",
-      "url_type": "pages",
-      "target_label": "Live",
-      "repo_url": "https://github.com/ttoriaa/vikipedia",
-      "language": "HTML",
-      "category": "Project",
-      "pushed_at": "2026-06-29T07:06:26Z"
-    },
-    {
       "name": "automotive-benchmarking",
       "description": "",
       "url": "https://ttoriaa.github.io/automotive-benchmarking/",
@@ -34,17 +45,6 @@
       "language": "Python",
       "category": "Project",
       "pushed_at": "2026-06-29T05:19:10Z"
-    },
-    {
-      "name": "shimai-podcast-site",
-      "description": "For podcast website.",
-      "url": "https://ttoriaa.github.io/shimai-podcast-site/",
-      "url_type": "pages",
-      "target_label": "Live",
-      "repo_url": "https://github.com/ttoriaa/shimai-podcast-site",
-      "language": "JavaScript",
-      "category": "Project",
-      "pushed_at": "2026-06-28T20:11:52Z"
     },
     {
       "name": "market-research",
