@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>懂车帝充电数据可视化 2026-07-02</title>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <style>
+    :root {
+      --bgA: #fff3e8;
+      --bgB: #eaf5ff;
+      --ink: #14202b;
+      --muted: #5f6b77;
+      --line: rgba(20, 32, 43, 0.15);
+      --card: rgba(255,255,255,0.84);
+      --accent: #d15a00;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 500px at -15% -10%, #ffd7b0 0%, transparent 55%),
+        radial-gradient(1000px 560px at 120% 5%, #b9dbff 0%, transparent 55%),
+        linear-gradient(140deg, var(--bgA), var(--bgB));
+      min-height: 100vh;
+      padding: 22px;
+    }
+
+    .wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      background: var(--card);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 14px 48px rgba(0,0,0,0.08);
+    }
+
+    .head {
+      padding: 18px 22px 6px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: 0.3px;
+    }
+
+    .sub {
+      margin: 8px 0 4px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 0 22px 16px;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      background: rgba(255,255,255,0.72);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+
+    .panel {
+      border-top: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      min-height: 520px;
+      padding: 10px 12px 12px;
+    }
+
+    .panel:nth-child(2n) {
+      border-right: none;
+    }
+
+    .panel-wide {
+      grid-column: 1 / -1;
+      border-right: none;
+    }
+
+    .panel-title {
+      font-size: 15px;
+      font-weight: 600;
+      padding: 8px 8px 0;
+    }
+
+    .chart {
+      width: 100%;
+      height: 470px;
+    }
+
+    .foot {
+      border-top: 1px solid var(--line);
+      padding: 10px 22px 16px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .warn { color: var(--accent); font-weight: 600; }
+
+    @media (max-width: 980px) {
+      body { padding: 8px; }
+      .grid { grid-template-columns: 1fr; }
+      .panel { border-right: none; min-height: 500px; }
+      .chart { height: 460px; }
+      h1 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="head">
+      <h1>懂车帝充电数据可视化 Dashboard</h1>
+      <p class="sub">日期: 2026-07-02 | 含雷达、帕累托前沿、平台箱线、品牌热力、续航分布、价格-续航与价格-快充双Bubble图。</p>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div class="grid">
+      <section class="panel">
+        <div class="panel-title">1) 电池能量密度雷达分布</div>
+        <div id="radarChart" class="chart"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-title">2) 帕累托前沿图（价格↓ 续航↑ 快充时间↓）</div>
+        <div id="paretoChart" class="chart"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-title">3) 平台电压 vs 快充时间 箱线图</div>
+        <div id="platformBoxChart" class="chart"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-title">4) 续航里程分布图（CLTC）</div>
+        <div id="rangeDistChart" class="chart"></div>
+      </section>
+      <section class="panel panel-wide">
+        <div class="panel-title">5) 品牌充电能力热力图（速度得分/续航得分/高压占比）</div>
+        <div id="brandHeatmapChart" class="chart"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-title">6) 价格 + 续航里程 Bubble 图</div>
+        <div id="priceRangeBubbleChart" class="chart"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-title">7) 价格 + 快充时间 Bubble 图</div>
+        <div id="priceFastBubbleChart" class="chart"></div>
+      </section>
+    </div>
+    <div class="foot" id="foot"></div>
+  </div>
+
+  <script>
+    const payload = {"reportDate": "2026-07-02", "generatedAt": "2026-07-02 15:49:37", "bubbleRows": [{"model": "极氪ZEEKR 7X 103kWh后驱 Max版", "brand": "极氪", "price": 22.98, "cltc": 802.0, "fastChargeMin": 10.0, "batteryKwh": 103.0, "platform": "900V", "platformVoltage": 900.0, "voltageGroup": "900V+"}, {"model": "极氪ZEEKR 7X 103kWh四驱 Ultra版", "brand": "极氪", "price": 22.98, "cltc": 715.0, "fastChargeMin": 10.0, "batteryKwh": 103.0, "platform": "900V", "platformVoltage": 900.0, "voltageGroup": "900V+"}, {"model": "乐道L60 2025款 740km 长续航版", "brand": "乐道", "price": 23.59, "cltc": 740.0, "fastChargeMin": 25.0, "batteryKwh": 85.0, "platform": "900V", "platformVoltage": 900.0, "voltageGroup": "900V+"}, {"model": "乐道L60 2024款 730km 长续航版", "brand": "乐道", "price": 23.18, "cltc": 730.0, "fastChargeMin": 25.0, "batteryKwh": 85.0, "platform": "900V", "platformVoltage": 900.0, "voltageGroup": "900V+"}, {"model": "乐道L60 2025款 707km 长续航四驱版", "brand": "乐道", "price": 25.59, "cltc": 707.0, "fastChargeMin": 25.0, "batteryKwh": 85.0, "platform": "900V", "platformVoltage": 900.0, "voltageGroup": "900V+"}, {"model": "乐道L60 2024款 700km 长续航四驱版", "brand": "乐道", "price": 25.18, "cltc": 700.0, "fastChargeMin": 25.0, "batteryKwh": 85.0, "platform": "900V", "platformVoltage": 900.0, "voltageGroup": "900V+"}, {"model": "乐道L60 2025款 560km 标准续航版", "brand": "乐道", "price": 20.69, "cltc": 560.0, "fastChargeMin": 25.0, "batteryKwh": 60.0, "platform": "900V", "platformVoltage": 900.0, "voltageGroup": "900V+"}, {"model": "乐道L60 2024款 555km 标准续航版", "brand": "乐道", "price": 20.28, "cltc": 555.0, "fastChargeMin": 25.0, "batteryKwh": 60.0, "platform": "900V", "platformVoltage": 900.0, "voltageGroup": "900V+"}, {"model": "乐道L60 2025款 530km 标准续航四驱版", "brand": "乐道", "price": 22.69, "cltc": 530.0, "fastChargeMin": 25.0, "batteryKwh": 60.0, "platform": "900V", "platformVoltage": 900.0, "voltageGroup": "900V+"}, {"model": "乐道L60 2025款 530km 黑骑士特别版", "brand": "乐道", "price": 21.19, "cltc": 530.0, "fastChargeMin": 25.0, "batteryKwh": 60.0, "platform": "900V", "platformVoltage": 900.0, "voltageGroup": "900V+"}, {"model": "乐道L60 2024款 525km 标准续航四驱版", "brand": "乐道", "price": 22.28, "cltc": 525.0, "fastChargeMin": 25.0, "batteryKwh": 60.0, "platform": "900V", "platformVoltage": 900.0, "voltageGroup": "900V+"}, {"model": "昊铂HL 2025款 750 Max五座激光雷达版", "brand": "昊铂", "price": 26.98, "cltc": 750.0, "fastChargeMin": 10.0, "batteryKwh": 108.35, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "昊铂HL 2025款 750 Max六座激光雷达版", "brand": "昊铂", "price": 26.98, "cltc": 750.0, "fastChargeMin": 10.0, "batteryKwh": 108.35, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "昊铂HL 2025款 700 Ultra六座四驱激光雷达版", "brand": "昊铂", "price": 26.98, "cltc": 700.0, "fastChargeMin": 10.0, "batteryKwh": 108.35, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "岚图岚图知音 后驱乾崑版", "brand": "岚图", "price": 20.29, "cltc": 650.0, "fastChargeMin": 10.0, "batteryKwh": 81.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "岚图岚图知音 长续航超充版", "brand": "岚图", "price": 20.29, "cltc": 650.0, "fastChargeMin": 10.0, "batteryKwh": 79.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "岚图岚图知音 四驱乾崑版", "brand": "岚图", "price": 20.29, "cltc": 600.0, "fastChargeMin": 10.0, "batteryKwh": 81.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "理想i8 2025款 标准版", "brand": "理想", "price": 33.98, "cltc": 720.0, "fastChargeMin": 11.0, "batteryKwh": 97.8, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "极氪ZEEKR 7X 75kWh后驱 Max版", "brand": "极氪", "price": 22.98, "cltc": 620.0, "fastChargeMin": 11.0, "batteryKwh": 75.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "极氪ZEEKR 7X 75kWh 后驱智驾版", "brand": "极氪", "price": 22.98, "cltc": 605.0, "fastChargeMin": 11.0, "batteryKwh": 75.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "小鹏GX 2026款 纯电 750四驱Ultra旗舰版", "brand": "小鹏", "price": 27.98, "cltc": 750.0, "fastChargeMin": 11.7, "batteryKwh": 110.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "小鹏GX 2026款 纯电 665Max", "brand": "小鹏", "price": 27.98, "cltc": 665.0, "fastChargeMin": 11.7, "batteryKwh": 91.9, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "小鹏GX 2026款 纯电 665Ultra", "brand": "小鹏", "price": 27.98, "cltc": 665.0, "fastChargeMin": 11.7, "batteryKwh": 91.9, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "小鹏GX 2026款 纯电 665Ultra SE", "brand": "小鹏", "price": 27.98, "cltc": 665.0, "fastChargeMin": 11.7, "batteryKwh": 91.9, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "小米汽车小米YU7 四驱Max版", "brand": "小米汽车小米", "price": 23.35, "cltc": 760.0, "fastChargeMin": 12.0, "batteryKwh": 101.7, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "小鹏G9 2025款 725超长续航Max", "brand": "小鹏", "price": 24.88, "cltc": 725.0, "fastChargeMin": 12.0, "batteryKwh": 93.1, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "小鹏G9 2026款 725 Max", "brand": "小鹏", "price": 24.88, "cltc": 725.0, "fastChargeMin": 12.0, "batteryKwh": 93.1, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "小米汽车小米YU7 四驱GT", "brand": "小米汽车小米", "price": 23.35, "cltc": 705.0, "fastChargeMin": 12.0, "batteryKwh": 101.7, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "小鹏G9 2025款 680超长续航四驱Max", "brand": "小鹏", "price": 24.88, "cltc": 680.0, "fastChargeMin": 12.0, "batteryKwh": 93.1, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "小鹏G9 2026款 680 四驱 Max", "brand": "小鹏", "price": 24.88, "cltc": 680.0, "fastChargeMin": 12.0, "batteryKwh": 93.1, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "小鹏G9 2025款 625长续航Max", "brand": "小鹏", "price": 24.88, "cltc": 625.0, "fastChargeMin": 12.0, "batteryKwh": 79.1, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "小鹏G9 2026款 625 Max", "brand": "小鹏", "price": 24.88, "cltc": 625.0, "fastChargeMin": 12.0, "batteryKwh": 79.1, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "智己LS6 2026款 纯电 Max+", "brand": "智己", "price": 22.49, "cltc": 600.0, "fastChargeMin": 12.0, "batteryKwh": 76.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "智界智界R7 纯电 Max+(192线激光雷达)", "brand": "智界", "price": 24.98, "cltc": 802.0, "fastChargeMin": 15.0, "batteryKwh": 100.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "智界智界R7 纯电 Max+(896线激光雷达)", "brand": "智界", "price": 24.98, "cltc": 802.0, "fastChargeMin": 15.0, "batteryKwh": 100.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "极氪ZEEKR 7X 100kWh 长续航后驱智驾版", "brand": "极氪", "price": 22.98, "cltc": 780.0, "fastChargeMin": 15.0, "batteryKwh": 100.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "智界智界R7 纯电 UItra(192线激光雷达)", "brand": "智界", "price": 24.98, "cltc": 736.0, "fastChargeMin": 15.0, "batteryKwh": 100.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "智界智界R7 纯电 UItra(896线激光雷达)", "brand": "智界", "price": 24.98, "cltc": 736.0, "fastChargeMin": 15.0, "batteryKwh": 100.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "零跑D19 2026款 纯电720智尊版 七座", "brand": "零跑", "price": 21.98, "cltc": 720.0, "fastChargeMin": 15.0, "batteryKwh": 115.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "零跑D19 2026款 纯电720智尊版 六座", "brand": "零跑", "price": 21.98, "cltc": 720.0, "fastChargeMin": 15.0, "batteryKwh": 115.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "理想i6 2025款 两驱 标准版", "brand": "理想", "price": 24.98, "cltc": 720.0, "fastChargeMin": 15.0, "batteryKwh": 87.3, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "极氪ZEEKR 7X 100kWh 长续航四驱智驾版", "brand": "极氪", "price": 22.98, "cltc": 705.0, "fastChargeMin": 15.0, "batteryKwh": 100.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "零跑D19 2026款 纯电680三电机性能版 六座", "brand": "零跑", "price": 21.98, "cltc": 680.0, "fastChargeMin": 15.0, "batteryKwh": 115.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "智界智界R7 纯电 Max(192线激光雷达)", "brand": "智界", "price": 24.98, "cltc": 667.0, "fastChargeMin": 15.0, "batteryKwh": 82.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "智界智界R7 纯电 Max(896线激光雷达)", "brand": "智界", "price": 24.98, "cltc": 667.0, "fastChargeMin": 15.0, "batteryKwh": 82.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "理想i6 2025款 四驱 标准版", "brand": "理想", "price": 24.98, "cltc": 660.0, "fastChargeMin": 15.0, "batteryKwh": 87.3, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "零跑D19 2026款 纯电620智尊版 六座", "brand": "零跑", "price": 21.98, "cltc": 620.0, "fastChargeMin": 15.0, "batteryKwh": 99.6, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "智己LS6 2026款 纯电 103 Max上汽一亿台限定版", "brand": "智己", "price": 22.49, "cltc": 750.0, "fastChargeMin": 17.0, "batteryKwh": 103.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "智己LS6 2026款 纯电 Pro Max", "brand": "智己", "price": 22.49, "cltc": 750.0, "fastChargeMin": 17.0, "batteryKwh": 103.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "远航汽车远航H9 950km 四驱远航版", "brand": "远航汽车远航", "price": 40.98, "cltc": 950.0, "fastChargeMin": 18.0, "batteryKwh": 150.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "远航汽车远航H9 840km 四驱奢享版", "brand": "远航汽车远航", "price": 40.98, "cltc": 840.0, "fastChargeMin": 18.0, "batteryKwh": 120.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "远航汽车远航H9 650km 四驱奢享版", "brand": "远航汽车远航", "price": 40.98, "cltc": 650.0, "fastChargeMin": 18.0, "batteryKwh": 98.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "智己LS6 2026款 纯电 Max", "brand": "智己", "price": 22.49, "cltc": 600.0, "fastChargeMin": 18.0, "batteryKwh": 76.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "与众08 2026款 Ultra", "brand": "与众", "price": 22.99, "cltc": 730.0, "fastChargeMin": 20.0, "batteryKwh": 95.04, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "与众08 2026款 Max", "brand": "与众", "price": 22.99, "cltc": 700.0, "fastChargeMin": 20.0, "batteryKwh": 95.04, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "小米汽车小米YU7 后驱标准版", "brand": "小米汽车小米", "price": 23.35, "cltc": 643.0, "fastChargeMin": 20.0, "batteryKwh": 73.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "与众08 2026款 Pure", "brand": "与众", "price": 22.99, "cltc": 630.0, "fastChargeMin": 20.0, "batteryKwh": 82.37, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "小米汽车小米YU7 后驱长续航版", "brand": "小米汽车小米", "price": 23.35, "cltc": 835.0, "fastChargeMin": 21.0, "batteryKwh": 96.3, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "小米汽车小米YU7 四驱Pro版", "brand": "小米汽车小米", "price": 23.35, "cltc": 770.0, "fastChargeMin": 21.0, "batteryKwh": 96.3, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "奥迪Q6L Sportback e-tron 2026款 超长续航版", "brand": "奥迪", "price": 29.98, "cltc": 765.0, "fastChargeMin": 21.0, "batteryKwh": 107.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "奥迪Q6L e-tron 2026款 超长续航版", "brand": "奥迪", "price": 27.98, "cltc": 752.0, "fastChargeMin": 21.0, "batteryKwh": 107.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "奥迪Q6L Sportback e-tron 2026款 超长续航乾崑智驾版", "brand": "奥迪", "price": 29.98, "cltc": 715.0, "fastChargeMin": 21.0, "batteryKwh": 107.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "奥迪Q6L e-tron 2026款 超长续航乾崑智驾版", "brand": "奥迪", "price": 27.98, "cltc": 709.0, "fastChargeMin": 21.0, "batteryKwh": 107.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "奥迪Q6L Sportback e-tron 2026款 quattro乾崑智驾版", "brand": "奥迪", "price": 29.98, "cltc": 675.0, "fastChargeMin": 21.0, "batteryKwh": 107.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "奥迪Q6L e-tron 2026款 quattro乾崑智驾版", "brand": "奥迪", "price": 27.98, "cltc": 668.0, "fastChargeMin": 21.0, "batteryKwh": 107.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "阿维塔阿维塔 11 Max后驱纯电版", "brand": "阿维塔", "price": 28.99, "cltc": 815.0, "fastChargeMin": 25.0, "batteryKwh": 116.79, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "阿维塔阿维塔 11 Max四驱纯电版", "brand": "阿维塔", "price": 28.99, "cltc": 760.0, "fastChargeMin": 25.0, "batteryKwh": 116.79, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "阿维塔阿维塔 11 改款 Ultra四驱纯电版", "brand": "阿维塔", "price": 28.99, "cltc": 760.0, "fastChargeMin": 25.0, "batteryKwh": 116.79, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "阿维塔阿维塔 11 改款 皇家剧院版", "brand": "阿维塔", "price": 28.99, "cltc": 760.0, "fastChargeMin": 25.0, "batteryKwh": 116.79, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "阿维塔阿维塔 11 暗夜骑士版", "brand": "阿维塔", "price": 28.99, "cltc": 760.0, "fastChargeMin": 25.0, "batteryKwh": 116.79, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "奥迪Q6L Sportback e-tron 2026款 长续航版", "brand": "奥迪", "price": 29.98, "cltc": 677.0, "fastChargeMin": 25.0, "batteryKwh": 95.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "奥迪Q6L e-tron 2026款 长续航版", "brand": "奥迪", "price": 27.98, "cltc": 672.0, "fastChargeMin": 25.0, "batteryKwh": 95.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "岚图岚图知音 超长续航乾崑版", "brand": "岚图", "price": 20.29, "cltc": 901.0, "fastChargeMin": 32.0, "batteryKwh": 112.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "岚图岚图知音 超长续航智享版", "brand": "岚图", "price": 20.29, "cltc": 901.0, "fastChargeMin": 32.0, "batteryKwh": 109.0, "platform": "800V", "platformVoltage": 800.0, "voltageGroup": "800V"}, {"model": "smart精灵#5 2024款 超长续航豪华版", "brand": "smart", "price": 23.99, "cltc": 740.0, "fastChargeMin": 15.0, "batteryKwh": 100.0, "platform": "400V", "platformVoltage": 400.0, "voltageGroup": "400V"}, {"model": "smart精灵#5 2025款 超长续航豪华四驱版", "brand": "smart", "price": 23.99, "cltc": 670.0, "fastChargeMin": 15.0, "batteryKwh": 100.0, "platform": "400V", "platformVoltage": 400.0, "voltageGroup": "400V"}, {"model": "smart精灵#5 2025款 BRABUS超能版", "brand": "smart", "price": 23.99, "cltc": 660.0, "fastChargeMin": 15.0, "batteryKwh": 100.0, "platform": "400V", "platformVoltage": 400.0, "voltageGroup": "400V"}, {"model": "smart精灵#5 2024款 丛林之境限量版", "brand": "smart", "price": 23.99, "cltc": 580.0, "fastChargeMin": 15.0, "batteryKwh": 100.0, "platform": "400V", "platformVoltage": 400.0, "voltageGroup": "400V"}, {"model": "红旗天工08 2025款 730 Max后驱版", "brand": "红旗天工", "price": 21.59, "cltc": 730.0, "fastChargeMin": 20.0, "batteryKwh": 111.0, "platform": "400V", "platformVoltage": 400.0, "voltageGroup": "400V"}, {"model": "红旗天工08 2025款 730 后驱智选版", "brand": "红旗天工", "price": 21.59, "cltc": 730.0, "fastChargeMin": 20.0, "batteryKwh": 111.0, "platform": "400V", "platformVoltage": 400.0, "voltageGroup": "400V"}, {"model": "红旗天工08 2025款 680 Ultra四驱版", "brand": "红旗天工", "price": 21.59, "cltc": 680.0, "fastChargeMin": 20.0, "batteryKwh": 111.0, "platform": "400V", "platformVoltage": 400.0, "voltageGroup": "400V"}, {"model": "红旗天工08 2025款 680 四驱智选版", "brand": "红旗天工", "price": 21.59, "cltc": 680.0, "fastChargeMin": 20.0, "batteryKwh": 111.0, "platform": "400V", "platformVoltage": 400.0, "voltageGroup": "400V"}, {"model": "红旗天工08 2025款 605 Max后驱版", "brand": "红旗天工", "price": 21.59, "cltc": 605.0, "fastChargeMin": 20.0, "batteryKwh": 85.0, "platform": "400V", "platformVoltage": 400.0, "voltageGroup": "400V"}, {"model": "红旗天工08 2025款 605 后驱先锋版", "brand": "红旗天工", "price": 21.59, "cltc": 605.0, "fastChargeMin": 20.0, "batteryKwh": 85.0, "platform": "400V", "platformVoltage": 400.0, "voltageGroup": "400V"}, {"model": "红旗天工08 2025款 605 后驱智选版", "brand": "红旗天工", "price": 21.59, "cltc": 605.0, "fastChargeMin": 20.0, "batteryKwh": 85.0, "platform": "400V", "platformVoltage": 400.0, "voltageGroup": "400V"}, {"model": "红旗天工08 2025款 565 Ultra四驱版", "brand": "红旗天工", "price": 21.59, "cltc": 565.0, "fastChargeMin": 20.0, "batteryKwh": 85.0, "platform": "400V", "platformVoltage": 400.0, "voltageGroup": "400V"}, {"model": "红旗天工08 2025款 565 四驱先锋版", "brand": "红旗天工", "price": 21.59, "cltc": 565.0, "fastChargeMin": 20.0, "batteryKwh": 85.0, "platform": "400V", "platformVoltage": 400.0, "voltageGroup": "400V"}, {"model": "红旗天工08 2025款 565 四驱智选版", "brand": "红旗天工", "price": 21.59, "cltc": 565.0, "fastChargeMin": 20.0, "batteryKwh": 85.0, "platform": "400V", "platformVoltage": 400.0, "voltageGroup": "400V"}, {"model": "红旗天工08 2025款 520 Max后驱版", "brand": "红旗天工", "price": 21.59, "cltc": 520.0, "fastChargeMin": 25.0, "batteryKwh": 75.0, "platform": "400V", "platformVoltage": 400.0, "voltageGroup": "400V"}, {"model": "smart精灵#5 2024款 长续航标准版", "brand": "smart", "price": 23.99, "cltc": 570.0, "fastChargeMin": 30.0, "batteryKwh": 76.0, "platform": "400V", "platformVoltage": 400.0, "voltageGroup": "400V"}, {"model": "smart精灵#5 2024款 长续航豪华版", "brand": "smart", "price": 23.99, "cltc": 570.0, "fastChargeMin": 30.0, "batteryKwh": 76.0, "platform": "400V", "platformVoltage": 400.0, "voltageGroup": "400V"}, {"model": "特斯拉Model Y 长续航后轮驱动版", "brand": "特斯拉", "price": 26.35, "cltc": 821.0, "fastChargeMin": null, "batteryKwh": 78.4, "platform": "400V", "platformVoltage": 400.0, "voltageGroup": "400V"}, {"model": "Model Y L 2026款 标准版", "brand": "Model", "price": 33.9, "cltc": 751.0, "fastChargeMin": null, "batteryKwh": 82.0, "platform": "400V", "platformVoltage": 400.0, "voltageGroup": "400V"}, {"model": "特斯拉Model Y 长续航全轮驱动版", "brand": "特斯拉", "price": 26.35, "cltc": 750.0, "fastChargeMin": null, "batteryKwh": 78.4, "platform": "400V", "platformVoltage": 400.0, "voltageGroup": "400V"}, {"model": "特斯拉Model Y 后轮驱动版", "brand": "特斯拉", "price": 26.35, "cltc": 593.0, "fastChargeMin": null, "batteryKwh": 62.5, "platform": "400V", "platformVoltage": 400.0, "voltageGroup": "400V"}, {"model": "智己LS6 2026款 纯电 76 Max上汽一亿台限定版", "brand": "智己", "price": 22.49, "cltc": 600.0, "fastChargeMin": 12.0, "batteryKwh": 76.0, "platform": "未明确显示", "platformVoltage": null, "voltageGroup": "未明确"}, {"model": "智己LS6 2026款 纯电 Ultra", "brand": "智己", "price": 22.49, "cltc": 710.0, "fastChargeMin": 17.0, "batteryKwh": 103.0, "platform": "未明确显示", "platformVoltage": null, "voltageGroup": "未明确"}, {"model": "奥迪Q6L Sportback e-tron 2026款 首发领航版", "brand": "奥迪", "price": 29.98, "cltc": 715.0, "fastChargeMin": 21.0, "batteryKwh": 107.0, "platform": "未明确显示", "platformVoltage": null, "voltageGroup": "未明确"}, {"model": "奥迪Q6L e-tron 2026款 首发领航版", "brand": "奥迪", "price": 27.98, "cltc": 709.0, "fastChargeMin": 21.0, "batteryKwh": 107.0, "platform": "未明确显示", "platformVoltage": null, "voltageGroup": "未明确"}, {"model": "Polestar 4 2025款 豪华版", "brand": "Polestar", "price": 33.8, "cltc": 755.0, "fastChargeMin": 30.0, "batteryKwh": 100.0, "platform": "未明确显示", "platformVoltage": null, "voltageGroup": "未明确"}, {"model": "Polestar 4 2025款 性能版", "brand": "Polestar", "price": 33.8, "cltc": 620.0, "fastChargeMin": 30.0, "batteryKwh": 100.0, "platform": "未明确显示", "platformVoltage": null, "voltageGroup": "未明确"}], "brandHeatmapRows": [{"brand": "红旗天工", "count": 11, "medianFast": 20.0, "medianCltc": 605.0, "hvShare": 0.0, "fastScore": 0.3333, "cltcScore": 0.225, "hvScore": 0.0}, {"brand": "奥迪", "count": 10, "medianFast": 21.0, "medianCltc": 709.0, "hvShare": 80.0, "fastScore": 0.2667, "cltcScore": 0.745, "hvScore": 0.8}, {"brand": "小鹏", "count": 10, "medianFast": 12.0, "medianCltc": 672.5, "hvShare": 100.0, "fastScore": 0.8667, "cltcScore": 0.5625, "hvScore": 1.0}, {"brand": "乐道", "count": 9, "medianFast": 25.0, "medianCltc": 560.0, "hvShare": 100.0, "fastScore": 0.0, "cltcScore": 0.0, "hvScore": 1.0}, {"brand": "smart", "count": 6, "medianFast": 15.0, "medianCltc": 620.0, "hvShare": 0.0, "fastScore": 0.6667, "cltcScore": 0.3, "hvScore": 0.0}, {"brand": "智己", "count": 6, "medianFast": 17.0, "medianCltc": 655.0, "hvShare": 66.7, "fastScore": 0.5333, "cltcScore": 0.475, "hvScore": 0.667}, {"brand": "智界", "count": 6, "medianFast": 15.0, "medianCltc": 736.0, "hvShare": 100.0, "fastScore": 0.6667, "cltcScore": 0.88, "hvScore": 1.0}, {"brand": "极氪", "count": 6, "medianFast": 11.0, "medianCltc": 710.0, "hvShare": 100.0, "fastScore": 0.9333, "cltcScore": 0.75, "hvScore": 1.0}, {"brand": "小米汽车小米", "count": 5, "medianFast": 20.0, "medianCltc": 760.0, "hvShare": 100.0, "fastScore": 0.3333, "cltcScore": 1.0, "hvScore": 1.0}, {"brand": "岚图", "count": 5, "medianFast": 10.0, "medianCltc": 650.0, "hvShare": 100.0, "fastScore": 1.0, "cltcScore": 0.45, "hvScore": 1.0}, {"brand": "阿维塔", "count": 5, "medianFast": 25.0, "medianCltc": 760.0, "hvShare": 100.0, "fastScore": 0.0, "cltcScore": 1.0, "hvScore": 1.0}, {"brand": "零跑", "count": 4, "medianFast": 15.0, "medianCltc": 700.0, "hvShare": 100.0, "fastScore": 0.6667, "cltcScore": 0.7, "hvScore": 1.0}, {"brand": "与众", "count": 3, "medianFast": 20.0, "medianCltc": 700.0, "hvShare": 100.0, "fastScore": 0.3333, "cltcScore": 0.7, "hvScore": 1.0}, {"brand": "昊铂", "count": 3, "medianFast": 10.0, "medianCltc": 750.0, "hvShare": 100.0, "fastScore": 1.0, "cltcScore": 0.95, "hvScore": 1.0}], "radarAxes": ["<150", "160-169", "170-175", "180-185", "186-190"], "radarSeries": [{"name": "三元锂", "value": [0, 2, 10, 1, 5]}, {"name": "磷酸铁锂", "value": [2, 0, 0, 0, 0]}, {"name": "混合", "value": [0, 0, 3, 0, 0]}, {"name": "其他/未明确", "value": [0, 0, 0, 0, 0]}], "stats": {"totalModels": 106, "densityAvailable": 23, "densityMissing": 83, "densityMissingRatio": 78.3, "bubblePoints": 101, "radarBucketsShown": 5, "radarShowZeroBuckets": false, "bubbleExcludeKeywords": ["奔驰EQS SUV"], "brandCount": 14}};
+
+    const statsEl = document.getElementById("stats");
+    const footEl = document.getElementById("foot");
+
+    const statItems = [
+      `总车型: ${payload.stats.totalModels}`,
+      `能量密度可用: ${payload.stats.densityAvailable}`,
+      `能量密度缺失: ${payload.stats.densityMissing} (${payload.stats.densityMissingRatio}%)`,
+      `Bubble 点位: ${payload.stats.bubblePoints}`,
+      `热力图品牌数: ${payload.stats.brandCount}`,
+      `Bubble 排除词: ${payload.stats.bubbleExcludeKeywords.join(" | ") || "无"}`,
+      `雷达轴模式: ${payload.stats.radarShowZeroBuckets ? "完整轴" : "紧凑轴"}`,
+      `生成时间: ${payload.generatedAt}`
+    ];
+    statItems.forEach(s => {
+      const node = document.createElement("span");
+      node.className = "pill";
+      node.textContent = s;
+      statsEl.appendChild(node);
+    });
+
+    const maxRadar = Math.max(
+      3,
+      ...payload.radarSeries.flatMap(s => s.value)
+    );
+
+    const radarTraces = payload.radarSeries.map(series => {
+      const values = [...series.value, series.value[0]];
+      const theta = [...payload.radarAxes, payload.radarAxes[0]];
+      return {
+        type: "scatterpolar",
+        r: values,
+        theta,
+        name: series.name,
+        opacity: 0.48,
+        fill: "toself",
+        hovertemplate: `${series.name}<br>%{theta}: %{r} 台<extra></extra>`
+      };
+    });
+
+    Plotly.newPlot("radarChart", radarTraces, {
+      margin: { l: 50, r: 40, t: 12, b: 20 },
+      paper_bgcolor: "rgba(0,0,0,0)",
+      polar: {
+        bgcolor: "rgba(255,255,255,0.55)",
+        radialaxis: {
+          visible: true,
+          range: [0, maxRadar],
+          gridcolor: "rgba(20, 32, 43, 0.18)",
+          tickfont: { size: 11 }
+        },
+        angularaxis: {
+          gridcolor: "rgba(20, 32, 43, 0.15)",
+          tickfont: { size: 12 }
+        }
+      },
+      legend: { orientation: "h", y: -0.1, x: 0 },
+      font: { family: "Segoe UI, PingFang SC, Microsoft YaHei, sans-serif", color: "#14202b" }
+    }, { responsive: true, displaylogo: false });
+
+    const colorByVoltage = {
+      "400V": "#457b9d",
+      "800V": "#1f7a8c",
+      "900V+": "#e07a5f",
+      "未明确": "#9c6644"
+    };
+
+        const rows = payload.bubbleRows;
+        const fastRows = rows.filter(r => r.fastChargeMin !== null && !Number.isNaN(r.fastChargeMin));
+
+        const groupedRange = {};
+        rows.forEach(d => {
+          if (!groupedRange[d.voltageGroup]) groupedRange[d.voltageGroup] = [];
+          groupedRange[d.voltageGroup].push(d);
+        });
+
+        const rangeTraces = Object.entries(groupedRange).map(([group, items]) => ({
+          type: "scatter",
+          mode: "markers",
+          name: group,
+          x: items.map(d => d.price),
+          y: items.map(d => d.cltc),
+          text: items.map(d => d.model),
+          customdata: items.map(d => [d.brand, d.batteryKwh, d.fastChargeMin]),
+          marker: {
+            size: items.map(d => Math.max(9, (d.batteryKwh || 70) * 0.26)),
+            color: colorByVoltage[group] || "#6d597a",
+            opacity: 0.72,
+            line: { width: 1.0, color: "rgba(20,32,43,0.42)" }
+          },
+          hovertemplate:
+            "<b>%{text}</b>" +
+            "<br>品牌: %{customdata[0]}" +
+            "<br>价格: %{x} 万元" +
+            "<br>CLTC续航: %{y} km" +
+            "<br>快充时间: %{customdata[2]} 分钟" +
+            "<br>电池容量: %{customdata[1]} kWh" +
+            "<extra></extra>"
+        }));
+
+        Plotly.newPlot("priceRangeBubbleChart", rangeTraces, {
+          margin: { l: 62, r: 20, t: 10, b: 55 },
+          paper_bgcolor: "rgba(0,0,0,0)",
+          plot_bgcolor: "rgba(255,255,255,0.55)",
+          xaxis: { title: "价格 (万元)", gridcolor: "rgba(20, 32, 43, 0.12)", zeroline: false },
+          yaxis: { title: "CLTC续航 (km)", gridcolor: "rgba(20, 32, 43, 0.12)", zeroline: false },
+          legend: { orientation: "h", y: 1.12, x: 0 },
+          font: { family: "Segoe UI, PingFang SC, Microsoft YaHei, sans-serif", color: "#14202b" }
+        }, { responsive: true, displaylogo: false });
+
+        const fastGrouped = {};
+        fastRows.forEach(d => {
+          if (!fastGrouped[d.voltageGroup]) fastGrouped[d.voltageGroup] = [];
+          fastGrouped[d.voltageGroup].push(d);
+        });
+
+        const fastBubbleTraces = Object.entries(fastGrouped).map(([group, items]) => ({
+          type: "scatter",
+          mode: "markers",
+          name: group,
+          x: items.map(d => d.price),
+          y: items.map(d => d.fastChargeMin),
+          text: items.map(d => d.model),
+          customdata: items.map(d => [d.brand, d.cltc, d.batteryKwh]),
+          marker: {
+            size: items.map(d => Math.max(9, (d.batteryKwh || 70) * 0.26)),
+            color: colorByVoltage[group] || "#6d597a",
+            opacity: 0.72,
+            line: { width: 1.0, color: "rgba(20,32,43,0.42)" }
+          },
+          hovertemplate:
+            "<b>%{text}</b>" +
+            "<br>品牌: %{customdata[0]}" +
+            "<br>价格: %{x} 万元" +
+            "<br>快充时间: %{y} 分钟" +
+            "<br>CLTC续航: %{customdata[1]} km" +
+            "<br>电池容量: %{customdata[2]} kWh" +
+            "<extra></extra>"
+        }));
+
+        Plotly.newPlot("priceFastBubbleChart", fastBubbleTraces, {
+          margin: { l: 62, r: 20, t: 10, b: 55 },
+          paper_bgcolor: "rgba(0,0,0,0)",
+          plot_bgcolor: "rgba(255,255,255,0.55)",
+          xaxis: { title: "价格 (万元)", gridcolor: "rgba(20, 32, 43, 0.12)", zeroline: false },
+          yaxis: { title: "快充时间 (分钟，越小越好)", autorange: "reversed", gridcolor: "rgba(20, 32, 43, 0.12)", zeroline: false },
+          legend: { orientation: "h", y: 1.12, x: 0 },
+          font: { family: "Segoe UI, PingFang SC, Microsoft YaHei, sans-serif", color: "#14202b" }
+        }, { responsive: true, displaylogo: false });
+
+        const rangeValues = rows.map(r => r.cltc).filter(v => v !== null && !Number.isNaN(v));
+        Plotly.newPlot("rangeDistChart", [{
+          type: "histogram",
+          x: rangeValues,
+          marker: { color: "#1f7a8c", opacity: 0.78, line: { width: 1, color: "rgba(20,32,43,0.3)" } },
+          nbinsx: 18,
+          hovertemplate: "续航区间: %{x} km<br>车型数: %{y}<extra></extra>"
+        }], {
+          margin: { l: 62, r: 20, t: 10, b: 55 },
+          paper_bgcolor: "rgba(0,0,0,0)",
+          plot_bgcolor: "rgba(255,255,255,0.55)",
+          xaxis: { title: "CLTC续航 (km)", gridcolor: "rgba(20, 32, 43, 0.12)" },
+          yaxis: { title: "车型数", gridcolor: "rgba(20, 32, 43, 0.12)" },
+          font: { family: "Segoe UI, PingFang SC, Microsoft YaHei, sans-serif", color: "#14202b" }
+        }, { responsive: true, displaylogo: false });
+
+        const paretoRows = fastRows.slice();
+        const dominates = (a, b) =>
+          a.price <= b.price && a.cltc >= b.cltc && a.fastChargeMin <= b.fastChargeMin &&
+          (a.price < b.price || a.cltc > b.cltc || a.fastChargeMin < b.fastChargeMin);
+
+        const frontier = paretoRows.filter((p, i) => !paretoRows.some((q, j) => i !== j && dominates(q, p)));
+        const frontierSet = new Set(frontier.map(x => x.model + "|" + x.price + "|" + x.cltc));
+        const others = paretoRows.filter(x => !frontierSet.has(x.model + "|" + x.price + "|" + x.cltc));
+        const frontierSorted = frontier.slice().sort((a, b) => a.price - b.price);
+
+        Plotly.newPlot("paretoChart", [
+          {
+            type: "scatter",
+            mode: "markers",
+            name: "其他车型",
+            x: others.map(d => d.price),
+            y: others.map(d => d.cltc),
+            text: others.map(d => d.model),
+            customdata: others.map(d => [d.fastChargeMin, d.brand]),
+            marker: { size: 8, color: "rgba(100,116,139,0.35)" },
+            hovertemplate: "<b>%{text}</b><br>品牌: %{customdata[1]}<br>价格: %{x} 万元<br>CLTC: %{y} km<br>快充: %{customdata[0]} 分钟<extra></extra>"
+          },
+          {
+            type: "scatter",
+            mode: "markers+lines",
+            name: "帕累托前沿",
+            x: frontierSorted.map(d => d.price),
+            y: frontierSorted.map(d => d.cltc),
+            text: frontierSorted.map(d => d.model),
+            customdata: frontierSorted.map(d => [d.fastChargeMin, d.brand]),
+            marker: { size: 11, color: "#c1121f", line: { width: 1, color: "#780000" } },
+            line: { color: "#c1121f", width: 2 },
+            hovertemplate: "<b>%{text}</b><br>品牌: %{customdata[1]}<br>价格: %{x} 万元<br>CLTC: %{y} km<br>快充: %{customdata[0]} 分钟<extra></extra>"
+          }
+        ], {
+          margin: { l: 62, r: 20, t: 10, b: 55 },
+          paper_bgcolor: "rgba(0,0,0,0)",
+          plot_bgcolor: "rgba(255,255,255,0.55)",
+          xaxis: { title: "价格 (万元，越左越优)", gridcolor: "rgba(20, 32, 43, 0.12)" },
+          yaxis: { title: "CLTC续航 (km，越高越优)", gridcolor: "rgba(20, 32, 43, 0.12)" },
+          legend: { orientation: "h", y: 1.12, x: 0 },
+          font: { family: "Segoe UI, PingFang SC, Microsoft YaHei, sans-serif", color: "#14202b" }
+        }, { responsive: true, displaylogo: false });
+
+        const voltageOrder = ["400V", "800V", "900V+", "未明确"];
+        const boxTraces = voltageOrder
+          .filter(v => fastRows.some(r => r.voltageGroup === v))
+          .map(v => {
+            const items = fastRows.filter(r => r.voltageGroup === v);
+            return {
+              type: "box",
+              name: v,
+              y: items.map(r => r.fastChargeMin),
+              boxmean: "sd",
+              marker: { color: colorByVoltage[v] || "#6d597a" },
+              line: { width: 1.2 },
+              hovertemplate: `${v}<br>快充时间: %{y} 分钟<extra></extra>`
+            };
+          });
+
+        Plotly.newPlot("platformBoxChart", boxTraces, {
+          margin: { l: 62, r: 20, t: 10, b: 55 },
+          paper_bgcolor: "rgba(0,0,0,0)",
+          plot_bgcolor: "rgba(255,255,255,0.55)",
+          xaxis: { title: "平台电压分组" },
+          yaxis: { title: "快充时间 (分钟，越小越好)", autorange: "reversed", gridcolor: "rgba(20, 32, 43, 0.12)" },
+          font: { family: "Segoe UI, PingFang SC, Microsoft YaHei, sans-serif", color: "#14202b" }
+        }, { responsive: true, displaylogo: false });
+
+        const brandRows = payload.brandHeatmapRows;
+        const heatmapX = ["快充速度得分", "续航得分", "高压占比得分"];
+        const heatmapY = brandRows.map(r => `${r.brand} (${r.count})`);
+        const heatmapZ = brandRows.map(r => [r.fastScore, r.cltcScore, r.hvScore]);
+        const heatmapText = brandRows.map(r => [
+          r.medianFast === null ? "-" : `${r.medianFast} min`,
+          r.medianCltc === null ? "-" : `${r.medianCltc} km`,
+          `${r.hvShare}%`
+        ]);
+
+        Plotly.newPlot("brandHeatmapChart", [{
+          type: "heatmap",
+          x: heatmapX,
+          y: heatmapY,
+          z: heatmapZ,
+          text: heatmapText,
+          texttemplate: "%{text}",
+          colorscale: "YlGnBu",
+          zmin: 0,
+          zmax: 1,
+          hovertemplate: "品牌: %{y}<br>指标: %{x}<br>原始值: %{text}<br>得分: %{z:.2f}<extra></extra>"
+        }], {
+          margin: { l: 110, r: 20, t: 10, b: 40 },
+          paper_bgcolor: "rgba(0,0,0,0)",
+          plot_bgcolor: "rgba(255,255,255,0.55)",
+          xaxis: { side: "top" },
+          yaxis: { automargin: true },
+          font: { family: "Segoe UI, PingFang SC, Microsoft YaHei, sans-serif", color: "#14202b" }
+        }, { responsive: true, displaylogo: false });
+
+    footEl.innerHTML =
+      `数据说明: Radar 仅统计有数值的电池能量密度。` +
+      ` <span class="warn">当前能量密度缺失率 ${payload.stats.densityMissingRatio}%</span>，分布解读需谨慎。` +
+      ` 帕累托前沿以价格、续航、快充时间联合判定；Bubble 排除词对所有 Bubble 与帕累托图生效。`;
+  </script>
+</body>
+</html>
