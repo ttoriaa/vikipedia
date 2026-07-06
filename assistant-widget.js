@@ -152,7 +152,7 @@
     var style = document.createElement("style");
     style.id = "vikipedia-assistant-style";
     style.textContent = [
-      ".viki-assistant{position:fixed;right:18px;bottom:18px;z-index:120;font-family:'Noto Sans SC','Microsoft YaHei',sans-serif;}",
+      ".viki-assistant{position:fixed;left:18px;bottom:18px;z-index:120;font-family:'Noto Sans SC','Microsoft YaHei',sans-serif;}",
       ".viki-assistant-launcher{border:1px solid rgba(163,189,255,.32);background:linear-gradient(135deg,#7a5bff,#a76dff);color:#fff;border-radius:999px;padding:12px 16px;font-size:13px;font-weight:800;letter-spacing:.01em;cursor:pointer;box-shadow:0 18px 34px rgba(0,0,0,.28);}",
       ".viki-assistant-panel{width:min(360px,calc(100vw - 24px));border-radius:18px;border:1px solid rgba(163,189,255,.25);background:linear-gradient(160deg,rgba(11,18,32,.98),rgba(16,27,46,.95));color:#e7efff;box-shadow:0 26px 58px rgba(0,0,0,.45);overflow:hidden;}",
       ".viki-assistant-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:14px 14px 10px;border-bottom:1px solid rgba(163,189,255,.2);}",
