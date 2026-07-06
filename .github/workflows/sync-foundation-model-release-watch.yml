@@ -1,0 +1,82 @@
+name: Sync Foundation Model Release Watch
+
+on:
+  schedule:
+    - cron: "10 1 * * 1"
+  workflow_dispatch:
+    inputs:
+      cadence:
+        description: "Report cadence"
+        required: false
+        default: "weekly"
+        type: choice
+        options:
+          - weekly
+          - daily
+      window_days:
+        description: "Lookback window in days"
+        required: false
+        default: "7"
+        type: string
+      providers:
+        description: "Comma-separated providers"
+        required: false
+        default: "openai,anthropic,google,deepseek,moonshot,glm,qwen"
+        type: string
+      max_items:
+        description: "Maximum items per provider"
+        required: false
+        default: "5"
+        type: string
+      language:
+        description: "Report language"
+        required: false
+        default: "bilingual"
+        type: choice
+        options:
+          - bilingual
+          - zh
+          - en
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_WATCH_CADENCE: ${{ inputs.cadence || vars.RELEASE_WATCH_CADENCE || 'weekly' }}
+      RELEASE_WATCH_WINDOW_DAYS: ${{ inputs.window_days || vars.RELEASE_WATCH_WINDOW_DAYS || '7' }}
+      RELEASE_WATCH_PROVIDERS: ${{ inputs.providers || vars.RELEASE_WATCH_PROVIDERS || 'openai,anthropic,google,deepseek,moonshot,glm,qwen' }}
+      RELEASE_WATCH_MAX_ITEMS: ${{ inputs.max_items || vars.RELEASE_WATCH_MAX_ITEMS || '5' }}
+      RELEASE_WATCH_LANGUAGE: ${{ inputs.language || vars.RELEASE_WATCH_LANGUAGE || 'bilingual' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Generate weekly report
+        run: |
+          python scripts/run_foundation_model_release_watch.py \
+            --cadence "$RELEASE_WATCH_CADENCE" \
+            --window-days "$RELEASE_WATCH_WINDOW_DAYS" \
+            --providers "$RELEASE_WATCH_PROVIDERS" \
+            --max-items "$RELEASE_WATCH_MAX_ITEMS" \
+            --language "$RELEASE_WATCH_LANGUAGE" \
+            --dry-run false
+
+      - name: Commit changes
+        run: |
+          if git diff --quiet -- reports/foundation_model_release_watch; then
+            echo "No foundation-model report changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/foundation_model_release_watch
+          git commit -m "chore: sync foundation model release watch report"
+          git push
