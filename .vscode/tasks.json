@@ -1,347 +1,688 @@
 {
-  "version": "2.0.0",
-  "inputs": [
-    {
-      "id": "dongchediSiteSyncDate",
-      "type": "promptString",
-      "description": "Dongchedi site sync date (YYYY-MM-DD, leave empty for latest)",
-      "default": ""
-    },
-    {
-      "id": "dongchediSiteSyncDeploy",
-      "type": "pickString",
-      "description": "Whether to commit and push site changes",
-      "options": [
-        "true",
-        "false"
-      ],
-      "default": "false"
-    },
-    {
-      "id": "dongchediSiteSyncDispatch",
-      "type": "pickString",
-      "description": "Whether to trigger the Dongchedi Pages workflow",
-      "options": [
-        "true",
-        "false"
-      ],
-      "default": "false"
-    },
-    {
-      "id": "kbDecisionDate",
-      "type": "promptString",
-      "description": "Decision date (YYYY-MM-DD, leave empty for today)",
-      "default": ""
-    },
-    {
-      "id": "kbDecisionTitle",
-      "type": "promptString",
-      "description": "Decision title"
-    },
-    {
-      "id": "kbDecisionContext",
-      "type": "promptString",
-      "description": "Decision context"
-    },
-    {
-      "id": "kbDecisionDecision",
-      "type": "promptString",
-      "description": "Decision made"
-    },
-    {
-      "id": "kbDecisionRationale",
-      "type": "promptString",
-      "description": "Decision rationale"
-    },
-    {
-      "id": "kbDecisionImpact",
-      "type": "promptString",
-      "description": "Expected impact"
-    },
-    {
-      "id": "kbDecisionNext",
-      "type": "promptString",
-      "description": "Next action"
-    },
-    {
-      "id": "kbDecisionOwner",
-      "type": "promptString",
-      "description": "Decision owner",
-      "default": "Vickie"
-    },
-    {
-      "id": "kbDecisionTags",
-      "type": "promptString",
-      "description": "Tags (comma-separated)",
-      "default": "knowledge-base,decision"
-    }
-  ],
-  "tasks": [
-    {
-      "label": "Dongchedi Daily: Precheck .env (Pipeline)",
-      "type": "shell",
-      "command": ".\\.venv\\Scripts\\python.exe",
-      "args": [
-        ".\\scripts\\precheck_confluence_env.py",
-        "--mode",
-        "pipeline"
-      ],
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "Dongchedi Daily Report: Dry Run",
-      "type": "shell",
-      "command": ".\\.venv\\Scripts\\python.exe",
-      "args": [
-        ".\\scripts\\run_dongchedi_daily.py",
-        "--no-backfill-missing",
-        "--dry-run"
-      ],
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "Dongchedi Daily Report: Confluence",
-      "type": "shell",
-      "command": ".\\.venv\\Scripts\\python.exe",
-      "args": [
-        ".\\scripts\\run_dongchedi_daily.py",
-        "--no-backfill-missing"
-      ],
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "Dongchedi Daily Report: Check Unresolved Prices",
-      "type": "shell",
-      "command": ".\\.venv\\Scripts\\python.exe",
-      "args": [
-        ".\\scripts\\check_unresolved_dongchedi_prices.py"
-      ],
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "Dongchedi Site Sync: Local",
-      "type": "shell",
-      "command": "powershell",
-      "args": [
-        "-NoProfile",
-        "-ExecutionPolicy",
-        "Bypass",
-        "-File",
-        ".\\scripts\\sync_dongchedi_site_after_daily.ps1",
-        "-Deploy",
-        "false",
-        "-DispatchWorkflow",
-        "false"
-      ],
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "Dongchedi Site Sync: Deploy",
-      "type": "shell",
-      "command": "powershell",
-      "args": [
-        "-NoProfile",
-        "-ExecutionPolicy",
-        "Bypass",
-        "-File",
-        ".\\scripts\\sync_dongchedi_site_after_daily.ps1",
-        "-Deploy",
-        "true",
-        "-DispatchWorkflow",
-        "false"
-      ],
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "Dongchedi Site Sync: Parameterized",
-      "type": "shell",
-      "command": "powershell",
-      "args": [
-        "-NoProfile",
-        "-ExecutionPolicy",
-        "Bypass",
-        "-File",
-        ".\\scripts\\sync_dongchedi_site_after_daily.ps1",
-        "-Date",
-        "${input:dongchediSiteSyncDate}",
-        "-Deploy",
-        "${input:dongchediSiteSyncDeploy}",
-        "-DispatchWorkflow",
-        "${input:dongchediSiteSyncDispatch}"
-      ],
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "Market Watch: Intraday Dry Run",
-      "type": "shell",
-      "command": ".\\.venv\\Scripts\\python.exe",
-      "args": [
-        ".\\scripts\\update_market_watch_data.py",
-        "--snapshot-type",
-        "intraday",
-        "--skip-news",
-        "--request-timeout",
-        "6",
-        "--dry-run"
-      ],
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "Market Watch: Intraday",
-      "type": "shell",
-      "command": ".\\.venv\\Scripts\\python.exe",
-      "args": [
-        ".\\scripts\\update_market_watch_data.py",
-        "--snapshot-type",
-        "intraday"
-      ],
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "Market Watch: Post Close",
-      "type": "shell",
-      "command": ".\\.venv\\Scripts\\python.exe",
-      "args": [
-        ".\\scripts\\update_market_watch_data.py",
-        "--snapshot-type",
-        "post_close"
-      ],
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "Market Watch: Notify Dry Run",
-      "type": "shell",
-      "command": ".\\.venv\\Scripts\\python.exe",
-      "args": [
-        ".\\scripts\\update_market_watch_data.py",
-        "--snapshot-type",
-        "intraday",
-        "--skip-news",
-        "--request-timeout",
-        "6",
-        "--notify-dry-run"
-      ],
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "Market Watch: Post Close Dry Run",
-      "type": "shell",
-      "command": ".\\.venv\\Scripts\\python.exe",
-      "args": [
-        ".\\scripts\\update_market_watch_data.py",
-        "--snapshot-type",
-        "post_close",
-        "--skip-news",
-        "--request-timeout",
-        "6",
-        "--dry-run"
-      ],
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "Daily Market News: Dry Run",
-      "type": "shell",
-      "command": ".\\.venv\\Scripts\\python.exe",
-      "args": [
-        ".\\scripts\\run_daily_market_news.py",
-        "--dry-run",
-        "true",
-        "--mode",
-        "mixed",
-        "--markets",
-        "us,cn,kr,hk"
-      ],
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "Daily Market News: Run",
-      "type": "shell",
-      "command": ".\\.venv\\Scripts\\python.exe",
-      "args": [
-        ".\\scripts\\run_daily_market_news.py",
-        "--dry-run",
-        "false",
-        "--mode",
-        "mixed",
-        "--markets",
-        "us,cn,kr,hk"
-      ],
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "Unified Daily Brief: Dry Run",
-      "type": "shell",
-      "command": ".\\.venv\\Scripts\\python.exe",
-      "args": [
-        ".\\scripts\\build_unified_daily_brief.py",
-        "--dry-run"
-      ],
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "Unified Daily Brief: Run",
-      "type": "shell",
-      "command": ".\\.venv\\Scripts\\python.exe",
-      "args": [
-        ".\\scripts\\build_unified_daily_brief.py"
-      ],
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "Personal KB: Refresh",
-      "type": "shell",
-      "command": ".\\.venv\\Scripts\\python.exe",
-      "args": [
-        ".\\scripts\\build_personal_knowledge_base.py"
-      ],
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "Personal KB: Add Decision Note",
-      "type": "shell",
-      "command": ".\\.venv\\Scripts\\python.exe",
-      "args": [
-        ".\\scripts\\add_decision_log_entry.py",
-        "--date",
-        "${input:kbDecisionDate}",
-        "--title",
-        "${input:kbDecisionTitle}",
-        "--context",
-        "${input:kbDecisionContext}",
-        "--decision",
-        "${input:kbDecisionDecision}",
-        "--rationale",
-        "${input:kbDecisionRationale}",
-        "--impact",
-        "${input:kbDecisionImpact}",
-        "--next",
-        "${input:kbDecisionNext}",
-        "--owner",
-        "${input:kbDecisionOwner}",
-        "--source",
-        "chat",
-        "--tags",
-        "${input:kbDecisionTags}"
-      ],
-      "group": "build",
-      "problemMatcher": []
-    }
-  ]
+	"version": "2.0.0",
+	"inputs": [
+		{
+			"id": "dongchediSiteSyncDate",
+			"type": "promptString",
+			"description": "Dongchedi site sync date (YYYY-MM-DD, leave empty for latest)",
+			"default": ""
+		},
+		{
+			"id": "dongchediSiteSyncDeploy",
+			"type": "pickString",
+			"description": "Whether to commit and push site changes",
+			"options": [
+				"true",
+				"false"
+			],
+			"default": "false"
+		},
+		{
+			"id": "dongchediSiteSyncDispatch",
+			"type": "pickString",
+			"description": "Whether to trigger the Dongchedi Pages workflow",
+			"options": [
+				"true",
+				"false"
+			],
+			"default": "false"
+		},
+		{
+			"id": "kbDecisionDate",
+			"type": "promptString",
+			"description": "Decision date (YYYY-MM-DD, leave empty for today)",
+			"default": ""
+		},
+		{
+			"id": "kbDecisionTitle",
+			"type": "promptString",
+			"description": "Decision title"
+		},
+		{
+			"id": "kbDecisionContext",
+			"type": "promptString",
+			"description": "Decision context"
+		},
+		{
+			"id": "kbDecisionDecision",
+			"type": "promptString",
+			"description": "Decision made"
+		},
+		{
+			"id": "kbDecisionRationale",
+			"type": "promptString",
+			"description": "Decision rationale"
+		},
+		{
+			"id": "kbDecisionImpact",
+			"type": "promptString",
+			"description": "Expected impact"
+		},
+		{
+			"id": "kbDecisionNext",
+			"type": "promptString",
+			"description": "Next action"
+		},
+		{
+			"id": "kbDecisionOwner",
+			"type": "promptString",
+			"description": "Decision owner",
+			"default": "Vickie"
+		},
+		{
+			"id": "kbDecisionTags",
+			"type": "promptString",
+			"description": "Tags (comma-separated)",
+			"default": "knowledge-base,decision"
+		}
+	],
+	"tasks": [
+		{
+			"label": "Dongchedi Daily: Precheck .env (Pipeline)",
+			"type": "shell",
+			"command": ".\\.venv\\Scripts\\python.exe",
+			"args": [
+				".\\scripts\\precheck_confluence_env.py",
+				"--mode",
+				"pipeline"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Dongchedi Daily Report: Dry Run",
+			"type": "shell",
+			"command": ".\\.venv\\Scripts\\python.exe",
+			"args": [
+				".\\scripts\\run_dongchedi_daily.py",
+				"--no-backfill-missing",
+				"--dry-run"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Dongchedi Daily Report: Confluence",
+			"type": "shell",
+			"command": ".\\.venv\\Scripts\\python.exe",
+			"args": [
+				".\\scripts\\run_dongchedi_daily.py",
+				"--no-backfill-missing"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Dongchedi Daily Report: Check Unresolved Prices",
+			"type": "shell",
+			"command": ".\\.venv\\Scripts\\python.exe",
+			"args": [
+				".\\scripts\\check_unresolved_dongchedi_prices.py"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Dongchedi Site Sync: Local",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				".\\scripts\\sync_dongchedi_site_after_daily.ps1",
+				"-Deploy",
+				"false",
+				"-DispatchWorkflow",
+				"false"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Dongchedi Site Sync: Deploy",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				".\\scripts\\sync_dongchedi_site_after_daily.ps1",
+				"-Deploy",
+				"true",
+				"-DispatchWorkflow",
+				"false"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Dongchedi Site Sync: Parameterized",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				".\\scripts\\sync_dongchedi_site_after_daily.ps1",
+				"-Date",
+				"${input:dongchediSiteSyncDate}",
+				"-Deploy",
+				"${input:dongchediSiteSyncDeploy}",
+				"-DispatchWorkflow",
+				"${input:dongchediSiteSyncDispatch}"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Market Watch: Intraday Dry Run",
+			"type": "shell",
+			"command": ".\\.venv\\Scripts\\python.exe",
+			"args": [
+				".\\scripts\\update_market_watch_data.py",
+				"--snapshot-type",
+				"intraday",
+				"--skip-news",
+				"--request-timeout",
+				"6",
+				"--dry-run"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Market Watch: Intraday",
+			"type": "shell",
+			"command": ".\\.venv\\Scripts\\python.exe",
+			"args": [
+				".\\scripts\\update_market_watch_data.py",
+				"--snapshot-type",
+				"intraday"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Market Watch: Post Close",
+			"type": "shell",
+			"command": ".\\.venv\\Scripts\\python.exe",
+			"args": [
+				".\\scripts\\update_market_watch_data.py",
+				"--snapshot-type",
+				"post_close"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Market Watch: Notify Dry Run",
+			"type": "shell",
+			"command": ".\\.venv\\Scripts\\python.exe",
+			"args": [
+				".\\scripts\\update_market_watch_data.py",
+				"--snapshot-type",
+				"intraday",
+				"--skip-news",
+				"--request-timeout",
+				"6",
+				"--notify-dry-run"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Market Watch: Post Close Dry Run",
+			"type": "shell",
+			"command": ".\\.venv\\Scripts\\python.exe",
+			"args": [
+				".\\scripts\\update_market_watch_data.py",
+				"--snapshot-type",
+				"post_close",
+				"--skip-news",
+				"--request-timeout",
+				"6",
+				"--dry-run"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Daily Market News: Dry Run",
+			"type": "shell",
+			"command": ".\\.venv\\Scripts\\python.exe",
+			"args": [
+				".\\scripts\\run_daily_market_news.py",
+				"--dry-run",
+				"true",
+				"--mode",
+				"mixed",
+				"--markets",
+				"us,cn,kr,hk"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Daily Market News: Run",
+			"type": "shell",
+			"command": ".\\.venv\\Scripts\\python.exe",
+			"args": [
+				".\\scripts\\run_daily_market_news.py",
+				"--dry-run",
+				"false",
+				"--mode",
+				"mixed",
+				"--markets",
+				"us,cn,kr,hk"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Unified Daily Brief: Dry Run",
+			"type": "shell",
+			"command": ".\\.venv\\Scripts\\python.exe",
+			"args": [
+				".\\scripts\\build_unified_daily_brief.py",
+				"--dry-run"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Unified Daily Brief: Run",
+			"type": "shell",
+			"command": ".\\.venv\\Scripts\\python.exe",
+			"args": [
+				".\\scripts\\build_unified_daily_brief.py"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Personal KB: Refresh",
+			"type": "shell",
+			"command": ".\\.venv\\Scripts\\python.exe",
+			"args": [
+				".\\scripts\\build_personal_knowledge_base.py"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Personal KB: Add Decision Note",
+			"type": "shell",
+			"command": ".\\.venv\\Scripts\\python.exe",
+			"args": [
+				".\\scripts\\add_decision_log_entry.py",
+				"--date",
+				"${input:kbDecisionDate}",
+				"--title",
+				"${input:kbDecisionTitle}",
+				"--context",
+				"${input:kbDecisionContext}",
+				"--decision",
+				"${input:kbDecisionDecision}",
+				"--rationale",
+				"${input:kbDecisionRationale}",
+				"--impact",
+				"${input:kbDecisionImpact}",
+				"--next",
+				"${input:kbDecisionNext}",
+				"--owner",
+				"${input:kbDecisionOwner}",
+				"--source",
+				"chat",
+				"--tags",
+				"${input:kbDecisionTags}"
+			],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Publish VikipediAi 6-layer tab",
+			"type": "shell",
+			"command": "C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+			"args": [
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"add",
+				"enterprise_agent_architecture.html",
+				"agent_stack_6_layers_market_map.html",
+				";",
+				"C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"commit",
+				"-m",
+				"feat(architecture): add 6-layer tab under enterprise page",
+				";",
+				"C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"push"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Check VikipediAi pages workflow",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$ProgressPreference='SilentlyContinue'; $u='https://api.github.com/repos/ttoriaa/VikipediAi/actions/workflows/pages.yml/runs?per_page=3'; $r=Invoke-RestMethod -Headers @{\"User-Agent\"=\"copilot\"} -Uri $u; $r.workflow_runs | Select-Object created_at,status,conclusion,html_url | Format-Table -AutoSize | Out-String -Width 260"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Publish in-page tab architecture update",
+			"type": "shell",
+			"command": "C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+			"args": [
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"add",
+				"enterprise_agent_architecture.html",
+				";",
+				"C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"commit",
+				"-m",
+				"feat(agent-arch): merge six-layer mapping into in-page tab with visual stack",
+				";",
+				"C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"push"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Publish tab redirect fix",
+			"type": "shell",
+			"command": "C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+			"args": [
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"add",
+				"enterprise_agent_architecture.html",
+				"agent_stack_6_layers_market_map.html",
+				";",
+				"C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"commit",
+				"-m",
+				"fix(agent-arch): redirect old six-layer URL to in-page tab view",
+				";",
+				"C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"push"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Check latest VikipediAi pages runs",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"$ProgressPreference='SilentlyContinue'; $u='https://api.github.com/repos/ttoriaa/VikipediAi/actions/workflows/pages.yml/runs?per_page=5'; $r=Invoke-RestMethod -Headers @{'User-Agent'='copilot'} -Uri $u; $r.workflow_runs | Select-Object head_sha,status,conclusion,created_at,html_url | Format-Table -AutoSize | Out-String -Width 260"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Publish tab dashboard style + metrics tab",
+			"type": "shell",
+			"command": "C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+			"args": [
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"add",
+				"enterprise_agent_architecture.html",
+				";",
+				"C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"commit",
+				"-m",
+				"feat(agent-arch): add metrics tab and dashboard segmented tab control",
+				";",
+				"C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"push"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Verify latest pushed architecture html commit",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"Set-Location 'c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi'; git show --stat -1; git show -1 -- enterprise_agent_architecture.html | Out-String -Width 240"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Verify pushed commit in VikipediAi repo",
+			"type": "shell",
+			"command": "C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+			"args": [
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"show",
+				"--stat",
+				"-1"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Publish VikipediAi agent UI changes",
+			"type": "shell",
+			"command": "C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+			"args": [
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"add",
+				"index.html",
+				"enterprise_agent_architecture.html",
+				";",
+				"C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"commit",
+				"-m",
+				"feat(ui): simplify enterprise tabs and homepage agent entry",
+				";",
+				"C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"push"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Retry VikipediAi pages deploy",
+			"type": "shell",
+			"command": "C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+			"args": [
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"commit",
+				"--allow-empty",
+				"-m",
+				"chore(deploy): retry pages workflow after transient failure",
+				";",
+				"C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"push"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Inject global UI assets into all VikipediAi pages",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"$files = @('index.html','map.html','foundation_models.html','usecases.html','developer_coding_hub.html','agent_effectiveness_metrics.html','ai_vibe_coding_guide.html','products.html','enterprise_agent_architecture.html','agent_stack_6_layers_market_map.html'); $root='c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi'; foreach($f in $files){ $p=Join-Path $root $f; $raw=Get-Content -Raw -Path $p; if($raw -notmatch 'assets/global-ui.css'){ $raw=$raw -replace '</head>','  <link rel=\"stylesheet\" href=\"assets/global-ui.css\" />`r`n</head>'; } if($raw -notmatch 'assets/global-ui.js'){ $raw=$raw -replace '</body>','  <script src=\"assets/global-ui.js\"></script>`r`n</body>'; } Set-Content -Path $p -Value $raw -NoNewline; Write-Output \"updated $f\" }"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Publish global UI and i18n shell",
+			"type": "shell",
+			"command": "C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+			"args": [
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"add",
+				"assets/global-ui.css",
+				"assets/global-ui.js",
+				"index.html",
+				"map.html",
+				"foundation_models.html",
+				"usecases.html",
+				"developer_coding_hub.html",
+				"agent_effectiveness_metrics.html",
+				"ai_vibe_coding_guide.html",
+				"products.html",
+				"enterprise_agent_architecture.html",
+				"agent_stack_6_layers_market_map.html",
+				";",
+				"C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"commit",
+				"-m",
+				"feat(ui): add global language toggle and unified homepage theme shell",
+				";",
+				"C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"push"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Publish phase2-phase3 global i18n and design system",
+			"type": "shell",
+			"command": "C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+			"args": [
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"add",
+				"assets/global-ui.css",
+				"assets/global-ui.js",
+				";",
+				"C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"commit",
+				"-m",
+				"feat(i18n-design): extend full-page bilingual dictionary engine and unified component system",
+				";",
+				"C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe",
+				"-C",
+				"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi",
+				"push"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Audit bilingual data keys",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Set-Location \"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi\"; Write-Output \"usecases lines:\"; (Get-Content data/usecases.json | Measure-Object -Line).Lines; Write-Output \"products lines:\"; (Get-Content data/products.json | Measure-Object -Line).Lines; Write-Output \"key hits:\"; rg -n \"\\\"[a-zA-Z_]+_zh\\\"|\\\"[a-zA-Z_]+_en\\\"\" data/usecases.json data/products.json"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Generate en fields for data json",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"Set-Location \"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi\"; node scripts/add_en_fields.js"
+			],
+			"group": "build"
+		},
+		{
+			"label": "tmp git status vikipediAi",
+			"type": "shell",
+			"command": "\"C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe\" -C \"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi\" status --short",
+			"isBackground": false
+		},
+		{
+			"label": "tmp git status vikipediAi short",
+			"type": "shell",
+			"command": "\"C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe\" -C \"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi\" status -s",
+			"isBackground": false
+		},
+		{
+			"label": "tmp git status vikipediAi shell expr",
+			"type": "shell",
+			"command": "& \"C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe\" -C \"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi\" status -s",
+			"isBackground": false
+		},
+		{
+			"label": "tmp git status basic",
+			"type": "shell",
+			"command": "& \"C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe\" -C \"c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi\" status",
+			"isBackground": false
+		},
+		{
+			"label": "tmp git status cd",
+			"type": "shell",
+			"command": "Set-Location 'c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi'; & 'C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe' status",
+			"isBackground": false
+		},
+		{
+			"label": "tmp git add scoped files",
+			"type": "shell",
+			"command": "Set-Location 'c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi'; & 'C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe' add 'map.html' 'enterprise_agent_architecture.html'; & 'C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe' status",
+			"isBackground": false
+		},
+		{
+			"label": "tmp git commit push scoped",
+			"type": "shell",
+			"command": "Set-Location 'c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi'; & 'C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe' commit -m 'feat(map,enterprise): move top-right lang toggle and expand product mapping'; & 'C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe' push",
+			"isBackground": false
+		},
+		{
+			"label": "tmp git show latest commit",
+			"type": "shell",
+			"command": "Set-Location 'c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi'; & 'C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe' show --name-only --oneline HEAD",
+			"isBackground": false
+		},
+		{
+			"label": "tmp git status after push",
+			"type": "shell",
+			"command": "Set-Location 'c:/Users/Q653867/OneDrive - BMW Group/Desktop/V/VikipediAi'; & 'C:/Users/Q653867/AppData/Local/Programs/Git/cmd/git.exe' status",
+			"isBackground": false
+		}
+	]
 }

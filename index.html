@@ -244,6 +244,9 @@
     }
 
     .top-tab {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       min-height: 34px;
       padding: 7px 14px;
       border-radius: 999px;
@@ -2167,6 +2170,7 @@
         <button class="top-tab" type="button" data-tab-target="skills" data-i18n="tabSkills">Skills</button>
         <button class="top-tab" type="button" data-tab-target="resume" data-i18n="tabResume">Resume</button>
         <button class="top-tab" type="button" data-tab-target="token" data-i18n="tabToken">Token</button>
+        <a class="top-tab" href="enterprise_agent_architecture.html" data-i18n="tabAgentArch">Agent Arch</a>
       </div>
       <nav class="top-links" aria-label="快速入口">
         <button id="langToggle" class="lang-toggle" type="button">中文</button>
@@ -2374,6 +2378,28 @@
           <p data-i18n="sitePodcastSummary">A podcast experience designed to reduce noise and create clarity in an entropic world.</p>
           <div class="site-actions">
             <a href="https://ttoriaa.github.io/shimai-podcast-site/index.html?lang=zh#home" target="_blank" rel="noreferrer" data-i18n="siteOpen">Open</a>
+          </div>
+        </article>
+
+        <article class="site-card">
+          <div class="site-thumb site-thumb--auto">
+            <div class="thumb-top"><span></span><span></span><span></span></div>
+            <div class="thumb-body">
+              <div class="thumb-title">Studio</div>
+              <div class="thumb-micro"><span>Brainstorm</span><span>Script</span><span>Publish</span></div>
+              <div class="thumb-line long"></div>
+              <div class="thumb-line mid"></div>
+              <div class="thumb-line short"></div>
+            </div>
+          </div>
+          <div class="site-tags">
+            <span class="site-tag">Creator</span>
+            <span class="site-tag">Workflow</span>
+          </div>
+          <h3>时髦小姨 Creator Studio</h3>
+          <p>A creator operations cockpit for RSS ingestion, GLM-driven semantic analysis, topic brainstorming, scripting, recording, editing, and publishing.</p>
+          <div class="site-actions">
+            <a href="shimai_creator_studio_app/pages/dashboard.html" target="_blank" rel="noreferrer" data-i18n="siteOpen">Open</a>
           </div>
         </article>
 
@@ -2753,6 +2779,7 @@
           tabResume: 'Resume',
           tabSkills: 'Skills',
           tabToken: 'Token',
+          tabAgentArch: 'Agent Arch',
           siteOpen: 'Open',
           eyebrow: 'Portfolio of live pages',
           heroTitleLine1: 'Vikipedia:',
@@ -2864,6 +2891,7 @@
           tabResume: '简历',
           tabSkills: '技能',
           tabToken: 'Token',
+          tabAgentArch: 'Agent架构',
           siteOpen: '打开',
           eyebrow: '线上项目作品集入口',
           heroTitleLine1: 'Vikipedia:',

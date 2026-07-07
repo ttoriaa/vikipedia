@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import re
+import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -164,14 +165,26 @@ class ConfluenceClient:
         json_body: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         auth_type = self.config.auth_type
-        if auth_type == "auto":
-            first = self._request_once(method, path, params=params, json_body=json_body, auth_mode="bearer")
-            if first.status_code in (401, 403) and self.config.email:
-                response = self._request_once(method, path, params=params, json_body=json_body, auth_mode="basic")
+        retries = 5
+        for attempt in range(retries):
+            if auth_type == "auto":
+                first = self._request_once(method, path, params=params, json_body=json_body, auth_mode="bearer")
+                if first.status_code in (401, 403) and self.config.email:
+                    response = self._request_once(method, path, params=params, json_body=json_body, auth_mode="basic")
+                else:
+                    response = first
             else:
-                response = first
-        else:
-            response = self._request_once(method, path, params=params, json_body=json_body, auth_mode=auth_type)
+                response = self._request_once(method, path, params=params, json_body=json_body, auth_mode=auth_type)
+
+            if response.status_code == 429 and attempt < retries - 1:
+                retry_after = response.headers.get("Retry-After", "")
+                try:
+                    sleep_seconds = max(1.0, float(retry_after))
+                except Exception:
+                    sleep_seconds = 1.5 * (attempt + 1)
+                time.sleep(sleep_seconds)
+                continue
+            break
 
         if response.status_code >= 400:
             try:

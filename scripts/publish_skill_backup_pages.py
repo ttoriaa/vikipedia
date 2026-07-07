@@ -4,6 +4,7 @@ import argparse
 import html
 import json
 import re
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -140,6 +141,14 @@ def build_child_page_body(skill_dir: Path, slug: str) -> tuple[str, str, str]:
     return backup_title, body, overview or "No purpose provided"
 
 
+def first_non_empty_line(text: str, default: str = "Not specified") -> str:
+    for line in text.splitlines():
+        stripped = line.strip()
+        if stripped:
+            return stripped
+    return default
+
+
 def build_index_section(rows: list[dict[str, str]]) -> str:
     parts = [
         INDEX_START,
@@ -180,6 +189,7 @@ def main() -> int:
     parser.add_argument("--source-dir", default=".github/skills")
     parser.add_argument("--skill", action="append", help="Optional skill slug filter; can be repeated")
     parser.add_argument("--apply", action="store_true", help="Create or update child pages and root index")
+    parser.add_argument("--skip-existing", action="store_true", help="Skip existing child pages instead of updating them")
     parser.add_argument("--include-template", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
@@ -201,19 +211,25 @@ def main() -> int:
         skill_dirs.append(child)
 
     results: list[dict[str, str]] = []
+    existing_children = {str(page.get("title", "")).strip(): page for page in client.list_child_pages(args.root_page, limit=200)}
     for skill_dir in skill_dirs:
         slug = skill_dir.name
         child_title, child_body, overview = build_child_page_body(skill_dir, slug)
-        existing = client.find_child_page(args.root_page, child_title)
-        action = "update" if existing else "create"
+        existing = existing_children.get(child_title.strip())
+        action = "skip" if (existing and args.skip_existing) else ("update" if existing else "create")
         child_url = ""
         if args.apply and not args.dry_run:
-            if existing:
+            if existing and args.skip_existing:
+                child_url = client.page_webui_url(existing)
+            elif existing:
                 updated = client.update_page(str(existing.get("id", "")), title=child_title, body_storage=child_body)
                 child_url = client.page_webui_url(updated)
             else:
                 created = client.create_page(space_key=root_space_key, title=child_title, body_storage=child_body, parent_page_ref=args.root_page)
                 child_url = client.page_webui_url(created)
+                existing_children[child_title.strip()] = created
+            # Avoid hitting Confluence rate limits during bulk writes.
+            time.sleep(0.3)
         elif existing:
             child_url = client.page_webui_url(existing)
         results.append(
@@ -225,7 +241,7 @@ def main() -> int:
                 "url": child_url,
                 "purpose": overview.splitlines()[0].strip(),
                 "source": f".github/skills/{slug}/SKILL.md",
-                "sensitivity": parse_skill_markdown(skill_dir / "SKILL.md")["sensitivity"].splitlines()[0].strip() or "Not specified",
+                "sensitivity": first_non_empty_line(parse_skill_markdown(skill_dir / "SKILL.md").get("sensitivity", "")),
             }
         )
 

@@ -238,6 +238,48 @@ Quick invoke:
 - `/ai-hardware-industry-chain language=bilingual include_companies=true`
 - `/ai-hardware-industry-chain perspective=buyer auto_procurement_actions=true risk_to_action_mode=conservative`
 
+### 21. foundation-model-release-watch
+
+Use when:
+- You want periodic tracking of newly released frontier models across global and China providers.
+- You need one unified weekly brief covering OpenAI, Anthropic, Google, DeepSeek, Moonshot, GLM, Qwen and peers.
+- You need structured output focused on release changes, pricing shifts, and enterprise readiness impact.
+
+Path:
+- [foundation-model-release-watch/SKILL.md](foundation-model-release-watch/SKILL.md)
+
+Quick invoke:
+- `/foundation-model-release-watch`
+- `/foundation-model-release-watch cadence=weekly window_days=7 providers=openai,anthropic,google,deepseek,moonshot,glm,qwen language=bilingual dry_run=true`
+
+### 21. architecture-solution-advisor
+
+Use when:
+- You need implementation-ready code architecture options from product requirements.
+- You want weighted recommendation scoring with configurable priorities.
+- You need phased rollout planning with risks and validation checklist.
+
+Path:
+- [architecture-solution-advisor/SKILL.md](architecture-solution-advisor/SKILL.md)
+
+Quick invoke:
+- `/architecture-solution-advisor`
+- `/architecture-solution-advisor scenario=web output_depth=detailed language=bilingual include_scaffold_blueprint=true`
+
+### 22. prd-product-requirement-clarifier
+
+Use when:
+- You need to turn a vague product idea into an execution-ready PRD.
+- You want one output covering scenarios, goals, users, features, frontend and backend stack, and database schema.
+- You need MVP, phased roadmap, and measurable acceptance criteria.
+
+Path:
+- [prd-product-requirement-clarifier/SKILL.md](prd-product-requirement-clarifier/SKILL.md)
+
+Quick invoke:
+- `/prd-product-requirement-clarifier 我想做一个典型的平台数据产品，请把 PRD 必要部分完整化`
+- `/prd-product-requirement-clarifier product_name=Retail Insight Hub domain=retail depth=deep db=postgresql`
+
 ## Add New Skills
 
 When adding a new skill:
