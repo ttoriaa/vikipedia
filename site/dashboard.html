@@ -117,9 +117,34 @@
       <div class="meta">
         <span class="pill">数据日期: 2026-07-07</span>
         <span class="pill">来源: data.html 同批数据</span>
+        <span class="pill">AI Assistant: GLM</span>
       </div>
       <iframe class="frame" src="reports/2026-07-07/charging_visualization_dashboard.html" title="Charging Dashboard"></iframe>
+      <p class="foot">AI Assistant 通过后端代理调用 GLM，页面端不保存也不暴露 API Key。</p>
     </section>
   </div>
+  <script>
+    (function () {
+      window.__VIKI_ASSISTANT_CONFIG__ = {
+        endpoint: "https://resume-tailor-1x7i.onrender.com/api/assistant/query",
+        method: "POST",
+        protocol: "assistant_query",
+        provider: "glm",
+        model: "glm-4.5-flash",
+        stream: false,
+        context: "Charging Dashboard (automotive-benchmarking)",
+        titleZh: "充电助手",
+        titleEn: "Charging Copilot",
+        launcherZh: "充电助手",
+        launcherEn: "Charging Copilot",
+        answerPaths: [
+          "answer",
+          "output_text",
+          "choices.0.message.content"
+        ]
+      };
+    })();
+  </script>
+  <script src="assistant-widget.js?v=20260707-glm-dashboard"></script>
 </body>
 </html>
