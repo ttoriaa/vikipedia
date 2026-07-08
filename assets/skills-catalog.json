@@ -1,0 +1,231 @@
+{
+  "generated_at": "2026-07-08T09:33:49.757171+00:00",
+  "repo": "ttoriaa/vikipedia",
+  "count": 32,
+  "skills": [
+    {
+      "slug": "agent-regression-evaluator",
+      "title": "Agent Regression Evaluator",
+      "description": "Run repeatable regression tests for agent/prompt changes and block low-quality releases with explicit score deltas.",
+      "path": ".github/skills/agent-regression-evaluator",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/agent-regression-evaluator"
+    },
+    {
+      "slug": "architecture-solution-advisor",
+      "title": "Architecture Solution Advisor",
+      "description": "\u5c06\u4ea7\u54c1\u9700\u6c42\u8f6c\u5316\u4e3a\u53ef\u843d\u5730\u7684\u4ee3\u7801\u67b6\u6784\u5efa\u8bae\uff1a",
+      "path": ".github/skills/architecture-solution-advisor",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/architecture-solution-advisor"
+    },
+    {
+      "slug": "bilingual-consistency-checker",
+      "title": "Bilingual Consistency Checker",
+      "description": "Ensure bilingual artifacts are complete, aligned, and terminology-consistent before publishing.",
+      "path": ".github/skills/bilingual-consistency-checker",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/bilingual-consistency-checker"
+    },
+    {
+      "slug": "confluence-bulk-page-ops",
+      "title": "Confluence Bulk Page Ops",
+      "description": "Perform controlled batch operations on a root Confluence page and all descendant pages using PAT-backed local scripts.",
+      "path": ".github/skills/confluence-bulk-page-ops",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/confluence-bulk-page-ops"
+    },
+    {
+      "slug": "confluence-search",
+      "title": "Confluence Search",
+      "description": "Search and retrieve Confluence content for both CC and ATC via PAT-backed local-script retrieval.",
+      "path": ".github/skills/confluence-search",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/confluence-search"
+    },
+    {
+      "slug": "confluence-update",
+      "title": "Confluence Update",
+      "description": "Perform controlled updates for both CC and ATC through local skill scripts and PAT authentication.",
+      "path": ".github/skills/confluence-update",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/confluence-update"
+    },
+    {
+      "slug": "daily-market-news-research",
+      "title": "Daily Market News Research",
+      "description": "\u628a\u591a\u5e02\u573a\u6bcf\u65e5\u65b0\u95fb\u68c0\u7d22\u56fa\u5316\u6210\u53ef\u91cd\u590d\u6267\u884c\u6d41\u7a0b\uff1a\u56f4\u7ed5\u7f8e\u56fd\u3001\u4e2d\u56fd\u3001\u97e9\u56fd\u3001\u9999\u6e2f\u5e02\u573a\uff0c\u6309\u80a1\u7968\u6c60\u6216\u4e3b\u9898\u68c0\u7d22\u534a\u5bfc\u4f53\u3001AI \u7b97\u529b\u3001\u5b58\u50a8\u3001\u9ec4\u91d1\u3001\u8d35\u91d1\u5c5e\u7b49\u76f8\u5173\u65b0\u95fb\uff0c\u5e76\u8f93\u51fa\u53ef\u76f4\u63a5\u590d\u5236\u5230 Feishu \u6216 Confluence \u7684\u53cc\u8bed Markdown \u7b80\u62a5\u3002",
+      "path": ".github/skills/daily-market-news-research",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/daily-market-news-research"
+    },
+    {
+      "slug": "data-quality-guardrail",
+      "title": "Data Quality Guardrail",
+      "description": "Prevent bad data from entering daily reports by enforcing deterministic quality gates before downstream generation and publishing.",
+      "path": ".github/skills/data-quality-guardrail",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/data-quality-guardrail"
+    },
+    {
+      "slug": "dcc-rpa-assessment",
+      "title": "Dcc Rpa Assessment",
+      "description": "Produce one merged CSV where each row remains a recognized data type, the first five columns stay aligned with the DCC dictionary contract, and appended columns capture row-level processing behavior.",
+      "path": ".github/skills/dcc-rpa-assessment",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/dcc-rpa-assessment"
+    },
+    {
+      "slug": "dongchedi-charging-confluence-pipeline",
+      "title": "Dongchedi Charging Confluence Pipeline",
+      "description": "\u6267\u884c\u61c2\u8f66\u5e1d charging \u6570\u636e\u65e5\u5e38\u6d41\u6c34\u7ebf\uff0c\u751f\u6210\u5f53\u65e5\u62a5\u544a\u4ea7\u7269\uff0c\u5e76\u6309\u9700\u53d1\u5e03\u5230 Confluence \u6216 Feishu\u3002\u9ed8\u8ba4\u652f\u6301\u4ec5\u751f\u6210\u672c\u5730\u4ea7\u7269\uff0c\u4e5f\u652f\u6301\u540e\u7eed\u5206\u53d1\u53d1\u5e03\u3002",
+      "path": ".github/skills/dongchedi-charging-confluence-pipeline",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/dongchedi-charging-confluence-pipeline"
+    },
+    {
+      "slug": "dongchedi-charging-performance-summary",
+      "title": "Dongchedi Charging Performance Summary",
+      "description": "\u4ea7\u51fa\u57fa\u4e8e\u61c2\u8f66\u5e1d\u53c2\u6570\u9875\u7684\u8f66\u578b\u7ea7\u5145\u7535\u6027\u80fd\u603b\u7ed3\uff0c\u786e\u4fdd\u5b57\u6bb5\u5bf9\u9f50\u3001\u53e3\u5f84\u4e00\u81f4\u3001\u7f3a\u5931\u503c\u900f\u660e\u6807\u6ce8\uff0c\u53ef\u76f4\u63a5\u7528\u4e8e\u62a5\u544a\u3001\u90ae\u4ef6\u6216\u6587\u6863\u3002",
+      "path": ".github/skills/dongchedi-charging-performance-summary",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/dongchedi-charging-performance-summary"
+    },
+    {
+      "slug": "dongchedi-site-sync-after-daily",
+      "title": "Dongchedi Site Sync After Daily",
+      "description": "\u5728\u4f60\u5b8c\u6210\u5f53\u65e5\u61c2\u8f66\u5e1d\u5145\u7535\u6570\u636e\u66f4\u65b0\u540e\uff0c\u81ea\u52a8\u91cd\u5efa\u7f51\u7ad9\u6570\u636e\u9875\u3001\u53ef\u89c6\u5316\u9875\u9762\u548c\u8d8b\u52bf\u603b\u7ed3\u9875\u9762\uff0c\u5e76\u6309\u9700\u89e6\u53d1 GitHub Pages \u90e8\u7f72\uff0c\u8ba9\u7ebf\u4e0a\u7ad9\u70b9\u5c3d\u5feb\u540c\u6b65\u3002",
+      "path": ".github/skills/dongchedi-site-sync-after-daily",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/dongchedi-site-sync-after-daily"
+    },
+    {
+      "slug": "foundation-model-release-watch",
+      "title": "Foundation Model Release Watch",
+      "description": "\u628a\u57fa\u5ea7\u5927\u6a21\u578b\u5e02\u573a\u8ddf\u8e2a\u56fa\u5316\u4e3a\u53ef\u91cd\u590d\u6267\u884c\u6d41\u7a0b\uff0c\u5b9a\u671f\u626b\u63cf\u56fd\u5185\u5916\u4e3b\u6d41\u5382\u5546\u7684\u65b0\u6a21\u578b\u53d1\u5e03\u3001\u7248\u672c\u66f4\u65b0\u3001\u4ef7\u683c\u53d8\u5316\u3001\u80fd\u529b\u8fb9\u754c\u4e0e\u4f01\u4e1a\u53ef\u7528\u6027\uff0c\u8f93\u51fa\u53ef\u76f4\u63a5\u7528\u4e8e\u5468\u4f1a\u548c\u7ba1\u7406\u6c47\u62a5\u7684\u7814\u7a76\u7ed3\u679c\u3002",
+      "path": ".github/skills/foundation-model-release-watch",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/foundation-model-release-watch"
+    },
+    {
+      "slug": "github-search",
+      "title": "Github Search",
+      "description": "Find relevant source artifacts from GitHub for technical or compliance context.",
+      "path": ".github/skills/github-search",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/github-search"
+    },
+    {
+      "slug": "github-update",
+      "title": "Github Update",
+      "description": "Prepare and coordinate GitHub-side updates with clear, auditable intent.",
+      "path": ".github/skills/github-update",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/github-update"
+    },
+    {
+      "slug": "html-slide-deck-generator",
+      "title": "Html Slide Deck Generator",
+      "description": "Generate a standalone HTML slide deck from a PowerPoint-style context while preserving the source visual direction and keeping an editable structure for wording and design iteration.",
+      "path": ".github/skills/html-slide-deck-generator",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/html-slide-deck-generator"
+    },
+    {
+      "slug": "jira-search",
+      "title": "Jira Search",
+      "description": "Retrieve Jira planning and execution evidence relevant to the request.",
+      "path": ".github/skills/jira-search",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/jira-search"
+    },
+    {
+      "slug": "jira-update",
+      "title": "Jira Update",
+      "description": "Perform structured Jira updates with explicit intent and traceability.",
+      "path": ".github/skills/jira-update",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/jira-update"
+    },
+    {
+      "slug": "live-web-news-retry",
+      "title": "Live Web News Retry",
+      "description": "\u5728\u7f51\u7edc\u6062\u590d\u540e\uff0c\u91cd\u8dd1\u7f51\u9875\u76f4\u91c7\u65b0\u95fb\u4efb\u52a1\uff08\u4e0d\u4f9d\u8d56\u5386\u53f2 data table\uff09\uff0c\u5e76\u91cd\u65b0\u751f\u6210\u53ef\u5206\u4eab\u7684 HTML/Markdown/JSON \u8f93\u51fa\u3002",
+      "path": ".github/skills/live-web-news-retry",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/live-web-news-retry"
+    },
+    {
+      "slug": "multi-source-search",
+      "title": "Multi Source Search",
+      "description": "Route and combine searches across Confluence, GitHub, and Jira for one integrated answer.",
+      "path": ".github/skills/multi-source-search",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/multi-source-search"
+    },
+    {
+      "slug": "pia-measures-bank-assessment",
+      "title": "Pia Measures Bank Assessment",
+      "description": "Act as the single workflow entry for the final PIA Measures Bank V4.0 assessment result in English.",
+      "path": ".github/skills/pia-measures-bank-assessment",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/pia-measures-bank-assessment"
+    },
+    {
+      "slug": "prd-product-requirement-clarifier",
+      "title": "Prd Product Requirement Clarifier",
+      "description": "\u628a\u4e00\u53e5\u8bdd\u6216\u4e00\u6bb5\u6a21\u7cca\u4e1a\u52a1\u8bc9\u6c42\uff0c\u6f84\u6e05\u5e76\u56fa\u5316\u4e3a\u4e00\u4efd\u53ef\u4ea4\u4ed8\u7ed9\u4ea7\u54c1\u3001\u8bbe\u8ba1\u3001\u524d\u540e\u7aef\u548c\u6570\u636e\u56e2\u961f\u5171\u540c\u6267\u884c\u7684 PRD\u3002",
+      "path": ".github/skills/prd-product-requirement-clarifier",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/prd-product-requirement-clarifier"
+    },
+    {
+      "slug": "reusable-skill-template",
+      "title": "Reusable Skill Template",
+      "description": "\u4e00\u53e5\u8bdd\u8bf4\u660e\u8fd9\u4e2a skill \u7684\u4e1a\u52a1\u76ee\u6807\u4e0e\u4ea7\u51fa\u3002",
+      "path": ".github/skills/reusable-skill-template",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/reusable-skill-template"
+    },
+    {
+      "slug": "semiconductor-daily-scoring-5min",
+      "title": "Semiconductor Daily Scoring 5min",
+      "description": "\u628a\u201c\u534a\u5bfc\u4f53\u516c\u53f8\u65e5\u8bc4\u201d\u56fa\u5316\u6210\u53ef\u91cd\u590d\u6267\u884c\u6d41\u7a0b\uff1a",
+      "path": ".github/skills/semiconductor-daily-scoring-5min",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/semiconductor-daily-scoring-5min"
+    },
+    {
+      "slug": "shimai-podcast-rss-site-sync",
+      "title": "Shimai Podcast Rss Site Sync",
+      "description": "\u5728 podcast \u7f51\u7ad9\u4ed3\u5e93\u5185\u5b9e\u73b0\u4e00\u4e2a\u53ef\u91cd\u590d\u6267\u884c\u7684\u201c\u589e\u91cf\u540c\u6b65\u201d\u6d41\u7a0b\uff1a",
+      "path": ".github/skills/shimai-podcast-rss-site-sync",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/shimai-podcast-rss-site-sync"
+    },
+    {
+      "slug": "skill-backup-sync",
+      "title": "Skill Backup Sync",
+      "description": "Synchronize the active workspace skill set to the ATC Confluence skill backup page so teammates can discover and reuse the latest skill contracts.",
+      "path": ".github/skills/skill-backup-sync",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/skill-backup-sync"
+    },
+    {
+      "slug": "source-reliability-retry-orchestrator",
+      "title": "Source Reliability Retry Orchestrator",
+      "description": "Increase collection success rate with deterministic retries, fallback routing, and transparent reliability logs.",
+      "path": ".github/skills/source-reliability-retry-orchestrator",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/source-reliability-retry-orchestrator"
+    },
+    {
+      "slug": "token-tab-github-daily-sync",
+      "title": "Token Tab Github Daily Sync",
+      "description": "\u5c06 Token tab \u7684\u5185\u5bb9\u66f4\u65b0\u6d41\u7a0b\u56fa\u5316\u4e3a\u6bcf\u65e5\u53ef\u91cd\u590d\u6267\u884c\u7684\u5355\u4e00\u52a8\u4f5c\uff1a",
+      "path": ".github/skills/token-tab-github-daily-sync",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/token-tab-github-daily-sync"
+    },
+    {
+      "slug": "vikipedia-github-landing-sync",
+      "title": "Vikipedia Github Landing Sync",
+      "description": "\u5728 `ttoriaa/vikipedia` \u4ed3\u5e93\u4e2d\u56fa\u5316\u4e00\u6761\u53ef\u91cd\u590d\u6267\u884c\u7684\u540c\u6b65\u6d41\u7a0b\uff1a",
+      "path": ".github/skills/vikipedia-github-landing-sync",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/vikipedia-github-landing-sync"
+    },
+    {
+      "slug": "vikipedia-skills-catalog-sync",
+      "title": "Vikipedia Skills Catalog Sync",
+      "description": "\u628a\u5f53\u524d workspace \u4e0b `.github/skills` \u7684\u6700\u65b0\u72b6\u6001\u540c\u6b65\u5230 Vikipedia \u9996\u9875\u4f7f\u7528\u7684\u6570\u636e\u6e90 `assets/skills-catalog.json`\uff0c\u5e76\u53ef\u6309\u9700\u81ea\u52a8\u63d0\u4ea4\u548c\u63a8\u9001\u3002",
+      "path": ".github/skills/vikipedia-skills-catalog-sync",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/vikipedia-skills-catalog-sync"
+    },
+    {
+      "slug": "vikipediai-right-buttons-sync",
+      "title": "Vikipediai Right Buttons Sync",
+      "description": "\u5728 `ttoriaa/VikipediAi` \u4ed3\u5e93\u4e2d\u56fa\u5316\u4e00\u6761\u53ef\u91cd\u590d\u6267\u884c\u7684\u540c\u6b65\u6d41\u7a0b\uff0c\u4e13\u95e8\u9488\u5bf9\u9996\u9875\u53f3\u4fa7\u6309\u94ae\uff08Top Tabs / \u53f3\u4e0a\u6309\u94ae\u7ec4\uff09\uff1a",
+      "path": ".github/skills/vikipediai-right-buttons-sync",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/vikipediai-right-buttons-sync"
+    },
+    {
+      "slug": "workspace-github-auto-sync",
+      "title": "Workspace Github Auto Sync",
+      "description": "\u5728\u672c\u5730\u5de5\u4f5c\u533a\u4e0e GitHub \u4ed3\u5e93\u4e4b\u95f4\u63d0\u4f9b\u53ef\u91cd\u590d\u6267\u884c\u7684\u5355\u5411\u540c\u6b65\u6d41\u7a0b\uff08local -> remote\uff09\uff0c\u81ea\u52a8\u8bc6\u522b\u6539\u52a8\u3001\u751f\u6210\u63d0\u4ea4\uff0c\u5e76\u57fa\u4e8e\u5b89\u5168\u7b56\u7565\u63a7\u5236\u662f\u5426\u63a8\u9001\u3002",
+      "path": ".github/skills/workspace-github-auto-sync",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/workspace-github-auto-sync"
+    }
+  ]
+}
