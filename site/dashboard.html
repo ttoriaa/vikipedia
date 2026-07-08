@@ -15,11 +15,39 @@
       --card: rgba(255, 255, 255, 0.88);
       --accent: #c55300;
       --accent-2: #ff8a00;
+      --viki-font-body: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      --viki-brand-solid: #c55300;
+      --viki-brand-ink: #ffffff;
+      --viki-brand-grad: linear-gradient(135deg, var(--accent), var(--accent-2));
+      --viki-shadow-launcher: 0 16px 34px rgba(18, 32, 43, 0.24);
+      --viki-shadow-panel: 0 24px 56px rgba(18, 32, 43, 0.28);
+      --viki-widget-text: #f5f9ff;
+      --viki-widget-muted: #cad8eb;
+      --viki-widget-muted-2: #d8e4f3;
+      --viki-widget-muted-3: #c2d1e6;
+      --viki-widget-line-strong: rgba(255, 255, 255, 0.34);
+      --viki-widget-line: rgba(255, 255, 255, 0.24);
+      --viki-widget-line-soft: rgba(255, 255, 255, 0.18);
+      --viki-widget-line-faint: rgba(255, 255, 255, 0.14);
+      --viki-widget-panel-bg: linear-gradient(160deg, rgba(18, 35, 61, 0.97), rgba(11, 23, 42, 0.95));
+      --viki-widget-btn-bg: rgba(16, 31, 53, 0.9);
+      --viki-widget-btn-text: #f0f6ff;
+      --viki-widget-intro-bg: rgba(28, 52, 84, 0.7);
+      --viki-widget-chip-bg: rgba(17, 38, 67, 0.88);
+      --viki-widget-chip-text: #ecf3ff;
+      --viki-widget-select-bg: rgba(12, 26, 47, 0.96);
+      --viki-widget-lang-bg: rgba(13, 24, 44, 0.94);
+      --viki-widget-messages-bg: rgba(8, 18, 34, 0.84);
+      --viki-widget-msg-bg: rgba(24, 49, 81, 0.85);
+      --viki-widget-msg-user-bg: rgba(197, 83, 0, 0.28);
+      --viki-widget-msg-error-bg: rgba(179, 38, 73, 0.36);
+      --viki-widget-input-bg: rgba(9, 20, 39, 0.95);
+      --viki-widget-input-text: #f3f7ff;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-family: var(--viki-font-body);
       color: var(--ink);
       background:
         radial-gradient(900px 480px at 0% 0%, #ffd9b7 0%, transparent 55%),
@@ -115,11 +143,11 @@
       <h1>可视化 Dashboard</h1>
       <p class="sub">该可视化由数据表页同源数据自动生成，用于快速观察车型分布、充电效率与关键指标差异。</p>
       <div class="meta">
-        <span class="pill">数据日期: 2026-07-07</span>
+        <span class="pill">数据日期: 2026-07-08</span>
         <span class="pill">来源: data.html 同批数据</span>
         <span class="pill">AI Assistant: GLM</span>
       </div>
-      <iframe class="frame" src="reports/2026-07-07/charging_visualization_dashboard.html" title="Charging Dashboard"></iframe>
+      <iframe class="frame" src="reports/2026-07-08/charging_visualization_dashboard.html" title="Charging Dashboard"></iframe>
       <p class="foot">AI Assistant 通过后端代理调用 GLM，页面端不保存也不暴露 API Key。</p>
     </section>
   </div>
@@ -145,6 +173,6 @@
       };
     })();
   </script>
-  <script src="assistant-widget.js?v=20260707-glm-dashboard"></script>
+  <script src="assistant-widget.js?v=20260708-shared-tokens"></script>
 </body>
 </html>
