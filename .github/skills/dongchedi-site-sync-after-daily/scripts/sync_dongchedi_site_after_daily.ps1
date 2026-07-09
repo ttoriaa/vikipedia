@@ -1,7 +1,7 @@
 param(
     [string]$Date,
-    [string]$Deploy = 'false',
-    [string]$DispatchWorkflow = 'false'
+    [string]$Deploy = 'true',
+    [string]$DispatchWorkflow = 'true'
 )
 
 $ErrorActionPreference = 'Stop'
