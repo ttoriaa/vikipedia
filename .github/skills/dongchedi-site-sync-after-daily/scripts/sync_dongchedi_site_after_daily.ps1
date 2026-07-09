@@ -127,7 +127,8 @@ try {
             "site/reports/$resolvedDate"
         )
 
-        git add -- $siteTargets
+            git add -- 'site/data.html' 'site/dashboard.html' 'site/insights.html' 'site/index.html' 'site/latest/charging_visualization_dashboard.html'
+            git add -f -- "site/reports/$resolvedDate"
         $hasStaged = (git diff --cached --name-only).Trim()
         if ($hasStaged) {
             git commit -m "chore: sync dongchedi site for $resolvedDate"
