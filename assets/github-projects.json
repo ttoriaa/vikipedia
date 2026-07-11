@@ -1,7 +1,18 @@
 {
-  "generated_at": "2026-07-10T15:38:21.130549+00:00",
+  "generated_at": "2026-07-11T05:23:11.010687+00:00",
   "source": "https://github.com/ttoriaa",
   "projects": [
+    {
+      "name": "vikipedia",
+      "description": "",
+      "url": "https://ttoriaa.github.io/vikipedia/",
+      "url_type": "pages",
+      "target_label": "Live",
+      "repo_url": "https://github.com/ttoriaa/vikipedia",
+      "language": "HTML",
+      "category": "Project",
+      "pushed_at": "2026-07-11T04:39:20Z"
+    },
     {
       "name": "VikipediAi",
       "description": "",
@@ -11,7 +22,18 @@
       "repo_url": "https://github.com/ttoriaa/VikipediAi",
       "language": "HTML",
       "category": "Project",
-      "pushed_at": "2026-07-10T15:07:10Z"
+      "pushed_at": "2026-07-11T03:48:49Z"
+    },
+    {
+      "name": "shimai-podcast-site",
+      "description": "For podcast website.",
+      "url": "https://ttoriaa.github.io/shimai-podcast-site/",
+      "url_type": "pages",
+      "target_label": "Live",
+      "repo_url": "https://github.com/ttoriaa/shimai-podcast-site",
+      "language": "JavaScript",
+      "category": "Project",
+      "pushed_at": "2026-07-10T21:59:51Z"
     },
     {
       "name": "automotive-benchmarking",
@@ -23,28 +45,6 @@
       "language": "HTML",
       "category": "Project",
       "pushed_at": "2026-07-10T14:57:23Z"
-    },
-    {
-      "name": "shimai-podcast-site",
-      "description": "For podcast website.",
-      "url": "https://ttoriaa.github.io/shimai-podcast-site/",
-      "url_type": "pages",
-      "target_label": "Live",
-      "repo_url": "https://github.com/ttoriaa/shimai-podcast-site",
-      "language": "JavaScript",
-      "category": "Project",
-      "pushed_at": "2026-07-10T13:26:16Z"
-    },
-    {
-      "name": "vikipedia",
-      "description": "",
-      "url": "https://ttoriaa.github.io/vikipedia/",
-      "url_type": "pages",
-      "target_label": "Live",
-      "repo_url": "https://github.com/ttoriaa/vikipedia",
-      "language": "HTML",
-      "category": "Project",
-      "pushed_at": "2026-07-10T07:17:57Z"
     },
     {
       "name": "C7-OTA-Hub",
