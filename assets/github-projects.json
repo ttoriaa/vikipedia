@@ -1,18 +1,7 @@
 {
-  "generated_at": "2026-07-12T05:39:06.058768+00:00",
+  "generated_at": "2026-07-13T05:27:49.235575+00:00",
   "source": "https://github.com/ttoriaa",
   "projects": [
-    {
-      "name": "shimai-podcast-site",
-      "description": "For podcast website.",
-      "url": "https://ttoriaa.github.io/shimai-podcast-site/",
-      "url_type": "pages",
-      "target_label": "Live",
-      "repo_url": "https://github.com/ttoriaa/shimai-podcast-site",
-      "language": "JavaScript",
-      "category": "Project",
-      "pushed_at": "2026-07-12T04:51:05Z"
-    },
     {
       "name": "vikipedia",
       "description": "",
@@ -22,7 +11,7 @@
       "repo_url": "https://github.com/ttoriaa/vikipedia",
       "language": "HTML",
       "category": "Project",
-      "pushed_at": "2026-07-12T04:50:03Z"
+      "pushed_at": "2026-07-13T04:57:31Z"
     },
     {
       "name": "VikipediAi",
@@ -33,7 +22,18 @@
       "repo_url": "https://github.com/ttoriaa/VikipediAi",
       "language": "HTML",
       "category": "Project",
-      "pushed_at": "2026-07-12T04:04:37Z"
+      "pushed_at": "2026-07-13T04:06:39Z"
+    },
+    {
+      "name": "shimai-podcast-site",
+      "description": "For podcast website.",
+      "url": "https://ttoriaa.github.io/shimai-podcast-site/",
+      "url_type": "pages",
+      "target_label": "Live",
+      "repo_url": "https://github.com/ttoriaa/shimai-podcast-site",
+      "language": "JavaScript",
+      "category": "Project",
+      "pushed_at": "2026-07-13T02:34:47Z"
     },
     {
       "name": "automotive-benchmarking",
@@ -44,7 +44,7 @@
       "repo_url": "https://github.com/ttoriaa/automotive-benchmarking",
       "language": "HTML",
       "category": "Project",
-      "pushed_at": "2026-07-11T07:40:43Z"
+      "pushed_at": "2026-07-13T01:37:10Z"
     },
     {
       "name": "C7-OTA-Hub",
@@ -55,7 +55,7 @@
       "repo_url": "https://github.com/ttoriaa/C7-OTA-Hub",
       "language": "HTML",
       "category": "Project",
-      "pushed_at": "2026-07-11T05:23:25Z"
+      "pushed_at": "2026-07-12T05:39:46Z"
     },
     {
       "name": "product-manager",
