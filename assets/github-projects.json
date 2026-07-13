@@ -1,7 +1,18 @@
 {
-  "generated_at": "2026-07-13T05:27:49.235575+00:00",
+  "generated_at": "2026-07-13T05:49:31.150916+00:00",
   "source": "https://github.com/ttoriaa",
   "projects": [
+    {
+      "name": "interview-depot",
+      "description": "",
+      "url": "https://ttoriaa.github.io/interview-depot/",
+      "url_type": "pages",
+      "target_label": "Live",
+      "repo_url": "https://github.com/ttoriaa/interview-depot",
+      "language": "HTML",
+      "category": "Project",
+      "pushed_at": "2026-07-13T05:41:33Z"
+    },
     {
       "name": "vikipedia",
       "description": "",
@@ -11,7 +22,7 @@
       "repo_url": "https://github.com/ttoriaa/vikipedia",
       "language": "HTML",
       "category": "Project",
-      "pushed_at": "2026-07-13T04:57:31Z"
+      "pushed_at": "2026-07-13T05:30:56Z"
     },
     {
       "name": "VikipediAi",
@@ -89,17 +100,6 @@
       "language": "Python",
       "category": "Project",
       "pushed_at": "2026-06-22T05:53:35Z"
-    },
-    {
-      "name": "gaming-vikipedia",
-      "description": "",
-      "url": "https://ttoriaa.github.io/gaming-vikipedia/",
-      "url_type": "pages",
-      "target_label": "Live",
-      "repo_url": "https://github.com/ttoriaa/gaming-vikipedia",
-      "language": "JavaScript",
-      "category": "Project",
-      "pushed_at": "2026-06-16T08:35:25Z"
     }
   ]
 }
