@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-08T09:33:49.757171+00:00",
+  "generated_at": "2026-07-13T06:53:08.376558+00:00",
   "repo": "ttoriaa/vikipedia",
-  "count": 32,
+  "count": 34,
   "skills": [
     {
       "slug": "agent-regression-evaluator",
@@ -86,6 +86,20 @@
       "description": "\u5728\u4f60\u5b8c\u6210\u5f53\u65e5\u61c2\u8f66\u5e1d\u5145\u7535\u6570\u636e\u66f4\u65b0\u540e\uff0c\u81ea\u52a8\u91cd\u5efa\u7f51\u7ad9\u6570\u636e\u9875\u3001\u53ef\u89c6\u5316\u9875\u9762\u548c\u8d8b\u52bf\u603b\u7ed3\u9875\u9762\uff0c\u5e76\u6309\u9700\u89e6\u53d1 GitHub Pages \u90e8\u7f72\uff0c\u8ba9\u7ebf\u4e0a\u7ad9\u70b9\u5c3d\u5feb\u540c\u6b65\u3002",
       "path": ".github/skills/dongchedi-site-sync-after-daily",
       "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/dongchedi-site-sync-after-daily"
+    },
+    {
+      "slug": "ev-benchmark-daily-publisher",
+      "title": "Ev Benchmark Daily Publisher",
+      "description": "\u5c06\u5f53\u65e5 EV Charging Benchmarking \u62a5\u544a\u4ece\u5f53\u524d\u5de5\u4f5c\u4ed3\u5e93\u540c\u6b65\u5230 automotive-benchmarking\uff0c\u5e76\u901a\u8fc7\u6700\u5c0f\u63d0\u4ea4\u89e6\u53d1\u8fdc\u7aef GitHub Pages \u6784\u5efa\uff0c\u6700\u7ec8\u6821\u9a8c\u7ebf\u4e0a\u9875\u9762\u662f\u5426\u547d\u4e2d\u76ee\u6807\u65e5\u671f\u3002",
+      "path": ".github/skills/ev-benchmark-daily-publisher",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/ev-benchmark-daily-publisher"
+    },
+    {
+      "slug": "ev-benchmark-deploy-watchdog",
+      "title": "Ev Benchmark Deploy Watchdog",
+      "description": "\u5de1\u68c0 EV Charging Benchmarking \u7ebf\u4e0a\u9875\u9762\u662f\u5426\u547d\u4e2d\u76ee\u6807\u65e5\u671f\uff1b\u82e5\u843d\u540e\u53ef\u81ea\u52a8\u89e6\u53d1\u53d1\u5e03 skill\uff0c\u5b9e\u73b0\u201c\u68c0\u6d4b -> \u4fee\u590d -> \u590d\u68c0\u201d\u7684\u95ed\u73af\u3002",
+      "path": ".github/skills/ev-benchmark-deploy-watchdog",
+      "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/ev-benchmark-deploy-watchdog"
     },
     {
       "slug": "foundation-model-release-watch",
@@ -209,7 +223,7 @@
     {
       "slug": "vikipedia-skills-catalog-sync",
       "title": "Vikipedia Skills Catalog Sync",
-      "description": "\u628a\u5f53\u524d workspace \u4e0b `.github/skills` \u7684\u6700\u65b0\u72b6\u6001\u540c\u6b65\u5230 Vikipedia \u9996\u9875\u4f7f\u7528\u7684\u6570\u636e\u6e90 `assets/skills-catalog.json`\uff0c\u5e76\u53ef\u6309\u9700\u81ea\u52a8\u63d0\u4ea4\u548c\u63a8\u9001\u3002",
+      "description": "\u628a\u5f53\u524d workspace \u4e0b `.github/skills` \u7684\u6700\u65b0\u72b6\u6001\u540c\u6b65\u5230 Vikipedia \u9996\u9875 Skills \u533a\u5757\u4f7f\u7528\u7684\u6570\u636e\u6e90 `assets/skills-catalog.json`\uff0c\u8ba9\u9996\u9875\u5c55\u793a\u7684 skill \u5217\u8868\u59cb\u7ec8\u548c\u672c\u5730 workspace \u4fdd\u6301\u4e00\u81f4\uff0c\u5e76\u53ef\u6309\u9700\u81ea\u52a8\u63d0\u4ea4\u548c\u63a8\u9001\u3002",
       "path": ".github/skills/vikipedia-skills-catalog-sync",
       "url": "https://github.com/ttoriaa/vikipedia/tree/main/.github/skills/vikipedia-skills-catalog-sync"
     },
