@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-14T05:10:33.170649+00:00",
+  "generated_at": "2026-07-15T05:10:51.536463+00:00",
   "source": "https://github.com/ttoriaa",
   "projects": [
     {
@@ -11,18 +11,7 @@
       "repo_url": "https://github.com/ttoriaa/vikipedia",
       "language": "HTML",
       "category": "Project",
-      "pushed_at": "2026-07-14T04:24:54Z"
-    },
-    {
-      "name": "shimai-podcast-site",
-      "description": "For podcast website.",
-      "url": "https://ttoriaa.github.io/shimai-podcast-site/",
-      "url_type": "pages",
-      "target_label": "Live",
-      "repo_url": "https://github.com/ttoriaa/shimai-podcast-site",
-      "language": "JavaScript",
-      "category": "Project",
-      "pushed_at": "2026-07-14T03:55:04Z"
+      "pushed_at": "2026-07-15T04:25:01Z"
     },
     {
       "name": "VikipediAi",
@@ -33,7 +22,18 @@
       "repo_url": "https://github.com/ttoriaa/VikipediAi",
       "language": "HTML",
       "category": "Project",
-      "pushed_at": "2026-07-14T03:41:50Z"
+      "pushed_at": "2026-07-15T03:41:53Z"
+    },
+    {
+      "name": "shimai-podcast-site",
+      "description": "For podcast website.",
+      "url": "https://ttoriaa.github.io/shimai-podcast-site/",
+      "url_type": "pages",
+      "target_label": "Live",
+      "repo_url": "https://github.com/ttoriaa/shimai-podcast-site",
+      "language": "JavaScript",
+      "category": "Project",
+      "pushed_at": "2026-07-15T02:12:15Z"
     },
     {
       "name": "automotive-benchmarking",
@@ -44,7 +44,18 @@
       "repo_url": "https://github.com/ttoriaa/automotive-benchmarking",
       "language": "HTML",
       "category": "Project",
-      "pushed_at": "2026-07-13T06:20:07Z"
+      "pushed_at": "2026-07-15T01:42:23Z"
+    },
+    {
+      "name": "market-research",
+      "description": "",
+      "url": "https://ttoriaa.github.io/market-research/",
+      "url_type": "pages",
+      "target_label": "Live",
+      "repo_url": "https://github.com/ttoriaa/market-research",
+      "language": "Python",
+      "category": "Project",
+      "pushed_at": "2026-07-14T06:14:37Z"
     },
     {
       "name": "C7-OTA-Hub",
@@ -55,7 +66,7 @@
       "repo_url": "https://github.com/ttoriaa/C7-OTA-Hub",
       "language": "HTML",
       "category": "Project",
-      "pushed_at": "2026-07-13T05:49:31Z"
+      "pushed_at": "2026-07-14T06:13:36Z"
     },
     {
       "name": "interview-depot",
@@ -89,17 +100,6 @@
       "language": "HTML",
       "category": "Project",
       "pushed_at": "2026-07-07T02:51:39Z"
-    },
-    {
-      "name": "market-research",
-      "description": "",
-      "url": "https://ttoriaa.github.io/market-research/",
-      "url_type": "pages",
-      "target_label": "Live",
-      "repo_url": "https://github.com/ttoriaa/market-research",
-      "language": "Python",
-      "category": "Project",
-      "pushed_at": "2026-06-22T05:53:35Z"
     }
   ]
 }
