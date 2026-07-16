@@ -1,7 +1,40 @@
 {
-  "generated_at": "2026-07-16T03:56:58.892487+00:00",
+  "generated_at": "2026-07-16T05:21:35.400720+00:00",
   "source": "https://github.com/ttoriaa",
   "projects": [
+    {
+      "name": "C7-OTA-Hub",
+      "description": "",
+      "url": "https://ttoriaa.github.io/C7-OTA-Hub/",
+      "url_type": "pages",
+      "target_label": "Live",
+      "repo_url": "https://github.com/ttoriaa/C7-OTA-Hub",
+      "language": "HTML",
+      "category": "Project",
+      "pushed_at": "2026-07-16T05:21:32Z"
+    },
+    {
+      "name": "vikipedia",
+      "description": "",
+      "url": "https://ttoriaa.github.io/vikipedia/",
+      "url_type": "pages",
+      "target_label": "Live",
+      "repo_url": "https://github.com/ttoriaa/vikipedia",
+      "language": "HTML",
+      "category": "Project",
+      "pushed_at": "2026-07-16T04:36:20Z"
+    },
+    {
+      "name": "shimai-podcast-site",
+      "description": "For podcast website.",
+      "url": "https://ttoriaa.github.io/shimai-podcast-site/",
+      "url_type": "pages",
+      "target_label": "Live",
+      "repo_url": "https://github.com/ttoriaa/shimai-podcast-site",
+      "language": "JavaScript",
+      "category": "Project",
+      "pushed_at": "2026-07-16T04:07:10Z"
+    },
     {
       "name": "VikipediAi",
       "description": "",
@@ -34,39 +67,6 @@
       "language": "HTML",
       "category": "Project",
       "pushed_at": "2026-07-16T02:33:29Z"
-    },
-    {
-      "name": "shimai-podcast-site",
-      "description": "For podcast website.",
-      "url": "https://ttoriaa.github.io/shimai-podcast-site/",
-      "url_type": "pages",
-      "target_label": "Live",
-      "repo_url": "https://github.com/ttoriaa/shimai-podcast-site",
-      "language": "JavaScript",
-      "category": "Project",
-      "pushed_at": "2026-07-16T00:55:17Z"
-    },
-    {
-      "name": "C7-OTA-Hub",
-      "description": "",
-      "url": "https://ttoriaa.github.io/C7-OTA-Hub/",
-      "url_type": "pages",
-      "target_label": "Live",
-      "repo_url": "https://github.com/ttoriaa/C7-OTA-Hub",
-      "language": "HTML",
-      "category": "Project",
-      "pushed_at": "2026-07-15T05:10:58Z"
-    },
-    {
-      "name": "vikipedia",
-      "description": "",
-      "url": "https://ttoriaa.github.io/vikipedia/",
-      "url_type": "pages",
-      "target_label": "Live",
-      "repo_url": "https://github.com/ttoriaa/vikipedia",
-      "language": "HTML",
-      "category": "Project",
-      "pushed_at": "2026-07-15T05:10:52Z"
     },
     {
       "name": "market-research",
