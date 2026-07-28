@@ -55,6 +55,9 @@ jobs:
           if [ -f assets/profile.jpg ]; then
             cp assets/profile.jpg out/assets/profile.jpg
           fi
+          if [ -d assets/personal-gallery ]; then
+            cp -R assets/personal-gallery out/assets/personal-gallery
+          fi
           if [ -f assistant-widget.js ]; then
             cp assistant-widget.js out/assistant-widget.js
           fi
