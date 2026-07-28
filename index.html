@@ -354,41 +354,121 @@
 
     .hobby-list {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: 1fr;
       gap: 10px;
       margin-top: 12px;
     }
 
     .hobby-chip {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      align-items: start;
-      gap: 2px 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
       padding: 13px;
       border: 1px solid var(--line);
       border-radius: 16px;
       background: rgba(124, 92, 255, 0.08);
-      color: var(--ink);
       font-size: 13px;
       font-weight: 700;
     }
 
     .hobby-chip span[aria-hidden="true"] {
-      grid-row: 1 / span 2;
-      font-size: 17px;
+      font-size: 20px;
       line-height: 1;
     }
 
-    .hobby-copy {
-      display: grid;
-      gap: 3px;
+    .hobby-label {
+      color: var(--ink);
+      font-size: 15px;
+      letter-spacing: 0.01em;
     }
 
-    .hobby-description {
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 500;
-      line-height: 1.55;
+    .personal-showcase {
+      display: grid;
+      grid-template-columns: minmax(220px, 0.72fr) minmax(0, 1.48fr);
+      gap: 16px;
+      margin-top: 16px;
+      align-items: stretch;
+    }
+
+    .personal-showcase > .resume-card {
+      height: 100%;
+    }
+
+    .personal-gallery {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      grid-template-rows: repeat(10, 30px);
+      gap: 8px;
+      min-height: 372px;
+      padding: 16px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background:
+        radial-gradient(circle at 18% 20%, rgba(179, 137, 255, 0.24), transparent 32%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(124, 92, 255, 0.08));
+    }
+
+    .personal-gallery::before {
+      content: "TRAVEL NOTES";
+      position: absolute;
+      right: 18px;
+      bottom: 10px;
+      color: rgba(255, 255, 255, 0.28);
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+    }
+
+    .personal-gallery figure {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      overflow: hidden;
+      border: 4px solid rgba(255, 255, 255, 0.92);
+      border-radius: 14px;
+      background: #17131f;
+      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.28);
+      transition: transform 0.25s ease, z-index 0s;
+    }
+
+    .personal-gallery figure:hover {
+      z-index: 5;
+      transform: rotate(0deg) scale(1.035);
+    }
+
+    .personal-gallery img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .gallery-hong-kong {
+      grid-column: 1 / span 4;
+      grid-row: 1 / span 7;
+      transform: rotate(-2deg);
+    }
+
+    .gallery-bali {
+      grid-column: 5 / span 4;
+      grid-row: 2 / span 5;
+      transform: rotate(2deg);
+    }
+
+    .gallery-venice {
+      grid-column: 9 / span 4;
+      grid-row: 1 / span 7;
+      transform: rotate(-1.5deg);
+    }
+
+    .gallery-rome {
+      grid-column: 4 / span 6;
+      grid-row: 6 / span 5;
+      z-index: 2;
+      transform: rotate(1.2deg);
     }
 
     .resume-hero {
@@ -1999,6 +2079,10 @@
       color: #a8bfdc;
     }
 
+    .dark-theme .hobby-label {
+      color: #fff;
+    }
+
     .dark-theme .resume-role,
     .dark-theme .resume-meta,
     .dark-theme .resume-photo-fallback {
@@ -2138,6 +2222,15 @@
 
       .hobby-list {
         grid-template-columns: 1fr;
+      }
+
+      .personal-showcase {
+        grid-template-columns: 1fr;
+      }
+
+      .personal-gallery {
+        grid-template-rows: repeat(10, 26px);
+        min-height: 330px;
       }
 
       .resume-photo-wrap {
@@ -2632,23 +2725,6 @@
               </ul>
             </article>
 
-            <article class="resume-card">
-              <h3 data-i18n="resumeHobbiesTitle">Personal Interests</h3>
-              <div class="hobby-list" role="list">
-                <div class="hobby-chip" role="listitem">
-                  <span aria-hidden="true">⛷️</span>
-                  <span class="hobby-copy"><span data-i18n="resumeHobbySkiing">Skiing</span><span class="hobby-description" data-i18n="resumeHobbySkiingDesc">Finding focus, rhythm, and freedom on the slopes.</span></span>
-                </div>
-                <div class="hobby-chip" role="listitem">
-                  <span aria-hidden="true">📷</span>
-                  <span class="hobby-copy"><span data-i18n="resumeHobbyPhotography">Photography</span><span class="hobby-description" data-i18n="resumeHobbyPhotographyDesc">Capturing light, people, and stories along the journey.</span></span>
-                </div>
-                <div class="hobby-chip" role="listitem">
-                  <span aria-hidden="true">⛰️</span>
-                  <span class="hobby-copy"><span data-i18n="resumeHobbyHiking">Mountaineering</span><span class="hobby-description" data-i18n="resumeHobbyHikingDesc">Exploring nature with endurance, curiosity, and an open mind.</span></span>
-                </div>
-              </div>
-            </article>
           </div>
 
           <div class="resume-col">
@@ -2709,6 +2785,22 @@
                 </article>
               </div>
             </article>
+          </div>
+        </div>
+        <div class="personal-showcase">
+          <article class="resume-card">
+            <h3 data-i18n="resumeHobbiesTitle">Personal Interests</h3>
+            <div class="hobby-list" role="list">
+              <div class="hobby-chip" role="listitem"><span aria-hidden="true">⛷️</span><span class="hobby-label" data-i18n="resumeHobbySkiing">Skiing</span></div>
+              <div class="hobby-chip" role="listitem"><span aria-hidden="true">📷</span><span class="hobby-label" data-i18n="resumeHobbyPhotography">Photography</span></div>
+              <div class="hobby-chip" role="listitem"><span aria-hidden="true">⛰️</span><span class="hobby-label" data-i18n="resumeHobbyHiking">Mountaineering</span></div>
+            </div>
+          </article>
+          <div class="personal-gallery" aria-label="Personal travel photo collage">
+            <figure class="gallery-hong-kong"><img src="assets/personal-gallery/hong-kong.jpg" alt="Street portrait in Hong Kong" loading="lazy" /></figure>
+            <figure class="gallery-bali"><img src="assets/personal-gallery/bali.jpg" alt="Portrait overlooking the rice terraces in Bali" loading="lazy" /></figure>
+            <figure class="gallery-venice"><img src="assets/personal-gallery/venice.jpg" alt="Walking beside the water in Venice" loading="lazy" /></figure>
+            <figure class="gallery-rome"><img src="assets/personal-gallery/rome.jpg" alt="Street portrait beside the Colosseum in Rome" loading="lazy" /></figure>
           </div>
         </div>
       </section>
@@ -2918,11 +3010,8 @@
           resumeSkill4: 'Bilingual communication: Chinese / English',
           resumeHobbiesTitle: 'Personal Interests',
           resumeHobbySkiing: 'Skiing',
-          resumeHobbySkiingDesc: 'Finding focus, rhythm, and freedom on the slopes.',
           resumeHobbyPhotography: 'Photography',
-          resumeHobbyPhotographyDesc: 'Capturing light, people, and stories along the journey.',
           resumeHobbyHiking: 'Mountaineering',
-          resumeHobbyHikingDesc: 'Exploring nature with endurance, curiosity, and an open mind.',
           skillsTitle: 'Skills',
           skillsIntro: 'A dedicated index of trained skills in this repository. Each card links to the corresponding skill folder.',
           skillsLoading: 'Loading skills from repository...',
@@ -3038,11 +3127,8 @@
           resumeSkill4: '中英双语沟通与内容交付',
           resumeHobbiesTitle: '个人爱好',
           resumeHobbySkiing: '滑雪',
-          resumeHobbySkiingDesc: '在雪道上寻找专注、节奏与自由。',
           resumeHobbyPhotography: '摄影',
-          resumeHobbyPhotographyDesc: '记录旅途中的光影、人物与故事。',
           resumeHobbyHiking: '登山',
-          resumeHobbyHikingDesc: '用耐力与好奇心探索自然，保持开放。',
           skillsTitle: '技能库',
           skillsIntro: '这里集中展示仓库中已训练的 skills。每张卡片都可直接跳转到对应 skill 目录。',
           skillsLoading: '正在从仓库加载 skills...',
