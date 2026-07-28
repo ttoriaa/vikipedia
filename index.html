@@ -352,6 +352,31 @@
       margin-top: 8px;
     }
 
+    .hobby-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .hobby-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(124, 92, 255, 0.08);
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .hobby-chip span[aria-hidden="true"] {
+      font-size: 17px;
+      line-height: 1;
+    }
+
     .resume-hero {
       background: linear-gradient(140deg, rgba(123, 97, 255, 0.14), rgba(255, 255, 255, 0.92));
     }
@@ -2172,7 +2197,7 @@
         <button class="top-tab" type="button" data-tab-target="token" data-i18n="tabToken">Token</button>
       </div>
       <nav class="top-links" aria-label="快速入口">
-        <button id="langToggle" class="lang-toggle" type="button">中文</button>
+        <button id="langToggle" class="lang-toggle" type="button" aria-live="polite">中 / EN</button>
         <a href="https://ttoriaa.github.io/VikipediAi/" target="_blank" rel="noreferrer">VikipediAi</a>
         <a href="https://ttoriaa.github.io/automotive-benchmarking" target="_blank" rel="noreferrer">Battery &amp; Charging</a>
         <a href="https://ttoriaa.github.io/vikipedia/market_watch/" target="_blank" rel="noreferrer">Market Watch</a>
@@ -2588,6 +2613,15 @@
                 <li data-i18n="resumeSkill4">Bilingual communication: Chinese / English</li>
               </ul>
             </article>
+
+            <article class="resume-card">
+              <h3 data-i18n="resumeHobbiesTitle">Personal Interests</h3>
+              <div class="hobby-list" role="list">
+                <span class="hobby-chip" role="listitem"><span aria-hidden="true">⛷️</span><span data-i18n="resumeHobbySkiing">Skiing</span></span>
+                <span class="hobby-chip" role="listitem"><span aria-hidden="true">📷</span><span data-i18n="resumeHobbyPhotography">Photography</span></span>
+                <span class="hobby-chip" role="listitem"><span aria-hidden="true">⛰️</span><span data-i18n="resumeHobbyHiking">Mountaineering</span></span>
+              </div>
+            </article>
           </div>
 
           <div class="resume-col">
@@ -2596,10 +2630,12 @@
               <div class="resume-timeline">
                 <article class="resume-card">
                   <h3 data-i18n="timelineBmwTitle">BMW (China) Services Ltd.</h3>
-                  <div class="resume-meta" data-i18n="timelineBmwMeta">Powertrain Data Management | 2024/05 - Present | Beijing</div>
+                  <div class="resume-meta" data-i18n="timelineBmwMeta">Powertrain Data Management | 2024/05 - 2026/07 | Beijing</div>
                   <ul class="resume-list">
-                    <li data-i18n="timelineBmw1">Led an enterprise-government OTA data platform with cross-functional stakeholders across China and Germany teams.</li>
-                    <li data-i18n="timelineBmw2">Built end-to-end powertrain data framework from signal setup and compliance to analytics and quality use cases.</li>
+                    <li data-i18n="timelineBmw1">Built powertrain data platforms for regulatory and homologation requirements, enabling OTA, remote diagnostics, SOH prediction, vehicle quality monitoring, and after-sales services.</li>
+                    <li data-i18n="timelineBmw2">Led external data collaboration as the central coordinator across government authorities, China and Germany R&amp;D, legal, compliance, and data governance teams.</li>
+                    <li data-i18n="timelineBmw3">Designed Generative AI solutions for enterprise knowledge management, diagnostic assistance, and engineering collaboration; evaluated RAG and AI Agent workflows from requirements through solution design.</li>
+                    <li data-i18n="timelineBmw4">Researched the AI ecosystem and automotive applications, assessing LLMs and tools including ChatGPT, Claude, GitHub Copilot, and Cursor for knowledge research, content generation, problem analysis, and R&amp;D collaboration.</li>
                   </ul>
                 </article>
                 <article class="resume-card">
@@ -2822,9 +2858,11 @@
           resumePhotoFallback: 'Profile Photo / assets/profile.jpg',
           resumeProfileBody: 'Product-minded storyteller and builder focused on automotive strategy, digital product narratives, and data-driven communication across cross-functional teams.',
           timelineBmwTitle: 'BMW (China) Services Ltd.',
-          timelineBmwMeta: 'Powertrain Data Management | 2024/05 - Present | Beijing',
-          timelineBmw1: 'Led an enterprise-government OTA data platform with cross-functional stakeholders across China and Germany teams.',
-          timelineBmw2: 'Built end-to-end powertrain data framework from signal setup and compliance to analytics and quality use cases.',
+          timelineBmwMeta: 'Powertrain Data Management | 2024/05 - 2026/07 | Beijing',
+          timelineBmw1: 'Built powertrain data platforms for regulatory and homologation requirements, enabling OTA, remote diagnostics, SOH prediction, vehicle quality monitoring, and after-sales services.',
+          timelineBmw2: 'Led external data collaboration as the central coordinator across government authorities, China and Germany R&D, legal, compliance, and data governance teams.',
+          timelineBmw3: 'Designed Generative AI solutions for enterprise knowledge management, diagnostic assistance, and engineering collaboration; evaluated RAG and AI Agent workflows from requirements through solution design.',
+          timelineBmw4: 'Researched the AI ecosystem and automotive applications, assessing LLMs and tools including ChatGPT, Claude, GitHub Copilot, and Cursor for knowledge research, content generation, problem analysis, and R&D collaboration.',
           timelineEyTitle: 'Ernst & Young (China) Advisory',
           timelineEyMeta: 'Technology Risk Consultant | 2023/08 - 2024/04 | Shanghai',
           timelineEy1: 'Delivered digital transformation and technology risk consulting with process and metric mapping.',
@@ -2851,6 +2889,10 @@
           resumeSkill2: 'Data-to-insight transformation for dashboard experiences',
           resumeSkill3: 'Web prototyping with HTML, CSS, JavaScript',
           resumeSkill4: 'Bilingual communication: Chinese / English',
+          resumeHobbiesTitle: 'Personal Interests',
+          resumeHobbySkiing: 'Skiing',
+          resumeHobbyPhotography: 'Photography',
+          resumeHobbyHiking: 'Mountaineering',
           skillsTitle: 'Skills',
           skillsIntro: 'A dedicated index of trained skills in this repository. Each card links to the corresponding skill folder.',
           skillsLoading: 'Loading skills from repository...',
@@ -2879,7 +2921,7 @@
           tokenPatternsTitle: 'Patterns Observed',
           tokenLessonsTitle: 'Experience and Lessons',
           tokenNextActionsTitle: 'Next Actions',
-          langButton: '中文'
+          langButton: '中 / EN'
         },
         zh: {
           pageTitle: "Vikipedia: Let's roll.",
@@ -2933,9 +2975,11 @@
           resumePhotoFallback: '个人照片 / assets/profile.jpg',
           resumeProfileBody: '以产品叙事与落地构建为核心，关注汽车战略、数字化产品表达与数据驱动沟通，擅长跨团队协作推进。',
           timelineBmwTitle: '宝马（中国）服务有限公司',
-          timelineBmwMeta: 'Powertrain Data Management | 2024/05 - 至今 | 北京',
-          timelineBmw1: '牵头企业-政府 OTA 数据平台项目，协调中国与德国团队及多部门利益相关方推进交付。',
-          timelineBmw2: '搭建动力总成端到端数据体系，覆盖信号定义、数据合规、分析应用与质量场景。',
+          timelineBmwMeta: 'Powertrain Data Management | 2024/05 - 2026/07 | 北京',
+          timelineBmw1: '负责标准与准入相关的动力总成数据平台建设，围绕 OTA、远程诊断、SOH 预测等场景，支持车辆质量监控与售后技术服务升级。',
+          timelineBmw2: '牵头对外数据合作项目，协调政府机构、中德研发团队及法规、数据合规等多方资源，推进企业级数据传输、合规治理与平台交付。',
+          timelineBmw3: '主导生成式 AI 在企业知识管理、故障诊断辅助与工程协同场景的落地探索，完成需求分析与方案设计，并验证 RAG、AI Agent Workflow 等技术路线。',
+          timelineBmw4: '持续研究 AI 全生态产品及汽车行业应用，评估 ChatGPT、Claude、GitHub Copilot、Cursor 等工具在知识调研、文档生成、问题分析与研发协同中的价值。',
           timelineEyTitle: '安永（中国）企业咨询有限公司',
           timelineEyMeta: 'Technology Risk Consultant | 2023/08 - 2024/04 | 上海',
           timelineEy1: '为大型企业提供数字化转型与技术风险咨询，梳理流程、指标与系统风险。',
@@ -2962,6 +3006,10 @@
           resumeSkill2: '从数据到洞察的可视化与仪表盘体验设计',
           resumeSkill3: 'HTML / CSS / JavaScript 快速原型构建',
           resumeSkill4: '中英双语沟通与内容交付',
+          resumeHobbiesTitle: '个人爱好',
+          resumeHobbySkiing: '滑雪',
+          resumeHobbyPhotography: '摄影',
+          resumeHobbyHiking: '登山',
           skillsTitle: '技能库',
           skillsIntro: '这里集中展示仓库中已训练的 skills。每张卡片都可直接跳转到对应 skill 目录。',
           skillsLoading: '正在从仓库加载 skills...',
@@ -2990,7 +3038,7 @@
           tokenPatternsTitle: '观察到的模式',
           tokenLessonsTitle: '经验与沉淀',
           tokenNextActionsTitle: '下一步建议',
-          langButton: 'English'
+          langButton: '中 / EN'
         }
       };
 
@@ -3306,6 +3354,10 @@
           skillsSearch.placeholder = dict.skillsSearchPlaceholder || '';
         }
         document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+        window.localStorage.setItem('vikipedia-language', lang);
+        const url = new URL(window.location.href);
+        url.searchParams.set('lang', lang);
+        window.history.replaceState({}, '', url);
 
         renderSkills(lang);
         renderImpact(lang);
@@ -3317,7 +3369,11 @@
         }
       };
 
-      let currentLang = 'en';
+      const urlLang = new URLSearchParams(window.location.search).get('lang');
+      const savedLang = window.localStorage.getItem('vikipedia-language');
+      let currentLang = ['en', 'zh'].includes(urlLang)
+        ? urlLang
+        : (['en', 'zh'].includes(savedLang) ? savedLang : 'en');
       applyLanguage(currentLang);
       loadSkillsCatalog(currentLang);
       loadAutoProjects(currentLang);
