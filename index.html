@@ -454,21 +454,25 @@
 
     .gallery-bali {
       grid-column: 5 / span 4;
-      grid-row: 2 / span 5;
+      grid-row: 1 / span 5;
       transform: rotate(2deg);
     }
 
     .gallery-venice {
-      grid-column: 9 / span 4;
-      grid-row: 1 / span 7;
+      grid-column: 3 / span 6;
+      grid-row: 6 / span 5;
       transform: rotate(-1.5deg);
     }
 
     .gallery-rome {
-      grid-column: 4 / span 6;
-      grid-row: 6 / span 5;
+      grid-column: 9 / span 4;
+      grid-row: 1 / span 10;
       z-index: 2;
       transform: rotate(1.2deg);
+    }
+
+    .gallery-rome img {
+      object-fit: contain;
     }
 
     .resume-hero {
@@ -553,8 +557,12 @@
     .resume-intern-grid {
       margin-top: 10px;
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 10px;
+    }
+
+    .resume-internships {
+      margin-top: 16px;
     }
 
     .resume-timeline .resume-card {
@@ -2167,6 +2175,10 @@
       .hero-copy h1 {
         max-width: none;
       }
+
+      .resume-intern-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
     @media (max-width: 980px) {
@@ -2752,41 +2764,41 @@
               </div>
             </article>
 
-            <article class="resume-card">
-              <h3 data-i18n="resumeInternshipTitle">Internship Timeline</h3>
-              <div class="resume-intern-grid">
-                <article class="resume-card">
-                  <h3 data-i18n="resumeInternTitle1">Microsoft</h3>
-                  <div class="resume-meta" data-i18n="resumeInternMeta1">Account Technology Strategist | 2022/07 - 2022/10 | Shanghai</div>
-                  <ul class="resume-list">
-                    <li data-i18n="resumeIntern1">Collected client planning inputs, built account roadmap, and supported execution within fiscal cycle.</li>
-                  </ul>
-                </article>
-                <article class="resume-card">
-                  <h3 data-i18n="resumeInternTitle2">Apple</h3>
-                  <div class="resume-meta" data-i18n="resumeInternMeta2">Data Analyst | 2022/03 - 2022/07 | Beijing</div>
-                  <ul class="resume-list">
-                    <li data-i18n="resumeIntern2">Built KPI decomposition and visual dashboards for market-facing optimization.</li>
-                  </ul>
-                </article>
-                <article class="resume-card">
-                  <h3 data-i18n="resumeInternTitle3">Didi</h3>
-                  <div class="resume-meta" data-i18n="resumeInternMeta3">Business Data Analysis Intern | 2022/01 - 2022/03 | Hangzhou</div>
-                  <ul class="resume-list">
-                    <li data-i18n="resumeIntern3">Improved subsidy governance and reduced subsidy rate from 0.8% to 0.6%.</li>
-                  </ul>
-                </article>
-                <article class="resume-card">
-                  <h3 data-i18n="resumeInternTitle4">Tencent</h3>
-                  <div class="resume-meta" data-i18n="resumeInternMeta4">Product &amp; User Growth Intern | 2020/08 - 2020/12 | Beijing</div>
-                  <ul class="resume-list">
-                    <li data-i18n="resumeIntern4">Refined user segmentation and A/B testing strategy to improve recall and content reach.</li>
-                  </ul>
-                </article>
-              </div>
-            </article>
           </div>
         </div>
+        <article class="resume-card resume-internships">
+          <h3 data-i18n="resumeInternshipTitle">Internship Timeline</h3>
+          <div class="resume-intern-grid">
+            <article class="resume-card">
+              <h3 data-i18n="resumeInternTitle1">Microsoft</h3>
+              <div class="resume-meta" data-i18n="resumeInternMeta1">Account Technology Strategist | 2022/07 - 2022/10 | Shanghai</div>
+              <ul class="resume-list">
+                <li data-i18n="resumeIntern1">Collected client planning inputs, built account roadmap, and supported execution within fiscal cycle.</li>
+              </ul>
+            </article>
+            <article class="resume-card">
+              <h3 data-i18n="resumeInternTitle2">Apple</h3>
+              <div class="resume-meta" data-i18n="resumeInternMeta2">Data Analyst | 2022/03 - 2022/07 | Beijing</div>
+              <ul class="resume-list">
+                <li data-i18n="resumeIntern2">Built KPI decomposition and visual dashboards for market-facing optimization.</li>
+              </ul>
+            </article>
+            <article class="resume-card">
+              <h3 data-i18n="resumeInternTitle3">Didi</h3>
+              <div class="resume-meta" data-i18n="resumeInternMeta3">Business Data Analysis Intern | 2022/01 - 2022/03 | Hangzhou</div>
+              <ul class="resume-list">
+                <li data-i18n="resumeIntern3">Improved subsidy governance and reduced subsidy rate from 0.8% to 0.6%.</li>
+              </ul>
+            </article>
+            <article class="resume-card">
+              <h3 data-i18n="resumeInternTitle4">Tencent</h3>
+              <div class="resume-meta" data-i18n="resumeInternMeta4">Product &amp; User Growth Intern | 2020/08 - 2020/12 | Beijing</div>
+              <ul class="resume-list">
+                <li data-i18n="resumeIntern4">Refined user segmentation and A/B testing strategy to improve recall and content reach.</li>
+              </ul>
+            </article>
+          </div>
+        </article>
         <div class="personal-showcase">
           <article class="resume-card">
             <h3 data-i18n="resumeHobbiesTitle">Personal Interests</h3>
