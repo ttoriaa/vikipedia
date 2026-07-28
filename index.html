@@ -353,19 +353,20 @@
     }
 
     .hobby-list {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 10px;
       margin-top: 12px;
     }
 
     .hobby-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 13px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: start;
+      gap: 2px 10px;
+      padding: 13px;
       border: 1px solid var(--line);
-      border-radius: 999px;
+      border-radius: 16px;
       background: rgba(124, 92, 255, 0.08);
       color: var(--ink);
       font-size: 13px;
@@ -373,8 +374,21 @@
     }
 
     .hobby-chip span[aria-hidden="true"] {
+      grid-row: 1 / span 2;
       font-size: 17px;
       line-height: 1;
+    }
+
+    .hobby-copy {
+      display: grid;
+      gap: 3px;
+    }
+
+    .hobby-description {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.55;
     }
 
     .resume-hero {
@@ -2122,6 +2136,10 @@
         grid-template-columns: 1fr;
       }
 
+      .hobby-list {
+        grid-template-columns: 1fr;
+      }
+
       .resume-photo-wrap {
         width: 108px;
         height: 108px;
@@ -2586,7 +2604,7 @@
                 </div>
                 <div>
                   <h3 data-i18n="resumeName">Wentao Vickie Li</h3>
-                  <p class="resume-role" data-i18n="resumeRole">Powertrain Data Management | Data &amp; AI Strategy</p>
+                  <p class="resume-role" data-i18n="resumeRole">Data Product Manager / AI Product Manager | Global Analytics</p>
                   <p data-i18n="resumeProfileBody">Product-minded storyteller and builder focused on automotive strategy, digital product narratives, and data-driven communication across cross-functional teams.</p>
                 </div>
               </div>
@@ -2617,9 +2635,18 @@
             <article class="resume-card">
               <h3 data-i18n="resumeHobbiesTitle">Personal Interests</h3>
               <div class="hobby-list" role="list">
-                <span class="hobby-chip" role="listitem"><span aria-hidden="true">⛷️</span><span data-i18n="resumeHobbySkiing">Skiing</span></span>
-                <span class="hobby-chip" role="listitem"><span aria-hidden="true">📷</span><span data-i18n="resumeHobbyPhotography">Photography</span></span>
-                <span class="hobby-chip" role="listitem"><span aria-hidden="true">⛰️</span><span data-i18n="resumeHobbyHiking">Mountaineering</span></span>
+                <div class="hobby-chip" role="listitem">
+                  <span aria-hidden="true">⛷️</span>
+                  <span class="hobby-copy"><span data-i18n="resumeHobbySkiing">Skiing</span><span class="hobby-description" data-i18n="resumeHobbySkiingDesc">Finding focus, rhythm, and freedom on the slopes.</span></span>
+                </div>
+                <div class="hobby-chip" role="listitem">
+                  <span aria-hidden="true">📷</span>
+                  <span class="hobby-copy"><span data-i18n="resumeHobbyPhotography">Photography</span><span class="hobby-description" data-i18n="resumeHobbyPhotographyDesc">Capturing light, people, and stories along the journey.</span></span>
+                </div>
+                <div class="hobby-chip" role="listitem">
+                  <span aria-hidden="true">⛰️</span>
+                  <span class="hobby-copy"><span data-i18n="resumeHobbyHiking">Mountaineering</span><span class="hobby-description" data-i18n="resumeHobbyHikingDesc">Exploring nature with endurance, curiosity, and an open mind.</span></span>
+                </div>
               </div>
             </article>
           </div>
@@ -2852,7 +2879,7 @@
           resumeTitle: 'Resume',
           resumeIntro: 'A bilingual profile snapshot covering positioning, experience focus, and practical strengths.',
           resumeName: 'Wentao Vickie Li',
-          resumeRole: 'Powertrain Data Management | Data & AI Strategy',
+          resumeRole: 'Data Product Manager / AI Product Manager | Global Analytics',
           resumeDownloadCn: 'Download CN Resume PDF',
           resumeDownloadEn: 'Download EN Resume PDF',
           resumePhotoFallback: 'Profile Photo / assets/profile.jpg',
@@ -2891,8 +2918,11 @@
           resumeSkill4: 'Bilingual communication: Chinese / English',
           resumeHobbiesTitle: 'Personal Interests',
           resumeHobbySkiing: 'Skiing',
+          resumeHobbySkiingDesc: 'Finding focus, rhythm, and freedom on the slopes.',
           resumeHobbyPhotography: 'Photography',
+          resumeHobbyPhotographyDesc: 'Capturing light, people, and stories along the journey.',
           resumeHobbyHiking: 'Mountaineering',
+          resumeHobbyHikingDesc: 'Exploring nature with endurance, curiosity, and an open mind.',
           skillsTitle: 'Skills',
           skillsIntro: 'A dedicated index of trained skills in this repository. Each card links to the corresponding skill folder.',
           skillsLoading: 'Loading skills from repository...',
@@ -2969,7 +2999,7 @@
           resumeTitle: '个人简历',
           resumeIntro: '中英文切换的简历概览，覆盖定位、经验重点和核心能力。',
           resumeName: '李文韬 Vickie LI',
-          resumeRole: 'Powertrain Data Management | Data & AI Strategy',
+          resumeRole: '数据产品经理 / AI 产品经理｜国际分析域',
           resumeDownloadCn: '下载中文简历 PDF',
           resumeDownloadEn: '下载英文简历 PDF',
           resumePhotoFallback: '个人照片 / assets/profile.jpg',
@@ -3008,8 +3038,11 @@
           resumeSkill4: '中英双语沟通与内容交付',
           resumeHobbiesTitle: '个人爱好',
           resumeHobbySkiing: '滑雪',
+          resumeHobbySkiingDesc: '在雪道上寻找专注、节奏与自由。',
           resumeHobbyPhotography: '摄影',
+          resumeHobbyPhotographyDesc: '记录旅途中的光影、人物与故事。',
           resumeHobbyHiking: '登山',
+          resumeHobbyHikingDesc: '用耐力与好奇心探索自然，保持开放。',
           skillsTitle: '技能库',
           skillsIntro: '这里集中展示仓库中已训练的 skills。每张卡片都可直接跳转到对应 skill 目录。',
           skillsLoading: '正在从仓库加载 skills...',
