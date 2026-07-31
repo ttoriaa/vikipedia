@@ -1,18 +1,7 @@
 {
-  "generated_at": "2026-07-30T05:19:38.825012+00:00",
+  "generated_at": "2026-07-31T05:46:13.513934+00:00",
   "source": "https://github.com/ttoriaa",
   "projects": [
-    {
-      "name": "vikipedia",
-      "description": "",
-      "url": "https://ttoriaa.github.io/vikipedia/",
-      "url_type": "pages",
-      "target_label": "Live",
-      "repo_url": "https://github.com/ttoriaa/vikipedia",
-      "language": "HTML",
-      "category": "Project",
-      "pushed_at": "2026-07-30T04:30:22Z"
-    },
     {
       "name": "shimai-podcast-site",
       "description": "For podcast website.",
@@ -22,7 +11,18 @@
       "repo_url": "https://github.com/ttoriaa/shimai-podcast-site",
       "language": "JavaScript",
       "category": "Project",
-      "pushed_at": "2026-07-30T03:54:44Z"
+      "pushed_at": "2026-07-31T04:57:25Z"
+    },
+    {
+      "name": "vikipedia",
+      "description": "",
+      "url": "https://ttoriaa.github.io/vikipedia/",
+      "url_type": "pages",
+      "target_label": "Live",
+      "repo_url": "https://github.com/ttoriaa/vikipedia",
+      "language": "HTML",
+      "category": "Project",
+      "pushed_at": "2026-07-31T04:56:25Z"
     },
     {
       "name": "C7-OTA-Hub",
@@ -33,7 +33,7 @@
       "repo_url": "https://github.com/ttoriaa/C7-OTA-Hub",
       "language": "HTML",
       "category": "Project",
-      "pushed_at": "2026-07-29T05:32:34Z"
+      "pushed_at": "2026-07-30T05:19:51Z"
     },
     {
       "name": "VikipediAi",
