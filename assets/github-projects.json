@@ -1,18 +1,7 @@
 {
-  "generated_at": "2026-08-31T08:41:44.269482+00:00",
+  "generated_at": "2026-09-01T07:51:21.082565+00:00",
   "source": "https://github.com/ttoriaa",
   "projects": [
-    {
-      "name": "shimai-podcast-site",
-      "description": "For podcast website.",
-      "url": "https://ttoriaa.github.io/shimai-podcast-site/",
-      "url_type": "pages",
-      "target_label": "Live",
-      "repo_url": "https://github.com/ttoriaa/shimai-podcast-site",
-      "language": "JavaScript",
-      "category": "Project",
-      "pushed_at": "2026-08-31T07:24:58Z"
-    },
     {
       "name": "vikipedia",
       "description": "",
@@ -22,18 +11,18 @@
       "repo_url": "https://github.com/ttoriaa/vikipedia",
       "language": "HTML",
       "category": "Project",
-      "pushed_at": "2026-08-31T07:16:51Z"
+      "pushed_at": "2026-09-01T06:29:49Z"
     },
     {
-      "name": "C7-OTA-Hub",
-      "description": "",
-      "url": "https://ttoriaa.github.io/C7-OTA-Hub/",
+      "name": "shimai-podcast-site",
+      "description": "For podcast website.",
+      "url": "https://ttoriaa.github.io/shimai-podcast-site/",
       "url_type": "pages",
       "target_label": "Live",
-      "repo_url": "https://github.com/ttoriaa/C7-OTA-Hub",
-      "language": "HTML",
+      "repo_url": "https://github.com/ttoriaa/shimai-podcast-site",
+      "language": "JavaScript",
       "category": "Project",
-      "pushed_at": "2026-08-30T08:22:24Z"
+      "pushed_at": "2026-09-01T05:29:26Z"
     },
     {
       "name": "automotive-benchmarking",
@@ -44,7 +33,18 @@
       "repo_url": "https://github.com/ttoriaa/automotive-benchmarking",
       "language": "HTML",
       "category": "Project",
-      "pushed_at": "2026-08-27T01:25:19Z"
+      "pushed_at": "2026-09-01T01:27:22Z"
+    },
+    {
+      "name": "C7-OTA-Hub",
+      "description": "",
+      "url": "https://ttoriaa.github.io/C7-OTA-Hub/",
+      "url_type": "pages",
+      "target_label": "Live",
+      "repo_url": "https://github.com/ttoriaa/C7-OTA-Hub",
+      "language": "HTML",
+      "category": "Project",
+      "pushed_at": "2026-08-31T08:42:37Z"
     },
     {
       "name": "VikipediAi",
