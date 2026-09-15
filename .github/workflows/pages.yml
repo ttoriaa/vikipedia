@@ -43,6 +43,9 @@ jobs:
             cp -R market_watch out/market_watch
           fi
           cp index.html out/index.html
+          if [ -d explore ]; then
+            cp -R explore out/explore
+          fi
           if [ -f ai_hardware_industry_chain_dashboard.html ]; then
             cp ai_hardware_industry_chain_dashboard.html out/ai_hardware_industry_chain_dashboard.html
           fi
