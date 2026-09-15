@@ -1,0 +1,8 @@
+// Original synthesized sounds. No downloaded recordings or media dependencies.
+export class DriveAudio{
+ constructor(){this.enabled=false;this.music=.18;this.effects=.3;this.ctx=null;}
+ async unlock(){if(!this.ctx){this.ctx=new AudioContext();this.master=this.ctx.createGain();this.master.connect(this.ctx.destination);this.engineGain=this.ctx.createGain();this.engineGain.gain.value=0;this.engineGain.connect(this.master);this.engine=this.ctx.createOscillator();this.engine.type='triangle';this.engine.frequency.value=50;this.engine.connect(this.engineGain);this.engine.start();this.ambient=this.ctx.createGain();this.ambient.gain.value=0;this.ambient.connect(this.master);[130.81,164.81,196].forEach(f=>{const o=this.ctx.createOscillator();o.type='sine';o.frequency.value=f;o.connect(this.ambient);o.start()})}await this.ctx.resume();}
+ async setEnabled(value){this.enabled=value;if(value)await this.unlock();if(this.ctx)this.master.gain.setTargetAtTime(value?.7:0,this.ctx.currentTime,.08);}
+ update(speed,paused,near){if(!this.ctx)return;const now=this.ctx.currentTime;this.engine.frequency.setTargetAtTime(45+Math.abs(speed)*8,now,.08);this.engineGain.gain.setTargetAtTime(this.enabled&&!paused?this.effects*(.015+Math.abs(speed)*.003):0,now,.08);this.ambient.gain.setTargetAtTime(this.enabled&&!paused?this.music*(near?.075:.035):0,now,.3);}
+ tone(f=440,duration=.14){if(!this.enabled||!this.ctx)return;const o=this.ctx.createOscillator(),g=this.ctx.createGain(),now=this.ctx.currentTime;o.type='sine';o.frequency.value=f;o.connect(g);g.connect(this.master);g.gain.setValueAtTime(this.effects*.25,now);g.gain.exponentialRampToValueAtTime(.001,now+duration);o.start();o.stop(now+duration+.03);}
+}
