@@ -1,4 +1,4 @@
-import * as THREE from './vendor/three.module.js';
+﻿import * as THREE from './vendor/three.module.js';
 import {zones} from './catalog.js';
 export {zones};
 export function buildWorld(host,quality){
@@ -65,6 +65,18 @@ export function buildWorld(host,quality){
  const pads=[];zones.forEach(z=>{const pad=cyl(2.9,.08,z.color,z.x,.31,z.z);const ring=mesh(new THREE.TorusGeometry(3,.08,6,48),0xfbf6e9,z.x,.38,z.z);ring.rotation.x=-Math.PI/2;pads.push(pad);const pole=cyl(.09,2.3,0x958592,z.x+3.5,1.3,z.z);const flag=box(1.5,.9,.08,z.color,z.x+4.1,2.1,z.z);obstacles.push({x:z.x+3.5,z:z.z,w:.4,d:.4});});
  // Main vehicle, +Z forward; soft toy proportions.
  const car=new THREE.Group();scene.add(car);const body=new THREE.Group();car.add(body);box(1.8,.55,3.2,0x8653b6,0,.78,0,body);box(1.58,.5,1.8,0x9c6bcb,0,1.2,-.35,body);box(1.36,.42,.08,0x485468,0,1.24,.58,body);box(1.35,.38,.08,0x526071,0,1.23,-1.29,body);box(1.9,.15,.2,0xc5b5d5,0,.55,1.55,body);box(1.9,.15,.15,0x533765,0,.58,-1.65,body);[-.58,.58].forEach(x=>{box(.38,.22,.08,0xffecc1,x,.84,1.64,body);box(.3,.17,.08,0xd78386,x,.83,-1.65,body)});box(.25,.06,2.7,0xdccbeb,0,1.48,-.22,body);
+ // BMW roundel, drawn locally so the badge has no network dependency.
+ const badgeCanvas=document.createElement('canvas');badgeCanvas.width=badgeCanvas.height=256;
+ const badgeCtx=badgeCanvas.getContext('2d');
+ badgeCtx.fillStyle='#e9edf0';badgeCtx.beginPath();badgeCtx.arc(128,128,125,0,Math.PI*2);badgeCtx.fill();
+ badgeCtx.fillStyle='#131820';badgeCtx.beginPath();badgeCtx.arc(128,128,117,0,Math.PI*2);badgeCtx.fill();
+ for(let i=0;i<4;i++){badgeCtx.fillStyle=i%2?'#ffffff':'#168bd0';badgeCtx.beginPath();badgeCtx.moveTo(128,128);badgeCtx.arc(128,128,78,i*Math.PI/2,(i+1)*Math.PI/2);badgeCtx.closePath();badgeCtx.fill();}
+ badgeCtx.strokeStyle='#ffffff';badgeCtx.lineWidth=3;badgeCtx.beginPath();badgeCtx.arc(128,128,80,0,Math.PI*2);badgeCtx.stroke();
+ badgeCtx.fillStyle='#ffffff';badgeCtx.font='bold 31px Arial';badgeCtx.textAlign='center';badgeCtx.textBaseline='middle';
+ [['B',-.65],['M',0],['W',.65]].forEach(([letter,angle])=>{badgeCtx.save();badgeCtx.translate(128,128);badgeCtx.rotate(angle);badgeCtx.fillText(letter,0,-99);badgeCtx.restore();});
+ const badgeTexture=new THREE.CanvasTexture(badgeCanvas);badgeTexture.colorSpace=THREE.SRGBColorSpace;
+ const badgeMaterial=new THREE.MeshBasicMaterial({map:badgeTexture,transparent:true,toneMapped:false});
+ [[.56,1.515,-.35],[.2,1.06,1.23]].forEach(([radius,y,z])=>{const badge=new THREE.Mesh(new THREE.CircleGeometry(radius,48),badgeMaterial);badge.rotation.x=-Math.PI/2;badge.position.set(0,y,z);body.add(badge);});
  const wheels=[];[-1,1].forEach(x=>[-1,1].forEach(z=>{const pivot=new THREE.Group();pivot.position.set(x,.53,z);car.add(pivot);const tire=mesh(new THREE.CylinderGeometry(.49,.49,.35,12),0x453e4b,0,0,0,pivot);tire.rotation.z=Math.PI/2;const hub=mesh(new THREE.CylinderGeometry(.25,.25,.37,12),0xcfbfd9,0,0,0,pivot);hub.rotation.z=Math.PI/2;wheels.push({pivot,tire,hub,front:z>0})}));
  function resize(){const w=innerWidth,h=innerHeight,aspect=w/h;const vertical=aspect<1?56:43;camera.left=-vertical*aspect;camera.right=vertical*aspect;camera.top=vertical;camera.bottom=-vertical;camera.updateProjectionMatrix();renderer.setSize(w,h)}resize();addEventListener('resize',resize);
  function setQuality(q){renderer.setPixelRatio(Math.min(devicePixelRatio,q==='high'?1.6:1));renderer.shadowMap.enabled=q==='high';scene.traverse(o=>{if(o.material)o.material.needsUpdate=true});}
@@ -75,3 +87,4 @@ export function buildWorld(host,quality){
  function screenPoint(x,y,z){projected.set(x,y,z).project(camera);return{x:(projected.x+1)*innerWidth/2,y:(1-projected.y)*innerHeight/2}}
  return {renderer,scene,camera,car,obstacles,update,screenPoint,setQuality,info:()=>({calls:renderer.info.render.calls,triangles:renderer.info.render.triangles})};
 }
+
