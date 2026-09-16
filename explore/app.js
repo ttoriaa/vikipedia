@@ -1,7 +1,8 @@
-import {installPortal} from './portal.js';
-import {buildWorld,zones} from './world.js';
+import {t,installLanguageSwitch} from './i18n.js?v=20260916c';
+import {installPortal} from './portal.js?v=20260916c';
+import {buildWorld,zones} from './world.js?v=20260916c';
 import {createCarState,stepCar,nearestZone,clamp} from './physics.mjs';
-import {DriveAudio} from './audio.js';
+import {DriveAudio} from './audio.js?v=20260916c';
 const $=s=>document.querySelector(s),panel=$('#panel'),content=$('#panel-content');
 function read(key,fallback){try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}}
 function write(key,value){try{localStorage.setItem(key,JSON.stringify(value))}catch{}}
@@ -49,8 +50,10 @@ zones.forEach((z,i)=>{const b=document.createElement('button');b.className='zone
 function frame(now){requestAnimationFrame(frame);const elapsed=Math.min((now-previous)/1000,.1);previous=now;if(document.hidden)return;time+=elapsed;const paused=!started||panel.open,controls=input();if(!paused){accumulator+=elapsed;while(accumulator>=1/60){const hit=stepCar(state,controls,1/60,world.obstacles,settings.sensitivity);if(hit&&time-lastCollision>.5){audio.tone(90,.1);lastCollision=time}accumulator-=1/60}}else accumulator=0;
  near=nearestZone(state,zones);world.update(state,elapsed,time,settings.reduce,controls.steer);audio.update(state.speed,paused,near?.id==='podcast');
  zones.forEach(z=>{const b=document.querySelector(`[data-zone="${z.id}"]`),p=world.screenPoint(z.x,2.3,z.z);b.style.left=p.x+'px';b.style.top=p.y+'px';b.classList.toggle('near',near?.id===z.id);b.style.visibility=p.y<85||p.x<0||p.x>innerWidth?'hidden':'visible'});
- $('#interact').hidden=!near||paused;if(near)$('#interact span').textContent=near.title;$('#location').textContent=near?.title??'自由探索';$('#speed').textContent=String(Math.round(Math.abs(state.speed)*3.6)).padStart(2,'0');$('#gear').textContent=Math.abs(state.speed)<.1?'P · PARK':state.speed<0?'R · REVERSE':'D · EXPLORE';const p=mapXY(state.x,state.z);$('#map-car').setAttribute('transform',`translate(${p.x},${p.y}) rotate(${180-state.heading*180/Math.PI})`);
+ $('#interact').hidden=!near||paused;if(near)$('#interact span').textContent=near.title;$('#location').textContent=near?.title??'自由探索';$('#speed').textContent=String(Math.round(Math.abs(state.speed)*3.6)).padStart(2,'0');$('#gear').textContent=Math.abs(state.speed)<.1?'P · PARK':state.speed<0?'R · REVERSE':'D · EXPLORE';const p=mapXY(state.x,state.z);$('#map-car').setAttribute('transform',`translate(${p.x},${p.y}) rotate(${180-state.heading*180/Math.PI}) scale(1.5)`);
  frames++;fpsTime+=elapsed;if(fpsTime>.5){fps=Math.round(frames/fpsTime);frames=fpsTime=0;$('#telemetry').textContent=JSON.stringify({x:+state.x.toFixed(2),z:+state.z.toFixed(2),speed:+state.speed.toFixed(2),collisions:state.collisions,distance:+state.distance.toFixed(2),near:near?.id??null,paused,fps,quality:settings.quality,audioEnabled:audio.enabled,audioState:audio.ctx?.state??'not-started',...world.info()})}
 }
 async function start(sound){started=true;$('#welcome').hidden=true;await toggleSound(sound);$('#world').focus();toast('沿道路探索，或点击展区路牌快速到达。')}
 try{world=buildWorld($('#world'),settings.quality);$('#world canvas').addEventListener('webglcontextlost',e=>{e.preventDefault();pause();toast('图形上下文已暂停，请刷新页面恢复，或返回作品列表。')});document.body.dataset.ready='true';$('#load-status').textContent='小车已就位。八个站点，等你探索。';$('#start').disabled=$('#start-sound').disabled=false;$('#start').onclick=()=>start(false);$('#start-sound').onclick=()=>start(true);requestAnimationFrame(frame)}catch(error){console.error(error);$('#load-status').textContent='无法启动 3D 场景，请使用支持 WebGL 的浏览器，或先浏览作品列表。';document.body.dataset.ready='error'}
+
+installLanguageSwitch();

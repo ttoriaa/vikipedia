@@ -1,3 +1,4 @@
+import {t,language} from './i18n.js?v=20260916c';
 // Public project URLs checked on 2026-09-15. See link-audit.json.
 export const zones=[
  {id:'home',title:'Vickie 的个人主页',en:'ORIGINAL HOMEPAGE',x:0,z:15,color:0xae8bc7,url:'https://ttoriaa.github.io/vikipedia/?lang=en',desc:'在 3D 世界里直接浏览 Vickie 的原版个人主页。',resources:[]},
@@ -9,3 +10,6 @@ export const zones=[
  {id:'regulation',title:'C7 OTA 法规馆',en:'REGULATION / OTA HUB',x:0,z:-19,color:0x7e9faa,url:'https://ttoriaa.github.io/C7-OTA-Hub/',desc:'从统一入口浏览 C7 OTA 法规与模块，连接汽车产品与监管场景。',resources:[]},
  {id:'market',title:'Market Watch 观察站',en:'MARKET / INDUSTRY / SIGNALS',x:17,z:0,color:0xc4a56b,url:'https://ttoriaa.github.io/vikipedia/market_watch/',desc:'查看市场概览、资讯与行业线索，持续观察技术与产业变化。',resources:[]}
 ];
+
+for(const zone of zones){zone.title=t(zone.title);zone.desc=t(zone.desc);for(const resource of zone.resources){resource.title=t(resource.title);resource.desc=t(resource.desc);}}
+zones[0].url=`https://ttoriaa.github.io/vikipedia/?lang=${language}`;

@@ -1,6 +1,7 @@
+import {t} from './i18n.js?v=20260916c';
 import * as THREE from './vendor/three.module.js';
-import {zones} from './catalog.js';
-import {buildCar} from './car.js';
+import {zones} from './catalog.js?v=20260916c';
+import {buildCar} from './car.js?v=20260916c';
 export {zones};
 export function buildWorld(host,quality){
  const scene=new THREE.Scene();scene.background=new THREE.Color('#e8e4df');
@@ -13,7 +14,7 @@ export function buildWorld(host,quality){
  function box(w,h,d,c,x,y,z,parent=scene){return mesh(new THREE.BoxGeometry(w,h,d),c,x,y,z,parent)}
  function cyl(r,h,c,x,y,z,parent=scene,segments=20){return mesh(new THREE.CylinderGeometry(r,r,h,segments),c,x,y,z,parent)}
  function block(w,h,d,c,x,z){const m=box(w,h,d,c,x,h/2+.15,z);obstacles.push({x,z,w,d});return m}
- function label(text,sub,w=10,h=2){const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=256;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff9eb';ctx.fillRect(0,0,1024,256);ctx.textAlign='center';ctx.fillStyle='#584463';ctx.font='bold 76px "Segoe UI",sans-serif';ctx.fillText(text,512,115);ctx.fillStyle='#9782a3';ctx.font='27px "Segoe UI",sans-serif';ctx.fillText(sub,512,185);const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;return new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:texture,side:THREE.DoubleSide}))}
+ function label(text,sub,w=10,h=2){text=t(text);sub=t(sub);const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=256;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff9eb';ctx.fillRect(0,0,1024,256);ctx.textAlign='center';ctx.fillStyle='#584463';ctx.font='bold 76px "Segoe UI",sans-serif';ctx.fillText(text,512,115);ctx.fillStyle='#9782a3';ctx.font='27px "Segoe UI",sans-serif';ctx.fillText(sub,512,185);const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;return new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:texture,side:THREE.DoubleSide}))}
  // A handcrafted toy-like island; all models generated locally, no external assets.
  box(82,2,68,0xbeb5af,0,-1.25,0);box(81,.6,67,0xe0dec9,0,-.15,0);
  const bg=box(1000,.2,1000,0xe8e4df,0,-3,0);bg.castShadow=false;
@@ -64,7 +65,7 @@ export function buildWorld(host,quality){
  const marketSign=label('MARKET WATCH','OBSERVE. CONNECT. UNDERSTAND.',8,2);marketSign.position.set(15,4.2,7);scene.add(marketSign);
  // Entry pads have clear drive-up interaction points.
  const pads=[];zones.forEach(z=>{const pad=cyl(2.9,.08,z.color,z.x,.31,z.z);const ring=mesh(new THREE.TorusGeometry(3,.08,6,48),0xfbf6e9,z.x,.38,z.z);ring.rotation.x=-Math.PI/2;pads.push(pad);const pole=cyl(.09,2.3,0x958592,z.x+3.5,1.3,z.z);const flag=box(1.5,.9,.08,z.color,z.x+4.1,2.1,z.z);obstacles.push({x:z.x+3.5,z:z.z,w:.4,d:.4});});
- const {car,body,wheels}=buildCar(scene);
+ const {car,body,wheels}=buildCar(scene);car.scale.setScalar(1.5);
  function resize(){const w=innerWidth,h=innerHeight,aspect=w/h;const vertical=aspect<1?56:43;camera.left=-vertical*aspect;camera.right=vertical*aspect;camera.top=vertical;camera.bottom=-vertical;camera.updateProjectionMatrix();renderer.setSize(w,h)}resize();addEventListener('resize',resize);
  function setQuality(q){renderer.setPixelRatio(Math.min(devicePixelRatio,q==='high'?1.6:1));renderer.shadowMap.enabled=q==='high';scene.traverse(o=>{if(o.material)o.material.needsUpdate=true});}
  const aim=new THREE.Vector3(),projected=new THREE.Vector3();

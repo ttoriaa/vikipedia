@@ -12,7 +12,7 @@ export function stepCar(s,input,dt,obstacles=[],sensitivity=1){
  s.heading-=steer*sensitivity*1.75*(s.speed/12)*dt;
  const dx=Math.sin(s.heading)*s.speed*dt,dz=Math.cos(s.heading)*s.speed*dt;
  let nx=s.x+dx,nz=s.z+dz,hit=false;
- const radius=1.05;
+ const radius=1.575;
  for(const o of obstacles){const cx=clamp(nx,o.x-o.w/2,o.x+o.w/2),cz=clamp(nz,o.z-o.d/2,o.z+o.d/2);if(Math.hypot(nx-cx,nz-cz)<radius){hit=true;break;}}
  if(Math.abs(nx)>37.5||Math.abs(nz)>30.5)hit=true;
  if(hit){s.speed=-s.speed*.16;s.collisions++;}else{s.x=nx;s.z=nz;s.distance+=Math.hypot(dx,dz);}
