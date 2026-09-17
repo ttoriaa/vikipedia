@@ -1,4 +1,4 @@
-import {t,language} from './i18n.js?v=20260916c';
+import {t,language} from './i18n.js?v=20260916sound';
 // Public project URLs checked on 2026-09-15. See link-audit.json.
 export const zones=[
  {id:'home',title:'Vickie 的个人主页',en:'ORIGINAL HOMEPAGE',x:0,z:15,color:0xae8bc7,url:'https://ttoriaa.github.io/vikipedia/?lang=en',desc:'在 3D 世界里直接浏览 Vickie 的原版个人主页。',resources:[]},

@@ -1,6 +1,9 @@
 const saved=(()=>{try{return localStorage.getItem('vikipedia-drive-language')}catch{return null}})();
 export const language=new URLSearchParams(location.search).get('lang')==='en'?'en':new URLSearchParams(location.search).get('lang')==='zh'?'zh':saved==='en'?'en':'zh';
 const messages={
+ '声音场景':'Soundscape','雨天漫游 · 雨声':'Rainy drive · rainfall','轻快日常 · Vlog':'Easy day · vlog music','Sport · 运动引擎':'Sport · engine sound','自然花园 · 风与鸟鸣':'Garden · breeze and birds','无背景音':'No background audio',
+ '背景音量':'Background volume','引擎与交互音量':'Engine and interaction volume','切换场景即可试听；背景音和引擎可分别调节。':'Select a scene to preview; adjust background and engine volumes separately.',
+ '雨声、旋律与引擎均为原创合成音效。打开外部项目时自动静音，避免声音叠加。':'Rain, music and engine sounds are synthesized. Audio fades out inside external projects to avoid overlap.',
  'Vickie 的个人主页':"Vickie's Homepage",'汽车数据中心':'Automotive Data','AI 实验室':'AI Lab','播客工作室':'Podcast Studio','///M 游戏试车场':'///M Playground','Token 知识花园':'Token Garden','C7 OTA 法规馆':'C7 OTA Hub','Market Watch 观察站':'Market Watch',
  '在 3D 世界里直接浏览 Vickie 的原版个人主页。':"Explore Vickie's original homepage inside the 3D world.",
  '从电池参数到充电表现，在数据里理解每一辆车。':'Explore cars through battery specifications and charging data.',

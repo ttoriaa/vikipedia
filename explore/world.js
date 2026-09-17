@@ -1,7 +1,7 @@
-import {t} from './i18n.js?v=20260916c';
+import {t} from './i18n.js?v=20260916sound';
 import * as THREE from './vendor/three.module.js';
-import {zones} from './catalog.js?v=20260916c';
-import {buildCar} from './car.js?v=20260916c';
+import {zones} from './catalog.js?v=20260916sound';
+import {buildCar} from './car.js?v=20260916sound';
 export {zones};
 export function buildWorld(host,quality){
  const scene=new THREE.Scene();scene.background=new THREE.Color('#e8e4df');

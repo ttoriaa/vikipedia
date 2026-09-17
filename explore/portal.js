@@ -1,4 +1,4 @@
-import {zones} from './catalog.js?v=20260916c';
+import {zones} from './catalog.js?v=20260916sound';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export function installPortal({openPanel,content,panel,showProject,mark,started}){
  panel.addEventListener('close',()=>{content.replaceChildren();panel.classList.remove('viewer','profile-panel')});
