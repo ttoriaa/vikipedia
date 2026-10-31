@@ -1,7 +1,18 @@
 {
-  "generated_at": "2026-10-30T08:42:25.467972+00:00",
+  "generated_at": "2026-10-31T08:28:58.131129+00:00",
   "source": "https://github.com/ttoriaa",
   "projects": [
+    {
+      "name": "shimai-podcast-site",
+      "description": "For podcast website.",
+      "url": "https://ttoriaa.github.io/shimai-podcast-site/",
+      "url_type": "pages",
+      "target_label": "Live",
+      "repo_url": "https://github.com/ttoriaa/shimai-podcast-site",
+      "language": "JavaScript",
+      "category": "Project",
+      "pushed_at": "2026-10-31T08:19:34Z"
+    },
     {
       "name": "vikipedia",
       "description": "",
@@ -11,7 +22,7 @@
       "repo_url": "https://github.com/ttoriaa/vikipedia",
       "language": "HTML",
       "category": "Project",
-      "pushed_at": "2026-10-30T07:29:20Z"
+      "pushed_at": "2026-10-31T07:16:52Z"
     },
     {
       "name": "automotive-benchmarking",
@@ -22,18 +33,7 @@
       "repo_url": "https://github.com/ttoriaa/automotive-benchmarking",
       "language": "HTML",
       "category": "Project",
-      "pushed_at": "2026-10-30T06:59:07Z"
-    },
-    {
-      "name": "shimai-podcast-site",
-      "description": "For podcast website.",
-      "url": "https://ttoriaa.github.io/shimai-podcast-site/",
-      "url_type": "pages",
-      "target_label": "Live",
-      "repo_url": "https://github.com/ttoriaa/shimai-podcast-site",
-      "language": "JavaScript",
-      "category": "Project",
-      "pushed_at": "2026-10-30T06:11:29Z"
+      "pushed_at": "2026-10-31T06:53:35Z"
     },
     {
       "name": "C7-OTA-Hub",
@@ -44,7 +44,7 @@
       "repo_url": "https://github.com/ttoriaa/C7-OTA-Hub",
       "language": "HTML",
       "category": "Project",
-      "pushed_at": "2026-10-29T08:36:46Z"
+      "pushed_at": "2026-10-30T08:44:08Z"
     },
     {
       "name": "VikipediAi",
